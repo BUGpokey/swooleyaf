@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 查询对账单下载地址
  * User: 姜伟
  * Date: 2018/9/6 0006
  * Time: 15:20
@@ -8,10 +8,11 @@
 namespace AliPay\Pay;
 
 use AliPay\AliPayBase;
-use Constant\ErrorCode;
-use Exception\AliPay\AliPayPayException;
+use SyConstant\ErrorCode;
+use SyException\AliPay\AliPayPayException;
 
-class BillDownload extends AliPayBase {
+class BillDownload extends AliPayBase
+{
     private static $billTypes = [
         'trade',
         'signcustomer',
@@ -28,20 +29,23 @@ class BillDownload extends AliPayBase {
      */
     private $bill_date = '';
 
-    public function __construct(string $appId) {
+    public function __construct(string $appId)
+    {
         parent::__construct($appId);
         $this->setMethod('alipay.data.dataservice.bill.downloadurl.query');
     }
 
-    private function __clone(){
+    private function __clone()
+    {
     }
 
     /**
      * @param string $billType
-     * @throws \Exception\AliPay\AliPayPayException
+     * @throws \SyException\AliPay\AliPayPayException
      */
-    public function setBillType(string $billType) {
-        if (in_array($billType, self::$billTypes)) {
+    public function setBillType(string $billType)
+    {
+        if (in_array($billType, self::$billTypes, true)) {
             $this->biz_content['bill_type'] = $billType;
         } else {
             throw new AliPayPayException('账单类型不合法', ErrorCode::ALIPAY_PAY_PARAM_ERROR);
@@ -50,9 +54,10 @@ class BillDownload extends AliPayBase {
 
     /**
      * @param string $billDate
-     * @throws \Exception\AliPay\AliPayPayException
+     * @throws \SyException\AliPay\AliPayPayException
      */
-    public function setBillDate(string $billDate) {
+    public function setBillDate(string $billDate)
+    {
         if (preg_match('/^\d{4}(\-\d{2}){1,2}$/', $billDate) > 0) {
             $this->biz_content['bill_date'] = $billDate;
         } else {
@@ -60,7 +65,8 @@ class BillDownload extends AliPayBase {
         }
     }
 
-    public function getDetail() : array {
+    public function getDetail() : array
+    {
         if (!isset($this->biz_content['bill_type'])) {
             throw new AliPayPayException('账单类型不能为空', ErrorCode::ALIPAY_PAY_PARAM_ERROR);
         }

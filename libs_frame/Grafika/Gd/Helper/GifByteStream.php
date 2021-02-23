@@ -1,5 +1,4 @@
 <?php
-
 namespace Grafika\Gd\Helper;
 
 /**
@@ -27,13 +26,13 @@ final class GifByteStream
     public function __construct($bytes)
     {
         $this->position = 0;
-        $this->bytes    = $bytes;
+        $this->bytes = $bytes;
     }
 
     /**
      * Take a bite from the byte stream.
      *
-     * @param int $size Byte size in integer.
+     * @param int $size byte size in integer
      *
      * @return string
      */

@@ -7,11 +7,12 @@
  */
 namespace SySms;
 
-use Constant\ErrorCode;
-use Exception\Sms\DaYuException;
-use Tool\Tool;
+use SyConstant\ErrorCode;
+use SyException\Sms\DaYuException;
+use SyTool\Tool;
 
-class ConfigDaYu {
+class ConfigDaYu
+{
     /**
      * APP KEY
      * @var string
@@ -23,28 +24,33 @@ class ConfigDaYu {
      */
     private $appSecret = '';
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
-    private function __clone() {
+    private function __clone()
+    {
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return Tool::jsonEncode($this->getConfigs(), JSON_UNESCAPED_UNICODE);
     }
 
     /**
      * @return string
      */
-    public function getAppKey() : string {
+    public function getAppKey() : string
+    {
         return $this->appKey;
     }
 
     /**
      * @param string $appKey
-     * @throws \Exception\Sms\DaYuException
+     * @throws \SyException\Sms\DaYuException
      */
-    public function setAppKey(string $appKey) {
+    public function setAppKey(string $appKey)
+    {
         if (ctype_alnum($appKey)) {
             $this->appKey = $appKey;
         } else {
@@ -55,15 +61,17 @@ class ConfigDaYu {
     /**
      * @return string
      */
-    public function getAppSecret() : string {
+    public function getAppSecret() : string
+    {
         return $this->appSecret;
     }
 
     /**
      * @param string $appSecret
-     * @throws \Exception\Sms\DaYuException
+     * @throws \SyException\Sms\DaYuException
      */
-    public function setAppSecret(string $appSecret) {
+    public function setAppSecret(string $appSecret)
+    {
         if (ctype_alnum($appSecret)) {
             $this->appSecret = $appSecret;
         } else {
@@ -75,7 +83,8 @@ class ConfigDaYu {
      * 获取配置数组
      * @return array
      */
-    public function getConfigs() : array {
+    public function getConfigs() : array
+    {
         return [
             'app.key' => $this->appKey,
             'app.secret' => $this->appSecret,

@@ -7,20 +7,24 @@
  */
 namespace Validator\Impl\String;
 
-use Constant\Project;
+use SyConstant\Project;
 use Validator\BaseValidator;
 use Validator\ValidatorService;
 
-class StringDigitUpper extends BaseValidator implements ValidatorService {
-    public function __construct() {
+class StringDigitUpper extends BaseValidator implements ValidatorService
+{
+    public function __construct()
+    {
         parent::__construct();
-        $this->validatorType = Project::VALIDATOR_STRING_TYPE_DIGIT_UPPER;
+        $this->validatorType = Project::VALIDATOR_TYPE_STRING_DIGIT_UPPER;
     }
 
-    private function __clone() {
+    private function __clone()
+    {
     }
 
-    public function validator($data, $compareData) : string {
+    public function validator($data, $compareData) : string
+    {
         if ($data === null) {
             return '';
         }
@@ -28,12 +32,12 @@ class StringDigitUpper extends BaseValidator implements ValidatorService {
         $trueData = $this->verifyStringData($data);
         if ($trueData === null) {
             return '必须是字符串';
-        } else if((strlen($trueData) == 0) && !$compareData){
+        } elseif ((strlen($trueData) == 0) && !$compareData) {
             return '';
-        } else if(ctype_alnum($trueData) && (strtoupper($trueData) == $trueData)){
+        } elseif (ctype_alnum($trueData) && (strtoupper($trueData) == $trueData)) {
             return '';
-        } else {
-            return '格式必须都是数字和大写字母';
         }
+
+        return '格式必须都是数字和大写字母';
     }
 }

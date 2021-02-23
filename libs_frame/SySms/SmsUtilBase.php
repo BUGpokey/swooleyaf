@@ -7,24 +7,24 @@
  */
 namespace SySms;
 
-use Constant\ErrorCode;
-use Log\Log;
-use Tool\Tool;
-use Traits\SimpleTrait;
+use SyConstant\ErrorCode;
+use SyLog\Log;
+use SyTool\Tool;
+use SyTrait\SimpleTrait;
 
-abstract class SmsUtilBase {
+abstract class SmsUtilBase
+{
     use SimpleTrait;
 
     /**
      * 发送请求
-     * @param string $url 请求地址
-     * @param array $data 请求参数
      * @param array $curlConfig curl配置数组
      * @return mixed
      */
-    protected static function sendCurlReq(array $curlConfig){
+    protected static function sendCurlReq(array $curlConfig)
+    {
         $sendRes = Tool::sendCurlReq($curlConfig);
-        if($sendRes['res_no'] > 0){
+        if ($sendRes['res_no'] > 0) {
             Log::error('短信请求失败,curl错误码为' . $sendRes['res_no'], ErrorCode::SMS_POST_ERROR);
         }
 

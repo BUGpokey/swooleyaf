@@ -3,70 +3,99 @@ namespace AliOpen\Mts;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class KeyDecryptRequest extends RpcAcsRequest {
-    private $rand;
-    private $resourceOwnerId;
-    private $resourceOwnerAccount;
-    private $ownerAccount;
-    private $ownerId;
-    private $ciphertextBlob;
+/**
+ * Request of DecryptKey
+ * @method string getRand()
+ * @method string getResourceOwnerId()
+ * @method string getResourceOwnerAccount()
+ * @method string getOwnerAccount()
+ * @method string getOwnerId()
+ * @method string getCiphertextBlob()
+ */
+class KeyDecryptRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Mts", "2014-06-18", "DecryptKey", "mts", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Mts', '2014-06-18', 'DecryptKey', 'mts');
     }
 
-    public function getRand(){
-        return $this->rand;
+    /**
+     * @param string $rand
+     * @return $this
+     */
+    public function setRand($rand)
+    {
+        $this->requestParameters['Rand'] = $rand;
+        $this->queryParameters['Rand'] = $rand;
+
+        return $this;
     }
 
-    public function setRand($rand){
-        $this->rand = $rand;
-        $this->queryParameters["Rand"] = $rand;
+    /**
+     * @param string $resourceOwnerId
+     * @return $this
+     */
+    public function setResourceOwnerId($resourceOwnerId)
+    {
+        $this->requestParameters['ResourceOwnerId'] = $resourceOwnerId;
+        $this->queryParameters['ResourceOwnerId'] = $resourceOwnerId;
+
+        return $this;
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $resourceOwnerAccount
+     * @return $this
+     */
+    public function setResourceOwnerAccount($resourceOwnerAccount)
+    {
+        $this->requestParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+        $this->queryParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $ownerAccount
+     * @return $this
+     */
+    public function setOwnerAccount($ownerAccount)
+    {
+        $this->requestParameters['OwnerAccount'] = $ownerAccount;
+        $this->queryParameters['OwnerAccount'] = $ownerAccount;
+
+        return $this;
     }
 
-    public function getResourceOwnerAccount(){
-        return $this->resourceOwnerAccount;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function setResourceOwnerAccount($resourceOwnerAccount){
-        $this->resourceOwnerAccount = $resourceOwnerAccount;
-        $this->queryParameters["ResourceOwnerAccount"] = $resourceOwnerAccount;
-    }
+    /**
+     * @param string $ciphertextBlob
+     * @return $this
+     */
+    public function setCiphertextBlob($ciphertextBlob)
+    {
+        $this->requestParameters['CiphertextBlob'] = $ciphertextBlob;
+        $this->queryParameters['CiphertextBlob'] = $ciphertextBlob;
 
-    public function getOwnerAccount(){
-        return $this->ownerAccount;
-    }
-
-    public function setOwnerAccount($ownerAccount){
-        $this->ownerAccount = $ownerAccount;
-        $this->queryParameters["OwnerAccount"] = $ownerAccount;
-    }
-
-    public function getOwnerId(){
-        return $this->ownerId;
-    }
-
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
-    }
-
-    public function getCiphertextBlob(){
-        return $this->ciphertextBlob;
-    }
-
-    public function setCiphertextBlob($ciphertextBlob){
-        $this->ciphertextBlob = $ciphertextBlob;
-        $this->queryParameters["CiphertextBlob"] = $ciphertextBlob;
+        return $this;
     }
 }

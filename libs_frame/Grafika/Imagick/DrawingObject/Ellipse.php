@@ -7,18 +7,18 @@ use Grafika\ImageInterface;
 
 /**
  * Class Ellipse
+ *
  * @package Grafika
  */
 class Ellipse extends Base implements DrawingObjectInterface
 {
-
     /**
      * @param ImageInterface $image
+     *
      * @return ImageInterface
      */
     public function draw($image)
     {
-
         $strokeColor = new \ImagickPixel($this->getBorderColor()->getHexString());
         $fillColor = new \ImagickPixel($this->getFillColor()->getHexString());
 
@@ -31,7 +31,7 @@ class Ellipse extends Base implements DrawingObjectInterface
         list($x, $y) = $this->pos;
         $left = $x + $this->width / 2;
         $top = $y + $this->height / 2;
-        $draw->ellipse($left, $top, $this->width/2, $this->height/2, 0, 360);
+        $draw->ellipse($left, $top, $this->width / 2, $this->height / 2, 0, 360);
 
         $image->getCore()->drawImage($draw);
 

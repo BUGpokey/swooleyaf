@@ -7,11 +7,12 @@
  */
 namespace Wx;
 
-use Constant\ErrorCode;
-use Tool\Tool;
-use Traits\SimpleTrait;
+use SyConstant\ErrorCode;
+use SyTool\Tool;
+use SyTrait\SimpleTrait;
 
-final class WxUtilMini extends WxUtilBase {
+final class WxUtilMini extends WxUtilBase
+{
     use SimpleTrait;
 
     /**
@@ -22,7 +23,8 @@ final class WxUtilMini extends WxUtilBase {
      * @param string $appId 小程序应用ID
      * @return array
      */
-    public static function decryptData(string $encryptedData,string $iv,string $sessionKey,string $appId) {
+    public static function decryptData(string $encryptedData, string $iv, string $sessionKey, string $appId)
+    {
         $resArr = [
             'code' => 0
         ];
@@ -31,7 +33,7 @@ final class WxUtilMini extends WxUtilBase {
             $resArr['code'] = ErrorCode::WX_PARAM_ERROR;
             $resArr['message'] = '初始向量不合法';
             return $resArr;
-        } else if (strlen($sessionKey) != 24) {
+        } elseif (strlen($sessionKey) != 24) {
             $resArr['code'] = ErrorCode::WX_PARAM_ERROR;
             $resArr['message'] = '会话密钥不合法';
             return $resArr;

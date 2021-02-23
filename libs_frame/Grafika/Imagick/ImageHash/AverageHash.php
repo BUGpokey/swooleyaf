@@ -1,9 +1,6 @@
 <?php
-
-
 namespace Grafika\Imagick\ImageHash;
 
-use Grafika\Imagick\Editor;
 use Grafika\Imagick\Image;
 
 /**
@@ -22,7 +19,6 @@ use Grafika\Imagick\Image;
  */
 class AverageHash
 {
-
     /**
      * Generate and get the average hash of the image.
      *

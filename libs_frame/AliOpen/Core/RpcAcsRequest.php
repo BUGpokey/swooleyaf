@@ -1,9 +1,28 @@
 <?php
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 namespace AliOpen\Core;
 
 use AliOpen\Core\Auth\BearerTokenCredential;
 
-abstract class RpcAcsRequest extends AcsRequest {
+abstract class RpcAcsRequest extends AcsRequest
+{
     /**
      * @var string
      */
@@ -25,7 +44,8 @@ abstract class RpcAcsRequest extends AcsRequest {
      * @param string|bool $value
      * @return string
      */
-    private function prepareValue($value){
+    private function prepareValue($value)
+    {
         if (is_bool($value)) {
             if ($value) {
                 return 'true';
@@ -43,7 +63,8 @@ abstract class RpcAcsRequest extends AcsRequest {
      * @param $domain
      * @return bool|mixed|string
      */
-    public function composeUrl($iSigner, $credential, $domain){
+    public function composeUrl($iSigner, $credential, $domain)
+    {
         $apiParams = parent::getQueryParameters();
         foreach ($apiParams as $key => $value) {
             $apiParams[$key] = $this->prepareValue($value);
@@ -91,22 +112,24 @@ abstract class RpcAcsRequest extends AcsRequest {
      * @param $iSigner
      * @return mixed
      */
-    private function computeSignature($parameters, $accessKeySecret, $iSigner){
+    private function computeSignature($parameters, $accessKeySecret, $iSigner)
+    {
         ksort($parameters);
         $canonicalizedQueryString = '';
         foreach ($parameters as $key => $value) {
             $canonicalizedQueryString .= '&' . $this->percentEncode($key) . '=' . $this->percentEncode($value);
         }
-        $stringToSign = parent::getMethod() . '&%2F&' . $this->percentEncode(substr($canonicalizedQueryString, 1));
+        $this->stringToBeSigned = parent::getMethod() . '&%2F&' . $this->percentEncode(substr($canonicalizedQueryString, 1));
 
-        return $iSigner->signString($stringToSign, $accessKeySecret . '&');
+        return $iSigner->signString($this->stringToBeSigned, $accessKeySecret . '&');
     }
 
     /**
      * @param $str
      * @return string|string[]|null
      */
-    protected function percentEncode($str){
+    protected function percentEncode($str)
+    {
         $res = urlencode($str);
         $res = str_replace(['+', '*'], ['%20', '%2A'], $res);
         $res = preg_replace('/%7E/', '~', $res);
@@ -117,7 +140,8 @@ abstract class RpcAcsRequest extends AcsRequest {
     /**
      * @return array
      */
-    public function getDomainParameter(){
+    public function getDomainParameter()
+    {
         return $this->domainParameters;
     }
 
@@ -125,7 +149,8 @@ abstract class RpcAcsRequest extends AcsRequest {
      * @param $name
      * @param $value
      */
-    public function putDomainParameters($name, $value){
+    public function putDomainParameters($name, $value)
+    {
         $this->domainParameters[$name] = $value;
     }
 }

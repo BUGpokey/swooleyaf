@@ -3,90 +3,99 @@ namespace AliOpen\Ons;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class TrendTopicInputTpsRequest extends RpcAcsRequest {
-    private $preventCache;
-    private $period;
-    private $onsRegionId;
-    private $onsPlatform;
-    private $topic;
-    private $endTime;
-    private $beginTime;
-    private $type;
+/**
+ * Request of OnsTrendTopicInputTps
+ * @method string getPeriod()
+ * @method string getEndTime()
+ * @method string getBeginTime()
+ * @method string getType()
+ * @method string getInstanceId()
+ * @method string getTopic()
+ */
+class TrendTopicInputTpsRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ons", "2017-09-18", "OnsTrendTopicInputTps");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ons', '2019-02-14', 'OnsTrendTopicInputTps', 'ons');
     }
 
-    public function getPreventCache(){
-        return $this->preventCache;
+    /**
+     * @param string $period
+     * @return $this
+     */
+    public function setPeriod($period)
+    {
+        $this->requestParameters['Period'] = $period;
+        $this->queryParameters['Period'] = $period;
+
+        return $this;
     }
 
-    public function setPreventCache($preventCache){
-        $this->preventCache = $preventCache;
-        $this->queryParameters["PreventCache"] = $preventCache;
+    /**
+     * @param string $endTime
+     * @return $this
+     */
+    public function setEndTime($endTime)
+    {
+        $this->requestParameters['EndTime'] = $endTime;
+        $this->queryParameters['EndTime'] = $endTime;
+
+        return $this;
     }
 
-    public function getPeriod(){
-        return $this->period;
+    /**
+     * @param string $beginTime
+     * @return $this
+     */
+    public function setBeginTime($beginTime)
+    {
+        $this->requestParameters['BeginTime'] = $beginTime;
+        $this->queryParameters['BeginTime'] = $beginTime;
+
+        return $this;
     }
 
-    public function setPeriod($period){
-        $this->period = $period;
-        $this->queryParameters["Period"] = $period;
+    /**
+     * @param string $type
+     * @return $this
+     */
+    public function setType($type)
+    {
+        $this->requestParameters['Type'] = $type;
+        $this->queryParameters['Type'] = $type;
+
+        return $this;
     }
 
-    public function getOnsRegionId(){
-        return $this->onsRegionId;
+    /**
+     * @param string $instanceId
+     * @return $this
+     */
+    public function setInstanceId($instanceId)
+    {
+        $this->requestParameters['InstanceId'] = $instanceId;
+        $this->queryParameters['InstanceId'] = $instanceId;
+
+        return $this;
     }
 
-    public function setOnsRegionId($onsRegionId){
-        $this->onsRegionId = $onsRegionId;
-        $this->queryParameters["OnsRegionId"] = $onsRegionId;
-    }
+    /**
+     * @param string $topic
+     * @return $this
+     */
+    public function setTopic($topic)
+    {
+        $this->requestParameters['Topic'] = $topic;
+        $this->queryParameters['Topic'] = $topic;
 
-    public function getOnsPlatform(){
-        return $this->onsPlatform;
-    }
-
-    public function setOnsPlatform($onsPlatform){
-        $this->onsPlatform = $onsPlatform;
-        $this->queryParameters["OnsPlatform"] = $onsPlatform;
-    }
-
-    public function getTopic(){
-        return $this->topic;
-    }
-
-    public function setTopic($topic){
-        $this->topic = $topic;
-        $this->queryParameters["Topic"] = $topic;
-    }
-
-    public function getEndTime(){
-        return $this->endTime;
-    }
-
-    public function setEndTime($endTime){
-        $this->endTime = $endTime;
-        $this->queryParameters["EndTime"] = $endTime;
-    }
-
-    public function getBeginTime(){
-        return $this->beginTime;
-    }
-
-    public function setBeginTime($beginTime){
-        $this->beginTime = $beginTime;
-        $this->queryParameters["BeginTime"] = $beginTime;
-    }
-
-    public function getType(){
-        return $this->type;
-    }
-
-    public function setType($type){
-        $this->type = $type;
-        $this->queryParameters["Type"] = $type;
+        return $this;
     }
 }

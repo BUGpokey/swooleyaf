@@ -1,7 +1,26 @@
 <?php
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 namespace AliOpen\Core\Auth;
 
-class Credential extends AbstractCredential {
+class Credential extends AbstractCredential
+{
     /**
      * @var string
      */
@@ -33,7 +52,8 @@ class Credential extends AbstractCredential {
      * @param $accessSecret
      * @param $securityToken
      */
-    public function __construct($accessKeyId, $accessSecret, $securityToken){
+    public function __construct($accessKeyId, $accessSecret, $securityToken)
+    {
         $this->accessKeyId = $accessKeyId;
         $this->accessSecret = $accessSecret;
         $this->securityToken = $securityToken;
@@ -43,7 +63,8 @@ class Credential extends AbstractCredential {
     /**
      * @return bool
      */
-    public function isExpired(){
+    public function isExpired()
+    {
         if ($this->expiredDate == null) {
             return false;
         }
@@ -57,14 +78,16 @@ class Credential extends AbstractCredential {
     /**
      * @return false|string
      */
-    public function getRefreshDate(){
+    public function getRefreshDate()
+    {
         return $this->refreshDate;
     }
 
     /**
      * @return string
      */
-    public function getExpiredDate(){
+    public function getExpiredDate()
+    {
         return $this->expiredDate;
     }
 
@@ -72,7 +95,8 @@ class Credential extends AbstractCredential {
      * @param $expiredHours
      * @return false|string
      */
-    public function setExpiredDate($expiredHours){
+    public function setExpiredDate($expiredHours)
+    {
         if ($expiredHours > 0) {
             return $this->expiredDate = date($this->dateTimeFormat, strtotime('+' . $expiredHours . ' hour'));
         }
@@ -81,42 +105,48 @@ class Credential extends AbstractCredential {
     /**
      * @return string
      */
-    public function getAccessKeyId(){
+    public function getAccessKeyId()
+    {
         return $this->accessKeyId;
     }
 
     /**
      * @param $accessKeyId
      */
-    public function setAccessKeyId($accessKeyId){
+    public function setAccessKeyId($accessKeyId)
+    {
         $this->accessKeyId = $accessKeyId;
     }
 
     /**
      * @return string
      */
-    public function getAccessSecret(){
+    public function getAccessSecret()
+    {
         return $this->accessSecret;
     }
 
     /**
      * @param $accessSecret
      */
-    public function setAccessSecret($accessSecret){
+    public function setAccessSecret($accessSecret)
+    {
         $this->accessSecret = $accessSecret;
     }
 
     /**
      * @return string
      */
-    public function getSecurityToken(){
+    public function getSecurityToken()
+    {
         return $this->securityToken;
     }
 
     /**
      * @param $securityToken
      */
-    public function setSecurityToken($securityToken){
+    public function setSecurityToken($securityToken)
+    {
         $this->securityToken = $securityToken;
     }
 }

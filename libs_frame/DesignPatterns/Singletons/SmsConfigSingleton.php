@@ -10,10 +10,11 @@ namespace DesignPatterns\Singletons;
 use SySms\ConfigAliYun;
 use SySms\ConfigDaYu;
 use SySms\ConfigYun253;
-use Tool\Tool;
-use Traits\SingletonTrait;
+use SyTool\Tool;
+use SyTrait\SingletonTrait;
 
-class SmsConfigSingleton {
+class SmsConfigSingleton
+{
     use SingletonTrait;
 
     /**
@@ -32,31 +33,16 @@ class SmsConfigSingleton {
      */
     private $yun253Config = null;
 
-    private function __construct(){
-        $configs = Tool::getConfig('sms.' . SY_ENV . SY_PROJECT);
-
-        $aliYunConfig = new ConfigAliYun();
-        $aliYunConfig->setAppKey((string)Tool::getArrayVal($configs, 'aliyun.app.key', '', true));
-        $aliYunConfig->setAppSecret((string)Tool::getArrayVal($configs, 'aliyun.app.secret', '', true));
-        $this->aliYunConfig = $aliYunConfig;
-
-        $daYuConfig = new ConfigDaYu();
-        $daYuConfig->setAppKey((string)Tool::getArrayVal($configs, 'dayu.app.key', '', true));
-        $daYuConfig->setAppSecret((string)Tool::getArrayVal($configs, 'dayu.app.secret', '', true));
-        $this->daYuConfig = $daYuConfig;
-
-        $yun253Config = new ConfigYun253();
-        $yun253Config->setAppKey((string)Tool::getArrayVal($configs, 'yun253.app.key', '', true));
-        $yun253Config->setAppSecret((string)Tool::getArrayVal($configs, 'yun253.app.secret', '', true));
-        $yun253Config->setUrlSmsSend((string)Tool::getArrayVal($configs, 'yun253.app.url.sms.send', '', true));
-        $this->yun253Config = $yun253Config;
+    private function __construct()
+    {
     }
 
     /**
      * @return \DesignPatterns\Singletons\SmsConfigSingleton
      */
-    public static function getInstance(){
-        if(is_null(self::$instance)){
+    public static function getInstance()
+    {
+        if (is_null(self::$instance)) {
             self::$instance = new self();
         }
 
@@ -66,21 +52,50 @@ class SmsConfigSingleton {
     /**
      * @return \SySms\ConfigAliYun
      */
-    public function getAliYunConfig() {
+    public function getAliYunConfig()
+    {
+        if (is_null($this->aliYunConfig)) {
+            $configs = Tool::getConfig('sms.' . SY_ENV . SY_PROJECT);
+            $aliYunConfig = new ConfigAliYun();
+            $aliYunConfig->setRegionId((string)Tool::getArrayVal($configs, 'aliyun.region.id', '', true));
+            $aliYunConfig->setAppKey((string)Tool::getArrayVal($configs, 'aliyun.app.key', '', true));
+            $aliYunConfig->setAppSecret((string)Tool::getArrayVal($configs, 'aliyun.app.secret', '', true));
+            $this->aliYunConfig = $aliYunConfig;
+        }
+
         return $this->aliYunConfig;
     }
 
     /**
      * @return \SySms\ConfigDaYu
      */
-    public function getDaYuConfig() {
+    public function getDaYuConfig()
+    {
+        if (is_null($this->daYuConfig)) {
+            $configs = Tool::getConfig('sms.' . SY_ENV . SY_PROJECT);
+            $daYuConfig = new ConfigDaYu();
+            $daYuConfig->setAppKey((string)Tool::getArrayVal($configs, 'dayu.app.key', '', true));
+            $daYuConfig->setAppSecret((string)Tool::getArrayVal($configs, 'dayu.app.secret', '', true));
+            $this->daYuConfig = $daYuConfig;
+        }
+
         return $this->daYuConfig;
     }
 
     /**
      * @return \SySms\ConfigYun253
      */
-    public function getYun253Config() {
+    public function getYun253Config()
+    {
+        if (is_null($this->yun253Config)) {
+            $configs = Tool::getConfig('sms.' . SY_ENV . SY_PROJECT);
+            $yun253Config = new ConfigYun253();
+            $yun253Config->setAppKey((string)Tool::getArrayVal($configs, 'yun253.app.key', '', true));
+            $yun253Config->setAppSecret((string)Tool::getArrayVal($configs, 'yun253.app.secret', '', true));
+            $yun253Config->setUrlSmsSend((string)Tool::getArrayVal($configs, 'yun253.app.url.sms.send', '', true));
+            $this->yun253Config = $yun253Config;
+        }
+
         return $this->yun253Config;
     }
 }

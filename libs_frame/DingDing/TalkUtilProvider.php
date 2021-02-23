@@ -7,30 +7,32 @@
  */
 namespace DingDing;
 
-use Constant\ErrorCode;
-use Constant\Project;
+use SyConstant\ErrorCode;
+use SyConstant\Project;
 use DesignPatterns\Factories\CacheSimpleFactory;
 use DesignPatterns\Singletons\DingTalkConfigSingleton;
 use DingDing\Corp\Sns\SnsTokenGet;
 use DingDing\Corp\Sns\TokenGet;
 use DingDing\Corp\Sso\SsoToken;
 use DingDing\CorpProvider\Common\CorpToken;
-use Exception\DingDing\TalkException;
-use Tool\Tool;
-use Traits\SimpleTrait;
+use SyException\DingDing\TalkException;
+use SyTool\Tool;
+use SyTrait\SimpleTrait;
 
-final class TalkUtilProvider extends TalkUtilBase {
+final class TalkUtilProvider extends TalkUtilBase
+{
     use SimpleTrait;
 
     /**
      * 获取服务商套件ticket
      * @return string
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public static function getSuiteTicket() : string {
+    public static function getSuiteTicket() : string
+    {
         $redisKey = Project::REDIS_PREFIX_DINGTALK_PROVIDER_ACCOUNT_SUITE . DingTalkConfigSingleton::getInstance()->getCorpProviderConfig()->getSuiteKey();
         $redisData = CacheSimpleFactory::getRedisInstance()->hGetAll($redisKey);
-        if(isset($redisData['unique_key']) && ($redisData['unique_key'] == $redisKey)){
+        if (isset($redisData['unique_key']) && ($redisData['unique_key'] == $redisKey)) {
             return $redisData['ticket'];
         } else {
             throw new TalkException('获取服务商套件缓存失败', ErrorCode::DING_TALK_PARAM_ERROR);
@@ -41,7 +43,8 @@ final class TalkUtilProvider extends TalkUtilBase {
      * 获取sso token
      * @return string
      */
-    public static function getSsoToken() : string {
+    public static function getSsoToken() : string
+    {
         $nowTime = Tool::getNowTime();
         $redisKey = Project::REDIS_PREFIX_DINGTALK_PROVIDER_ACCOUNT . DingTalkConfigSingleton::getInstance()->getCorpProviderConfig()->getCorpId();
         $redisData = CacheSimpleFactory::getRedisInstance()->hGetAll($redisKey);
@@ -67,7 +70,8 @@ final class TalkUtilProvider extends TalkUtilBase {
      * 获取sns token
      * @return string
      */
-    public static function getSnsToken() : string {
+    public static function getSnsToken() : string
+    {
         $nowTime = Tool::getNowTime();
         $redisKey = Project::REDIS_PREFIX_DINGTALK_PROVIDER_ACCOUNT . DingTalkConfigSingleton::getInstance()->getCorpProviderConfig()->getCorpId();
         $redisData = CacheSimpleFactory::getRedisInstance()->hGetAll($redisKey);
@@ -94,11 +98,12 @@ final class TalkUtilProvider extends TalkUtilBase {
      * @param string $corpId 授权企业ID
      * @return string
      */
-    public static function getAuthorizerAccessToken(string $corpId) : string {
+    public static function getAuthorizerAccessToken(string $corpId) : string
+    {
         $nowTime = Tool::getNowTime();
         $redisKey = Project::REDIS_PREFIX_DINGTALK_PROVIDER_AUTHORIZER . $corpId;
         $redisData = CacheSimpleFactory::getRedisInstance()->hGetAll($redisKey);
-        if(isset($redisData['at_key']) && ($redisData['at_key'] == $redisKey) && ($redisData['at_expire'] >= $nowTime)){
+        if (isset($redisData['at_key']) && ($redisData['at_key'] == $redisKey) && ($redisData['at_expire'] >= $nowTime)) {
             return $redisData['at_content'];
         }
 
@@ -123,7 +128,8 @@ final class TalkUtilProvider extends TalkUtilBase {
      * @param string $persistentCode 持久授权码
      * @return string
      */
-    public static function getUserSnsToken(string $openid,string $persistentCode) : string {
+    public static function getUserSnsToken(string $openid, string $persistentCode) : string
+    {
         $nowTime = Tool::getNowTime();
         $redisKey = Project::REDIS_PREFIX_DINGTALK_PROVIDER_ACCOUNT . DingTalkConfigSingleton::getInstance()->getCorpProviderConfig()->getCorpId() . '_' . $openid;
         $redisData = CacheSimpleFactory::getRedisInstance()->hGetAll($redisKey);

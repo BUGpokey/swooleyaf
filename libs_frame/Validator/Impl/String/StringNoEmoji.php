@@ -7,20 +7,24 @@
  */
 namespace Validator\Impl\String;
 
-use Constant\Project;
+use SyConstant\Project;
 use Validator\BaseValidator;
 use Validator\ValidatorService;
 
-class StringNoEmoji extends BaseValidator implements ValidatorService {
-    public function __construct() {
+class StringNoEmoji extends BaseValidator implements ValidatorService
+{
+    public function __construct()
+    {
         parent::__construct();
-        $this->validatorType = Project::VALIDATOR_STRING_TYPE_NO_EMOJI;
+        $this->validatorType = Project::VALIDATOR_TYPE_STRING_NO_EMOJI;
     }
 
-    private function __clone() {
+    private function __clone()
+    {
     }
 
-    public function validator($data, $compareData) : string {
+    public function validator($data, $compareData) : string
+    {
         if ($data === null) {
             return '';
         }
@@ -28,12 +32,12 @@ class StringNoEmoji extends BaseValidator implements ValidatorService {
         $trueData = $this->verifyStringData($data);
         if ($trueData === null) {
             return '必须是字符串';
-        } else if(strlen($trueData) == 0){
+        } elseif (strlen($trueData) == 0) {
             return '';
-        } else if(preg_match('/[\xf0-\xf7].{3}/', $trueData) == 0){
+        } elseif (preg_match('/[\xf0-\xf7].{3}/', $trueData) == 0) {
             return '';
-        } else {
-            return '不允许包含表情符号';
         }
+
+        return '不允许包含表情符号';
     }
 }

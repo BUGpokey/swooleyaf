@@ -7,32 +7,34 @@
  */
 namespace SyMessagePush;
 
-use Constant\ErrorCode;
-use Tool\Tool;
-use Traits\SimpleTrait;
+use SyConstant\ErrorCode;
+use SyTool\Tool;
+use SyTrait\SimpleTrait;
 
-final class PushUtilXinGe extends PushUtilBase {
+final class PushUtilXinGe extends PushUtilBase
+{
     use SimpleTrait;
 
-    public static function sendServiceRequest(PushBaseXinGe $pushBase){
+    public static function sendServiceRequest(PushBaseXinGe $pushBase)
+    {
         $resArr = [
             'code' => 0,
         ];
 
         $sendRes = self::sendCurl($pushBase->getDetail());
-        if($sendRes === false){
-            $resArr['code'] = ErrorCode::MESSAGE_PUSH_POST_ERROR;
+        if ($sendRes === false) {
+            $resArr['code'] = ErrorCode::MESSAGE_PUSH_REQ_XINGE_ERROR;
             $resArr['message'] = '发送请求出错';
         }
 
         $sendData = Tool::jsonDecode($sendRes);
-        if(isset($sendData['ret_code']) && ($sendData['ret_code'] == 0)){
+        if (isset($sendData['ret_code']) && ($sendData['ret_code'] == 0)) {
             $resArr['data'] = $sendData;
-        } else if(isset($sendData['err_msg'])){
-            $resArr['code'] = ErrorCode::MESSAGE_PUSH_PARAM_ERROR;
+        } elseif (isset($sendData['err_msg'])) {
+            $resArr['code'] = ErrorCode::MESSAGE_PUSH_REQ_XINGE_ERROR;
             $resArr['message'] = $sendData['err_msg'];
         } else {
-            $resArr['code'] = ErrorCode::MESSAGE_PUSH_PARAM_ERROR;
+            $resArr['code'] = ErrorCode::MESSAGE_PUSH_REQ_XINGE_ERROR;
             $resArr['message'] = '解析响应数据出错';
         }
 

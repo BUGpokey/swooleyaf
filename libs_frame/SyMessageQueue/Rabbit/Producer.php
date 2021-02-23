@@ -7,79 +7,35 @@
  */
 namespace SyMessageQueue\Rabbit;
 
-use Constant\ErrorCode;
-use Exception\Amqp\AmqpException;
-use Tool\Tool;
+use SyTool\Tool;
 
-class Producer {
-    /**
-     * @var \AMQPConnection|null
-     */
-    private $conn = null;
-    /**
-     * @var \AMQPExchange|null
-     */
-    private $exchange = null;
-
-    public function __construct(){
-        $configs = Tool::getConfig('messagequeue.' . SY_ENV . SY_PROJECT . '.rabbit');
-
-        try {
-            $this->conn = new \AMQPConnection($configs['conn']);
-            $this->conn->pconnect();
-            if(!$this->conn->isPersistent()){
-                throw new AmqpException('amqp连接出错', ErrorCode::AMQP_CONNECT_ERROR);
-            }
-
-            $channel = new \AMQPChannel($this->conn);
-            if (!$channel->isConnected()) {
-                throw new AmqpException('amqp channel连接出错', ErrorCode::AMQP_CONNECT_ERROR);
-            }
-
-            $exchangeName = 'exchange' . SY_ENV . SY_PROJECT;
-            $this->exchange = new \AMQPExchange($channel);
-            $this->exchange->setFlags(AMQP_DURABLE); //持久化
-            $this->exchange->setName($exchangeName);
-            $this->exchange->setType(AMQP_EX_TYPE_TOPIC);
-            $this->exchange->declareExchange();
-
-            $queue = new \AMQPQueue($channel);
-            $queue->setName('queue' . SY_ENV . SY_PROJECT);
-            $queue->setFlags(AMQP_DURABLE);
-            $queue->declareQueue();
-            $queue->bind($exchangeName, SY_ENV . SY_PROJECT . '.*');
-        } catch (\Exception $e) {
-            $this->destroy();
-            throw $e;
-        }
+class Producer extends Basic
+{
+    public function __construct(string $tag)
+    {
+        parent::__construct($tag, '1');
     }
 
-    public function __destruct(){
+    public function __destruct()
+    {
         $this->destroy();
     }
 
-    private function __clone(){
-    }
-
-    private function destroy() {
-        if(!is_null($this->exchange)){
-            $this->exchange = null;
-        }
-        if(!is_null($this->conn)){
-            if($this->conn->isPersistent()){
-                $this->conn->pdisconnect();
-            }
-            $this->conn = null;
-        }
+    private function __clone()
+    {
     }
 
     /**
      * 发送主题数据
      * @param string $topic
      * @param array $data
+     * @throws \AMQPChannelException
+     * @throws \AMQPConnectionException
+     * @throws \AMQPExchangeException
      */
-    public function sendTopicData(string $topic,array $data){
-        $trueTopic = SY_ENV . SY_PROJECT . '.' . $topic;
+    public function sendTopicData(string $topic, array $data)
+    {
+        $trueTopic = $this->tag . '.' . $topic;
         foreach ($data as $eData) {
             $this->exchange->publish(Tool::jsonEncode($eData, JSON_UNESCAPED_UNICODE), $trueTopic, AMQP_MANDATORY, [
                 'delivery_mode' => 2,

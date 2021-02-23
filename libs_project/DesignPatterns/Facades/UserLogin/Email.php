@@ -7,21 +7,23 @@
  */
 namespace DesignPatterns\Facades\UserLogin;
 
-use Constant\ErrorCode;
 use DesignPatterns\Facades\UserLoginFacade;
-use Exception\Common\CheckException;
 use Request\SyRequest;
-use Traits\SimpleFacadeTrait;
+use SyConstant\ErrorCode;
+use SyException\Common\CheckException;
+use SyTrait\SimpleFacadeTrait;
 
-class Email extends UserLoginFacade {
+class Email extends UserLoginFacade
+{
     use SimpleFacadeTrait;
 
-    protected static function checkParams(array $data) : array {
+    protected static function checkParams(array $data) : array
+    {
         $email = trim(SyRequest::getParams('user_email', ''));
         $pwd = (string)SyRequest::getParams('user_pwd', '');
         if (strlen($email) == 0) {
             throw new CheckException('邮箱不能为空', ErrorCode::COMMON_PARAM_ERROR);
-        } else if (strlen($pwd) == 0) {
+        } elseif (strlen($pwd) == 0) {
             throw new CheckException('密码不能为空', ErrorCode::COMMON_PARAM_ERROR);
         }
 
@@ -31,7 +33,8 @@ class Email extends UserLoginFacade {
         ];
     }
 
-    protected static function login(array $data) : array {
+    protected static function login(array $data) : array
+    {
         return [];
     }
 }

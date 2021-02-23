@@ -3,60 +3,86 @@ namespace AliOpen\Vod;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class PreprocessJobsSubmitRequest extends RpcAcsRequest {
-    private $resourceOwnerId;
-    private $resourceOwnerAccount;
-    private $videoId;
-    private $ownerId;
-    private $preprocessType;
+/**
+ * Request of SubmitPreprocessJobs
+ * @method string getResourceOwnerId()
+ * @method string getResourceOwnerAccount()
+ * @method string getVideoId()
+ * @method string getOwnerId()
+ * @method string getPreprocessType()
+ */
+class PreprocessJobsSubmitRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("vod", "2017-03-21", "SubmitPreprocessJobs", "vod", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('vod', '2017-03-21', 'SubmitPreprocessJobs', 'vod');
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $resourceOwnerId
+     * @return $this
+     */
+    public function setResourceOwnerId($resourceOwnerId)
+    {
+        $this->requestParameters['ResourceOwnerId'] = $resourceOwnerId;
+        $this->queryParameters['ResourceOwnerId'] = $resourceOwnerId;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $resourceOwnerAccount
+     * @return $this
+     */
+    public function setResourceOwnerAccount($resourceOwnerAccount)
+    {
+        $this->requestParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+        $this->queryParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+
+        return $this;
     }
 
-    public function getResourceOwnerAccount(){
-        return $this->resourceOwnerAccount;
+    /**
+     * @param string $videoId
+     * @return $this
+     */
+    public function setVideoId($videoId)
+    {
+        $this->requestParameters['VideoId'] = $videoId;
+        $this->queryParameters['VideoId'] = $videoId;
+
+        return $this;
     }
 
-    public function setResourceOwnerAccount($resourceOwnerAccount){
-        $this->resourceOwnerAccount = $resourceOwnerAccount;
-        $this->queryParameters["ResourceOwnerAccount"] = $resourceOwnerAccount;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function getVideoId(){
-        return $this->videoId;
-    }
+    /**
+     * @param string $preprocessType
+     * @return $this
+     */
+    public function setPreprocessType($preprocessType)
+    {
+        $this->requestParameters['PreprocessType'] = $preprocessType;
+        $this->queryParameters['PreprocessType'] = $preprocessType;
 
-    public function setVideoId($videoId){
-        $this->videoId = $videoId;
-        $this->queryParameters["VideoId"] = $videoId;
-    }
-
-    public function getOwnerId(){
-        return $this->ownerId;
-    }
-
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
-    }
-
-    public function getPreprocessType(){
-        return $this->preprocessType;
-    }
-
-    public function setPreprocessType($preprocessType){
-        $this->preprocessType = $preprocessType;
-        $this->queryParameters["PreprocessType"] = $preprocessType;
+        return $this;
     }
 }

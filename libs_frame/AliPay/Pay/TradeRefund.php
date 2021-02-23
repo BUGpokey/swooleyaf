@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 统一收单交易退款接口
  * User: 姜伟
  * Date: 2018/9/6 0006
  * Time: 16:23
@@ -8,10 +8,11 @@
 namespace AliPay\Pay;
 
 use AliPay\AliPayBase;
-use Constant\ErrorCode;
-use Exception\AliPay\AliPayPayException;
+use SyConstant\ErrorCode;
+use SyException\AliPay\AliPayPayException;
 
-class TradeRefund extends AliPayBase {
+class TradeRefund extends AliPayBase
+{
     /**
      * 商户订单号
      * @var string
@@ -38,19 +39,22 @@ class TradeRefund extends AliPayBase {
      */
     private $out_request_no = '';
 
-    public function __construct(string $appId) {
+    public function __construct(string $appId)
+    {
         parent::__construct($appId);
         $this->setMethod('alipay.trade.refund');
     }
 
-    private function __clone(){
+    private function __clone()
+    {
     }
 
     /**
      * @param string $outTradeNo
-     * @throws \Exception\AliPay\AliPayPayException
+     * @throws \SyException\AliPay\AliPayPayException
      */
-    public function setOutTradeNo(string $outTradeNo) {
+    public function setOutTradeNo(string $outTradeNo)
+    {
         if (ctype_digit($outTradeNo)) {
             $this->biz_content['out_trade_no'] = $outTradeNo;
         } else {
@@ -60,9 +64,10 @@ class TradeRefund extends AliPayBase {
 
     /**
      * @param string $tradeNo
-     * @throws \Exception\AliPay\AliPayPayException
+     * @throws \SyException\AliPay\AliPayPayException
      */
-    public function setTradeNo(string $tradeNo) {
+    public function setTradeNo(string $tradeNo)
+    {
         if (ctype_digit($tradeNo)) {
             $this->biz_content['trade_no'] = $tradeNo;
         } else {
@@ -72,9 +77,10 @@ class TradeRefund extends AliPayBase {
 
     /**
      * @param int $refundAmount
-     * @throws \Exception\AliPay\AliPayPayException
+     * @throws \SyException\AliPay\AliPayPayException
      */
-    public function setRefundAmount(int $refundAmount) {
+    public function setRefundAmount(int $refundAmount)
+    {
         if ($refundAmount > 0) {
             $this->biz_content['refund_amount'] = number_format(($refundAmount / 100), 2, '.', '');
         } else {
@@ -85,7 +91,8 @@ class TradeRefund extends AliPayBase {
     /**
      * @param string $refundReason
      */
-    public function setRefundReason(string $refundReason) {
+    public function setRefundReason(string $refundReason)
+    {
         if (strlen($refundReason) > 0) {
             $this->biz_content['refund_reason'] = mb_substr($refundReason, 0, 80);
         }
@@ -93,9 +100,10 @@ class TradeRefund extends AliPayBase {
 
     /**
      * @param string $refundNo
-     * @throws \Exception\AliPay\AliPayPayException
+     * @throws \SyException\AliPay\AliPayPayException
      */
-    public function setRefundNo(string $refundNo) {
+    public function setRefundNo(string $refundNo)
+    {
         if (ctype_digit($refundNo)) {
             $this->biz_content['out_request_no'] = $refundNo;
         } else {
@@ -103,7 +111,8 @@ class TradeRefund extends AliPayBase {
         }
     }
 
-    public function getDetail() : array {
+    public function getDetail() : array
+    {
         if ((!isset($this->biz_content['out_trade_no'])) && !isset($this->biz_content['trade_no'])) {
             throw new AliPayPayException('商户订单号和支付宝交易号不能都为空', ErrorCode::ALIPAY_PAY_PARAM_ERROR);
         }

@@ -3,170 +3,229 @@ namespace AliOpen\Vod;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class PlayInfoGetRequest extends RpcAcsRequest {
-    private $resourceOwnerId;
-    private $streamType;
-    private $formats;
-    private $resourceOwnerAccount;
-    private $channel;
-    private $videoId;
-    private $playerVersion;
-    private $ownerId;
-    private $resultType;
-    private $rand;
-    private $reAuthInfo;
-    private $playConfig;
-    private $outputType;
-    private $definition;
-    private $authTimeout;
-    private $authInfo;
+/**
+ * Request of GetPlayInfo
+ * @method string getResourceOwnerId()
+ * @method string getFormats()
+ * @method string getChannel()
+ * @method string getPlayerVersion()
+ * @method string getRand()
+ * @method string getReAuthInfo()
+ * @method string getPlayConfig()
+ * @method string getOutputType()
+ * @method string getDefinition()
+ * @method string getAuthTimeout()
+ * @method string getStreamType()
+ * @method string getResourceOwnerAccount()
+ * @method string getVideoId()
+ * @method string getOwnerId()
+ * @method string getResultType()
+ * @method string getAuthInfo()
+ */
+class PlayInfoGetRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("vod", "2017-03-21", "GetPlayInfo", "vod", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('vod', '2017-03-21', 'GetPlayInfo', 'vod');
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $resourceOwnerId
+     * @return $this
+     */
+    public function setResourceOwnerId($resourceOwnerId)
+    {
+        $this->requestParameters['ResourceOwnerId'] = $resourceOwnerId;
+        $this->queryParameters['ResourceOwnerId'] = $resourceOwnerId;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $formats
+     * @return $this
+     */
+    public function setFormats($formats)
+    {
+        $this->requestParameters['Formats'] = $formats;
+        $this->queryParameters['Formats'] = $formats;
+
+        return $this;
     }
 
-    public function getStreamType(){
-        return $this->streamType;
+    /**
+     * @param string $channel
+     * @return $this
+     */
+    public function setChannel($channel)
+    {
+        $this->requestParameters['Channel'] = $channel;
+        $this->queryParameters['Channel'] = $channel;
+
+        return $this;
     }
 
-    public function setStreamType($streamType){
-        $this->streamType = $streamType;
-        $this->queryParameters["StreamType"] = $streamType;
+    /**
+     * @param string $playerVersion
+     * @return $this
+     */
+    public function setPlayerVersion($playerVersion)
+    {
+        $this->requestParameters['PlayerVersion'] = $playerVersion;
+        $this->queryParameters['PlayerVersion'] = $playerVersion;
+
+        return $this;
     }
 
-    public function getFormats(){
-        return $this->formats;
+    /**
+     * @param string $rand
+     * @return $this
+     */
+    public function setRand($rand)
+    {
+        $this->requestParameters['Rand'] = $rand;
+        $this->queryParameters['Rand'] = $rand;
+
+        return $this;
     }
 
-    public function setFormats($formats){
-        $this->formats = $formats;
-        $this->queryParameters["Formats"] = $formats;
+    /**
+     * @param string $reAuthInfo
+     * @return $this
+     */
+    public function setReAuthInfo($reAuthInfo)
+    {
+        $this->requestParameters['ReAuthInfo'] = $reAuthInfo;
+        $this->queryParameters['ReAuthInfo'] = $reAuthInfo;
+
+        return $this;
     }
 
-    public function getResourceOwnerAccount(){
-        return $this->resourceOwnerAccount;
+    /**
+     * @param string $playConfig
+     * @return $this
+     */
+    public function setPlayConfig($playConfig)
+    {
+        $this->requestParameters['PlayConfig'] = $playConfig;
+        $this->queryParameters['PlayConfig'] = $playConfig;
+
+        return $this;
     }
 
-    public function setResourceOwnerAccount($resourceOwnerAccount){
-        $this->resourceOwnerAccount = $resourceOwnerAccount;
-        $this->queryParameters["ResourceOwnerAccount"] = $resourceOwnerAccount;
+    /**
+     * @param string $outputType
+     * @return $this
+     */
+    public function setOutputType($outputType)
+    {
+        $this->requestParameters['OutputType'] = $outputType;
+        $this->queryParameters['OutputType'] = $outputType;
+
+        return $this;
     }
 
-    public function getChannel(){
-        return $this->channel;
+    /**
+     * @param string $definition
+     * @return $this
+     */
+    public function setDefinition($definition)
+    {
+        $this->requestParameters['Definition'] = $definition;
+        $this->queryParameters['Definition'] = $definition;
+
+        return $this;
     }
 
-    public function setChannel($channel){
-        $this->channel = $channel;
-        $this->queryParameters["Channel"] = $channel;
+    /**
+     * @param string $authTimeout
+     * @return $this
+     */
+    public function setAuthTimeout($authTimeout)
+    {
+        $this->requestParameters['AuthTimeout'] = $authTimeout;
+        $this->queryParameters['AuthTimeout'] = $authTimeout;
+
+        return $this;
     }
 
-    public function getVideoId(){
-        return $this->videoId;
+    /**
+     * @param string $streamType
+     * @return $this
+     */
+    public function setStreamType($streamType)
+    {
+        $this->requestParameters['StreamType'] = $streamType;
+        $this->queryParameters['StreamType'] = $streamType;
+
+        return $this;
     }
 
-    public function setVideoId($videoId){
-        $this->videoId = $videoId;
-        $this->queryParameters["VideoId"] = $videoId;
+    /**
+     * @param string $resourceOwnerAccount
+     * @return $this
+     */
+    public function setResourceOwnerAccount($resourceOwnerAccount)
+    {
+        $this->requestParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+        $this->queryParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+
+        return $this;
     }
 
-    public function getPlayerVersion(){
-        return $this->playerVersion;
+    /**
+     * @param string $videoId
+     * @return $this
+     */
+    public function setVideoId($videoId)
+    {
+        $this->requestParameters['VideoId'] = $videoId;
+        $this->queryParameters['VideoId'] = $videoId;
+
+        return $this;
     }
 
-    public function setPlayerVersion($playerVersion){
-        $this->playerVersion = $playerVersion;
-        $this->queryParameters["PlayerVersion"] = $playerVersion;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function getOwnerId(){
-        return $this->ownerId;
+    /**
+     * @param string $resultType
+     * @return $this
+     */
+    public function setResultType($resultType)
+    {
+        $this->requestParameters['ResultType'] = $resultType;
+        $this->queryParameters['ResultType'] = $resultType;
+
+        return $this;
     }
 
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
-    }
+    /**
+     * @param string $authInfo
+     * @return $this
+     */
+    public function setAuthInfo($authInfo)
+    {
+        $this->requestParameters['AuthInfo'] = $authInfo;
+        $this->queryParameters['AuthInfo'] = $authInfo;
 
-    public function getResultType(){
-        return $this->resultType;
-    }
-
-    public function setResultType($resultType){
-        $this->resultType = $resultType;
-        $this->queryParameters["ResultType"] = $resultType;
-    }
-
-    public function getRand(){
-        return $this->rand;
-    }
-
-    public function setRand($rand){
-        $this->rand = $rand;
-        $this->queryParameters["Rand"] = $rand;
-    }
-
-    public function getReAuthInfo(){
-        return $this->reAuthInfo;
-    }
-
-    public function setReAuthInfo($reAuthInfo){
-        $this->reAuthInfo = $reAuthInfo;
-        $this->queryParameters["ReAuthInfo"] = $reAuthInfo;
-    }
-
-    public function getPlayConfig(){
-        return $this->playConfig;
-    }
-
-    public function setPlayConfig($playConfig){
-        $this->playConfig = $playConfig;
-        $this->queryParameters["PlayConfig"] = $playConfig;
-    }
-
-    public function getOutputType(){
-        return $this->outputType;
-    }
-
-    public function setOutputType($outputType){
-        $this->outputType = $outputType;
-        $this->queryParameters["OutputType"] = $outputType;
-    }
-
-    public function getDefinition(){
-        return $this->definition;
-    }
-
-    public function setDefinition($definition){
-        $this->definition = $definition;
-        $this->queryParameters["Definition"] = $definition;
-    }
-
-    public function getAuthTimeout(){
-        return $this->authTimeout;
-    }
-
-    public function setAuthTimeout($authTimeout){
-        $this->authTimeout = $authTimeout;
-        $this->queryParameters["AuthTimeout"] = $authTimeout;
-    }
-
-    public function getAuthInfo(){
-        return $this->authInfo;
-    }
-
-    public function setAuthInfo($authInfo){
-        $this->authInfo = $authInfo;
-        $this->queryParameters["AuthInfo"] = $authInfo;
+        return $this;
     }
 }

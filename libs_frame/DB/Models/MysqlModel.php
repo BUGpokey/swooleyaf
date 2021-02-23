@@ -7,16 +7,17 @@
  */
 namespace DB\Models;
 
-use Constant\ErrorCode;
-use Constant\Project;
+use SyConstant\ErrorCode;
+use SyConstant\Project;
 use DB\Models\NotORM\NotORM;
 use DB\Models\NotORM\NotORM_Result;
 use DB\Models\NotORM\NotORM_Structure_Convention;
 use DesignPatterns\Singletons\MysqlSingleton;
-use Exception\Mysql\MysqlException;
-use Log\Log;
+use SyException\Mysql\MysqlException;
+use SyLog\Log;
 
-class MysqlModel extends BaseModel {
+class MysqlModel extends BaseModel
+{
     /**
      * @var \DB\Models\NotORM\NotORM
      */
@@ -32,7 +33,8 @@ class MysqlModel extends BaseModel {
     private $_entityProps = [];
     private $_fields = [];
 
-    public function __construct(string $dbName,string $tableName,string $primaryKey='id') {
+    public function __construct(string $dbName, string $tableName, string $primaryKey = 'id')
+    {
         $this->_dbConn = MysqlSingleton::getInstance()->getConn();
         $this->_dbName = $dbName;
         $this->_tableName = $tableName;
@@ -46,43 +48,45 @@ class MysqlModel extends BaseModel {
      * 设置实体属性
      * @param array $props
      */
-    public function setEntityProperties(array $props) {
+    public function setEntityProperties(array $props)
+    {
         $this->_entityProps = $props;
     }
 
     /**
      * @return \PDO
      */
-    public function getDbConn() {
+    public function getDbConn()
+    {
         return $this->_dbConn;
     }
 
-    public function setDbName(string $dbName) {
+    public function setDbName(string $dbName)
+    {
         MysqlSingleton::getInstance()->changeDb($dbName);
         $this->_dbName = $dbName;
     }
 
-    public function getDbTable() : string {
+    public function getDbTable() : string
+    {
         return '`' . $this->_dbName . '`.`' . $this->_tableName . '`';
     }
 
     /**
      * @return \DB\Models\NotORM\NotORM
      */
-    public function getOrmDb() {
+    public function getOrmDb()
+    {
         return $this->_db;
     }
 
     /**
      * @return \DB\Models\NotORM\NotORM_Result
      */
-    public function getOrmDbTable() {
+    public function getOrmDbTable()
+    {
         $tableName = $this->_tableName;
         return $this->_db->$tableName();
-    }
-
-    private function clearModel() {
-        $this->_fields = [];
     }
 
     /**
@@ -91,20 +95,21 @@ class MysqlModel extends BaseModel {
      * @param bool $filter 是否过滤,true:过滤 false:不过滤
      * @return $this
      */
-    public function setFields($fields,bool $filter=false) {
+    public function setFields($fields, bool $filter = false)
+    {
         $fieldArr = [];
-        if(is_array($fields)){
+        if (is_array($fields)) {
             foreach ($fields as $eField) {
-                if(is_numeric($eField)){
+                if (is_numeric($eField)) {
                     $fieldArr[] = trim($eField);
-                } else if(is_string($eField)){
+                } elseif (is_string($eField)) {
                     $trueField = preg_replace('/\s+/', ' ', trim($eField));
-                    if(strlen($trueField) > 0){
+                    if (strlen($trueField) > 0) {
                         $fieldArr[] = $trueField;
                     }
                 }
             }
-        } else if(is_string($fields)){
+        } elseif (is_string($fields)) {
             $trueFields = preg_replace([
                 '/\s+\,\s+/',
                 '/\s+/',
@@ -114,7 +119,7 @@ class MysqlModel extends BaseModel {
             ], trim($fields));
             $trueArr = explode(',', $trueFields);
             foreach ($trueArr as $eData) {
-                if(strlen($eData) > 0){
+                if (strlen($eData) > 0) {
                     $fieldArr[] = $eData;
                 }
             }
@@ -122,9 +127,9 @@ class MysqlModel extends BaseModel {
         array_unique($fieldArr);
 
         $this->_fields = [];
-        if($filter){
+        if ($filter) {
             foreach ($this->_entityProps as $eProp => $eType) {
-                if(!in_array($eProp, $fieldArr)){
+                if (!in_array($eProp, $fieldArr, true)) {
                     $this->_fields[] = $eProp;
                 }
             }
@@ -136,52 +141,15 @@ class MysqlModel extends BaseModel {
     }
 
     /**
-     * 迭代器处理，转换数据结构，从对象类型转换成二维数组
-     * @param \DB\Models\NotORM\NotORM_Result $obj
-     * @return array
-     */
-    private function iteratorArray(NotORM_Result $obj) : array {
-        $data = [];
-        foreach ($obj as $row) {
-            $data[] = iterator_to_array($row);
-        }
-
-        return $data;
-    }
-
-    /**
-     * 设置orm查询字段
-     * @param \DB\Models\NotORM\NotORM_Result $result
-     */
-    private function setResultFields(NotORM_Result &$result) {
-        $result->select('');
-
-        if(empty($this->_fields)){
-            $fieldStr = '`' . implode('`,`', array_keys($this->_entityProps)) . '`';
-            $result->select($fieldStr);
-        } else {
-            $fieldStr = '';
-            foreach ($this->_fields as $eField) {
-                if(isset($this->_entityProps[$eField])){
-                    $fieldStr .= ',`' . $eField . '`';
-                } else {
-                    $fieldStr .= ',' . $eField;
-                }
-            }
-
-            $result->select(substr($fieldStr, 1));
-        }
-    }
-
-    /**
      * 查询数据
      * @param \DB\Models\NotORM\NotORM_Result $result
      * @param int $page 页数
      * @param int $limit 分页限制
      * @return array
-     * @throws \Exception\Mysql\MysqlException
+     * @throws \SyException\Mysql\MysqlException
      */
-    public function select(NotORM_Result $result,int $page=1,int $limit=1000) : array {
+    public function select(NotORM_Result $result, int $page = 1, int $limit = 1000) : array
+    {
         $this->setResultFields($result);
         $truePage = $page > 0 ? $page : Project::COMMON_PAGE_DEFAULT;
         $trueLimit = $limit > 0 ? $limit : 1000;
@@ -196,7 +164,6 @@ class MysqlModel extends BaseModel {
         } finally {
             $this->clearModel();
         }
-
     }
 
     /**
@@ -204,10 +171,11 @@ class MysqlModel extends BaseModel {
      * @param \DB\Models\NotORM\NotORM_Result $result
      * @param int $page 页数
      * @param int $limit 分页限制
-     * @throws \Exception\Mysql\MysqlException
+     * @throws \SyException\Mysql\MysqlException
      * @return array
      */
-    public function findPage(NotORM_Result $result,int $page,int $limit) : array {
+    public function findPage(NotORM_Result $result, int $page, int $limit) : array
+    {
         $resArr = [
             'total' => 0,
             'limit' => $limit > 0 ? $limit : Project::COMMON_LIMIT_DEFAULT,
@@ -238,10 +206,11 @@ class MysqlModel extends BaseModel {
     /**
      * 查询单条数据
      * @param \DB\Models\NotORM\NotORM_Result $result
-     * @throws \Exception\Mysql\MysqlException
+     * @throws \SyException\Mysql\MysqlException
      * @return array
      */
-    public function findOne(NotORM_Result $result) : array {
+    public function findOne(NotORM_Result $result) : array
+    {
         $this->setResultFields($result);
 
         try {
@@ -261,7 +230,8 @@ class MysqlModel extends BaseModel {
      * 开启事务
      * @return bool true:开启成功 false:开启失败
      */
-    public function openTransaction() : bool {
+    public function openTransaction() : bool
+    {
         if ($this->_dbConn->inTransaction()) {
             return true;
         } else {
@@ -273,7 +243,8 @@ class MysqlModel extends BaseModel {
      * 提交事务
      * @return bool
      */
-    public function commitTransaction() : bool {
+    public function commitTransaction() : bool
+    {
         if ($this->_dbConn->inTransaction()) {
             return $this->_dbConn->commit();
         }
@@ -285,7 +256,8 @@ class MysqlModel extends BaseModel {
      * 回滚事务
      * @return bool
      */
-    public function rollbackTransaction() : bool {
+    public function rollbackTransaction() : bool
+    {
         if ($this->_dbConn->inTransaction()) {
             return $this->_dbConn->rollBack();
         }
@@ -297,10 +269,11 @@ class MysqlModel extends BaseModel {
      * 修改数据
      * @param \DB\Models\NotORM\NotORM_Result $result
      * @param array $data
-     * @throws \Exception\Mysql\MysqlException
+     * @throws \SyException\Mysql\MysqlException
      * @return mixed
      */
-    public function update(NotORM_Result $result,array $data){
+    public function update(NotORM_Result $result, array $data)
+    {
         try {
             $affectNum = $result->update($data);
         } catch (\Exception $e) {
@@ -315,10 +288,11 @@ class MysqlModel extends BaseModel {
     /**
      * 插入数据
      * @param array $data
-     * @throws \Exception\Mysql\MysqlException
+     * @throws \SyException\Mysql\MysqlException
      * @return int|string
      */
-    public function insert(array $data){
+    public function insert(array $data)
+    {
         $table = $this->getOrmDbTable();
 
         try {
@@ -340,10 +314,11 @@ class MysqlModel extends BaseModel {
      * @param array $unique
      * @param array $insert
      * @param array $update
-     * @throws \Exception\Mysql\MysqlException
+     * @throws \SyException\Mysql\MysqlException
      * @return mixed
      */
-    public function insertOrUpdate(NotORM_Result $result,array $unique,array $insert,array $update = array()) {
+    public function insertOrUpdate(NotORM_Result $result, array $unique, array $insert, array $update = [])
+    {
         try {
             $affectNum = $result->insert_update($unique, $insert, $update);
         } catch (\Exception $e) {
@@ -358,10 +333,11 @@ class MysqlModel extends BaseModel {
     /**
      * 删除数据
      * @param \DB\Models\NotORM\NotORM_Result $result
-     * @throws \Exception\Mysql\MysqlException
+     * @throws \SyException\Mysql\MysqlException
      * @return mixed
      */
-    public function delete(NotORM_Result $result) {
+    public function delete(NotORM_Result $result)
+    {
         try {
             $affectNum = $result->delete();
         } catch (\Exception $e) {
@@ -371,5 +347,50 @@ class MysqlModel extends BaseModel {
         }
 
         return $affectNum;
+    }
+
+    private function clearModel()
+    {
+        $this->_fields = [];
+    }
+
+    /**
+     * 迭代器处理，转换数据结构，从对象类型转换成二维数组
+     * @param \DB\Models\NotORM\NotORM_Result $obj
+     * @return array
+     */
+    private function iteratorArray(NotORM_Result $obj) : array
+    {
+        $data = [];
+        foreach ($obj as $row) {
+            $data[] = iterator_to_array($row);
+        }
+
+        return $data;
+    }
+
+    /**
+     * 设置orm查询字段
+     * @param \DB\Models\NotORM\NotORM_Result $result
+     */
+    private function setResultFields(NotORM_Result &$result)
+    {
+        $result->select('');
+
+        if (empty($this->_fields)) {
+            $fieldStr = '`' . implode('`,`', array_keys($this->_entityProps)) . '`';
+            $result->select($fieldStr);
+        } else {
+            $fieldStr = '';
+            foreach ($this->_fields as $eField) {
+                if (isset($this->_entityProps[$eField])) {
+                    $fieldStr .= ',`' . $eField . '`';
+                } else {
+                    $fieldStr .= ',' . $eField;
+                }
+            }
+
+            $result->select(substr($fieldStr, 1));
+        }
     }
 }

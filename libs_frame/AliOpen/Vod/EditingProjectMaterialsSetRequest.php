@@ -3,70 +3,99 @@ namespace AliOpen\Vod;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class EditingProjectMaterialsSetRequest extends RpcAcsRequest {
-    private $resourceOwnerId;
-    private $resourceOwnerAccount;
-    private $ownerAccount;
-    private $materialIds;
-    private $ownerId;
-    private $projectId;
+/**
+ * Request of SetEditingProjectMaterials
+ * @method string getResourceOwnerId()
+ * @method string getProjectId()
+ * @method string getResourceOwnerAccount()
+ * @method string getOwnerAccount()
+ * @method string getOwnerId()
+ * @method string getMaterialIds()
+ */
+class EditingProjectMaterialsSetRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("vod", "2017-03-21", "SetEditingProjectMaterials", "vod", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('vod', '2017-03-21', 'SetEditingProjectMaterials', 'vod');
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $resourceOwnerId
+     * @return $this
+     */
+    public function setResourceOwnerId($resourceOwnerId)
+    {
+        $this->requestParameters['ResourceOwnerId'] = $resourceOwnerId;
+        $this->queryParameters['ResourceOwnerId'] = $resourceOwnerId;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $projectId
+     * @return $this
+     */
+    public function setProjectId($projectId)
+    {
+        $this->requestParameters['ProjectId'] = $projectId;
+        $this->queryParameters['ProjectId'] = $projectId;
+
+        return $this;
     }
 
-    public function getResourceOwnerAccount(){
-        return $this->resourceOwnerAccount;
+    /**
+     * @param string $resourceOwnerAccount
+     * @return $this
+     */
+    public function setResourceOwnerAccount($resourceOwnerAccount)
+    {
+        $this->requestParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+        $this->queryParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+
+        return $this;
     }
 
-    public function setResourceOwnerAccount($resourceOwnerAccount){
-        $this->resourceOwnerAccount = $resourceOwnerAccount;
-        $this->queryParameters["ResourceOwnerAccount"] = $resourceOwnerAccount;
+    /**
+     * @param string $ownerAccount
+     * @return $this
+     */
+    public function setOwnerAccount($ownerAccount)
+    {
+        $this->requestParameters['OwnerAccount'] = $ownerAccount;
+        $this->queryParameters['OwnerAccount'] = $ownerAccount;
+
+        return $this;
     }
 
-    public function getOwnerAccount(){
-        return $this->ownerAccount;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function setOwnerAccount($ownerAccount){
-        $this->ownerAccount = $ownerAccount;
-        $this->queryParameters["OwnerAccount"] = $ownerAccount;
-    }
+    /**
+     * @param string $materialIds
+     * @return $this
+     */
+    public function setMaterialIds($materialIds)
+    {
+        $this->requestParameters['MaterialIds'] = $materialIds;
+        $this->queryParameters['MaterialIds'] = $materialIds;
 
-    public function getMaterialIds(){
-        return $this->materialIds;
-    }
-
-    public function setMaterialIds($materialIds){
-        $this->materialIds = $materialIds;
-        $this->queryParameters["MaterialIds"] = $materialIds;
-    }
-
-    public function getOwnerId(){
-        return $this->ownerId;
-    }
-
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
-    }
-
-    public function getProjectId(){
-        return $this->projectId;
-    }
-
-    public function setProjectId($projectId){
-        $this->projectId = $projectId;
-        $this->queryParameters["ProjectId"] = $projectId;
+        return $this;
     }
 }

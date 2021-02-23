@@ -3,80 +3,125 @@ namespace AliOpen\Vod;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class VodTemplateAddRequest extends RpcAcsRequest {
-    private $resourceOwnerId;
-    private $resourceOwnerAccount;
-    private $templateConfig;
-    private $templateType;
-    private $name;
-    private $ownerId;
-    private $subTemplateType;
+/**
+ * Request of AddVodTemplate
+ * @method string getResourceOwnerId()
+ * @method string getSubTemplateType()
+ * @method string getTemplateConfig()
+ * @method string getTemplateType()
+ * @method string getResourceOwnerAccount()
+ * @method string getOwnerId()
+ * @method string getAppId()
+ * @method string getName()
+ */
+class VodTemplateAddRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("vod", "2017-03-21", "AddVodTemplate", "vod", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('vod', '2017-03-21', 'AddVodTemplate', 'vod');
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $resourceOwnerId
+     * @return $this
+     */
+    public function setResourceOwnerId($resourceOwnerId)
+    {
+        $this->requestParameters['ResourceOwnerId'] = $resourceOwnerId;
+        $this->queryParameters['ResourceOwnerId'] = $resourceOwnerId;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $subTemplateType
+     * @return $this
+     */
+    public function setSubTemplateType($subTemplateType)
+    {
+        $this->requestParameters['SubTemplateType'] = $subTemplateType;
+        $this->queryParameters['SubTemplateType'] = $subTemplateType;
+
+        return $this;
     }
 
-    public function getResourceOwnerAccount(){
-        return $this->resourceOwnerAccount;
+    /**
+     * @param string $templateConfig
+     * @return $this
+     */
+    public function setTemplateConfig($templateConfig)
+    {
+        $this->requestParameters['TemplateConfig'] = $templateConfig;
+        $this->queryParameters['TemplateConfig'] = $templateConfig;
+
+        return $this;
     }
 
-    public function setResourceOwnerAccount($resourceOwnerAccount){
-        $this->resourceOwnerAccount = $resourceOwnerAccount;
-        $this->queryParameters["ResourceOwnerAccount"] = $resourceOwnerAccount;
+    /**
+     * @param string $templateType
+     * @return $this
+     */
+    public function setTemplateType($templateType)
+    {
+        $this->requestParameters['TemplateType'] = $templateType;
+        $this->queryParameters['TemplateType'] = $templateType;
+
+        return $this;
     }
 
-    public function getTemplateConfig(){
-        return $this->templateConfig;
+    /**
+     * @param string $resourceOwnerAccount
+     * @return $this
+     */
+    public function setResourceOwnerAccount($resourceOwnerAccount)
+    {
+        $this->requestParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+        $this->queryParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+
+        return $this;
     }
 
-    public function setTemplateConfig($templateConfig){
-        $this->templateConfig = $templateConfig;
-        $this->queryParameters["TemplateConfig"] = $templateConfig;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function getTemplateType(){
-        return $this->templateType;
+    /**
+     * @param string $appId
+     * @return $this
+     */
+    public function setAppId($appId)
+    {
+        $this->requestParameters['AppId'] = $appId;
+        $this->queryParameters['AppId'] = $appId;
+
+        return $this;
     }
 
-    public function setTemplateType($templateType){
-        $this->templateType = $templateType;
-        $this->queryParameters["TemplateType"] = $templateType;
-    }
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->requestParameters['Name'] = $name;
+        $this->queryParameters['Name'] = $name;
 
-    public function getName(){
-        return $this->name;
-    }
-
-    public function setName($name){
-        $this->name = $name;
-        $this->queryParameters["Name"] = $name;
-    }
-
-    public function getOwnerId(){
-        return $this->ownerId;
-    }
-
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
-    }
-
-    public function getSubTemplateType(){
-        return $this->subTemplateType;
-    }
-
-    public function setSubTemplateType($subTemplateType){
-        $this->subTemplateType = $subTemplateType;
-        $this->queryParameters["SubTemplateType"] = $subTemplateType;
+        return $this;
     }
 }

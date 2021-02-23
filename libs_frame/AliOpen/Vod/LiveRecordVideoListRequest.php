@@ -3,130 +3,177 @@ namespace AliOpen\Vod;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class LiveRecordVideoListRequest extends RpcAcsRequest {
-    private $resourceOwnerId;
-    private $resourceOwnerAccount;
-    private $domainName;
-    private $endTime;
-    private $startTime;
-    private $ownerId;
-    private $appName;
-    private $pageNo;
-    private $pageSize;
-    private $sortBy;
-    private $streamName;
-    private $queryType;
+/**
+ * Request of ListLiveRecordVideo
+ * @method string getResourceOwnerId()
+ * @method string getStartTime()
+ * @method string getAppName()
+ * @method string getPageSize()
+ * @method string getStreamName()
+ * @method string getQueryType()
+ * @method string getResourceOwnerAccount()
+ * @method string getDomainName()
+ * @method string getEndTime()
+ * @method string getOwnerId()
+ * @method string getPageNo()
+ * @method string getSortBy()
+ */
+class LiveRecordVideoListRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("vod", "2017-03-21", "ListLiveRecordVideo", "vod", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('vod', '2017-03-21', 'ListLiveRecordVideo', 'vod');
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $resourceOwnerId
+     * @return $this
+     */
+    public function setResourceOwnerId($resourceOwnerId)
+    {
+        $this->requestParameters['ResourceOwnerId'] = $resourceOwnerId;
+        $this->queryParameters['ResourceOwnerId'] = $resourceOwnerId;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $startTime
+     * @return $this
+     */
+    public function setStartTime($startTime)
+    {
+        $this->requestParameters['StartTime'] = $startTime;
+        $this->queryParameters['StartTime'] = $startTime;
+
+        return $this;
     }
 
-    public function getResourceOwnerAccount(){
-        return $this->resourceOwnerAccount;
+    /**
+     * @param string $appName
+     * @return $this
+     */
+    public function setAppName($appName)
+    {
+        $this->requestParameters['AppName'] = $appName;
+        $this->queryParameters['AppName'] = $appName;
+
+        return $this;
     }
 
-    public function setResourceOwnerAccount($resourceOwnerAccount){
-        $this->resourceOwnerAccount = $resourceOwnerAccount;
-        $this->queryParameters["ResourceOwnerAccount"] = $resourceOwnerAccount;
+    /**
+     * @param string $pageSize
+     * @return $this
+     */
+    public function setPageSize($pageSize)
+    {
+        $this->requestParameters['PageSize'] = $pageSize;
+        $this->queryParameters['PageSize'] = $pageSize;
+
+        return $this;
     }
 
-    public function getDomainName(){
-        return $this->domainName;
+    /**
+     * @param string $streamName
+     * @return $this
+     */
+    public function setStreamName($streamName)
+    {
+        $this->requestParameters['StreamName'] = $streamName;
+        $this->queryParameters['StreamName'] = $streamName;
+
+        return $this;
     }
 
-    public function setDomainName($domainName){
-        $this->domainName = $domainName;
-        $this->queryParameters["DomainName"] = $domainName;
+    /**
+     * @param string $queryType
+     * @return $this
+     */
+    public function setQueryType($queryType)
+    {
+        $this->requestParameters['QueryType'] = $queryType;
+        $this->queryParameters['QueryType'] = $queryType;
+
+        return $this;
     }
 
-    public function getEndTime(){
-        return $this->endTime;
+    /**
+     * @param string $resourceOwnerAccount
+     * @return $this
+     */
+    public function setResourceOwnerAccount($resourceOwnerAccount)
+    {
+        $this->requestParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+        $this->queryParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+
+        return $this;
     }
 
-    public function setEndTime($endTime){
-        $this->endTime = $endTime;
-        $this->queryParameters["EndTime"] = $endTime;
+    /**
+     * @param string $domainName
+     * @return $this
+     */
+    public function setDomainName($domainName)
+    {
+        $this->requestParameters['DomainName'] = $domainName;
+        $this->queryParameters['DomainName'] = $domainName;
+
+        return $this;
     }
 
-    public function getStartTime(){
-        return $this->startTime;
+    /**
+     * @param string $endTime
+     * @return $this
+     */
+    public function setEndTime($endTime)
+    {
+        $this->requestParameters['EndTime'] = $endTime;
+        $this->queryParameters['EndTime'] = $endTime;
+
+        return $this;
     }
 
-    public function setStartTime($startTime){
-        $this->startTime = $startTime;
-        $this->queryParameters["StartTime"] = $startTime;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function getOwnerId(){
-        return $this->ownerId;
+    /**
+     * @param string $pageNo
+     * @return $this
+     */
+    public function setPageNo($pageNo)
+    {
+        $this->requestParameters['PageNo'] = $pageNo;
+        $this->queryParameters['PageNo'] = $pageNo;
+
+        return $this;
     }
 
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
-    }
+    /**
+     * @param string $sortBy
+     * @return $this
+     */
+    public function setSortBy($sortBy)
+    {
+        $this->requestParameters['SortBy'] = $sortBy;
+        $this->queryParameters['SortBy'] = $sortBy;
 
-    public function getAppName(){
-        return $this->appName;
-    }
-
-    public function setAppName($appName){
-        $this->appName = $appName;
-        $this->queryParameters["AppName"] = $appName;
-    }
-
-    public function getPageNo(){
-        return $this->pageNo;
-    }
-
-    public function setPageNo($pageNo){
-        $this->pageNo = $pageNo;
-        $this->queryParameters["PageNo"] = $pageNo;
-    }
-
-    public function getPageSize(){
-        return $this->pageSize;
-    }
-
-    public function setPageSize($pageSize){
-        $this->pageSize = $pageSize;
-        $this->queryParameters["PageSize"] = $pageSize;
-    }
-
-    public function getSortBy(){
-        return $this->sortBy;
-    }
-
-    public function setSortBy($sortBy){
-        $this->sortBy = $sortBy;
-        $this->queryParameters["SortBy"] = $sortBy;
-    }
-
-    public function getStreamName(){
-        return $this->streamName;
-    }
-
-    public function setStreamName($streamName){
-        $this->streamName = $streamName;
-        $this->queryParameters["StreamName"] = $streamName;
-    }
-
-    public function getQueryType(){
-        return $this->queryType;
-    }
-
-    public function setQueryType($queryType){
-        $this->queryType = $queryType;
-        $this->queryParameters["QueryType"] = $queryType;
+        return $this;
     }
 }

@@ -60,6 +60,28 @@ SwooleYaf是PHP语言的高性能分布式微服务框架,专注于restful api�
 ## 其他
 - gcc4.8+ //php7编译用gcc4.8+会开启Global Register for opline and execute_data支持, 这个会带来5%左右的性能提升
 
+# **使用相关(重要,必须首先进行)**
+## 设置项目核心配置
+复制helper_load_example.php为helper_load.php并修改相关配置
+其中: 
+- SY_ENV: 环境类型,支持dev:开发 product:生产
+- SY_PROJECT: 项目标识,3位长度,由数字和小写字母组成
+
+## 设置php环境配置
+复制helper_php_example.php为helper_php.php并修改相关配置
+
+## 设置swoole启动项目配置
+复制config_projects_example.php为config_projects.php并修改相关配置
+其中:
+
+- module_path: 模块目录,以sy_开头的目录名
+- module_name: 模块名称,和SyConstant\Project::MODULE_NAME_*开头的常量保持相同
+- listens.host: swoole服务运行的IP,可保持不变
+- listens.port: swoole服务运行的端口
+- listens.register_type: swoole服务注册类型, 空字符串:不注册 nginx:通过nginx注册,该注册方式通过lua实现
+
+**注1: 如果想要运行多个swoole服务,listens数组添加多个并保证端口不冲突即可**
+
 # 框架介绍
 ## 使用介绍
 - 操作系统只支持linux,不支持windows,因为pcntl扩展,nohup,inotify只有linux才可用
@@ -100,6 +122,8 @@ SwooleYaf是PHP语言的高性能分布式微服务框架,专注于restful api�
     /usr/local/php7/bin/php helper_service_manager.php -s kz-all
 ### mysql工具
     /usr/local/php7/bin/php helper_mysql.php -h
+### nginx工具
+    /usr/local/php7/bin/php helper_nginx.php -h
 
 ## 预定义常量
 - SY_ROOT //框架根目录
@@ -169,3 +193,78 @@ nginx配置: <br/>
 
 ## 图片处理
 - https://github.com/kosinix/grafika //参考地址
+
+## 切面支持
+说明:
+- 切面类必须继承\SyAspect\BaseAspect
+- 只支持在控制器的action方法注释上添加切面注释
+- 支持的切面注释为SyAspect(环绕切面),SyAspectBefore(前置切面),SyAspectAfter(后置切面)
+### 环绕切面
+    /**
+     * 登录
+     * @SyAspect-\SyAspect\Demo
+     */
+    public function loginAction()
+### 前置切面
+    /**
+     * 登录
+     * @SyAspectBefore-\SyAspect\Demo
+     */
+    public function loginAction()
+### 后置切面
+    /**
+     * 登录
+     * @SyAspectAfter-\SyAspect\Demo
+     */
+    public function loginAction()
+
+## 消息处理
+### 添加消息数据
+    $handlerType = \SyConstant\Project::MESSAGE_HANDLER_TYPE_SMS_DAYU;
+    $queueType = \SyConstant\Project::MESSAGE_QUEUE_TYPE_REDIS;
+    //具体的数据格式请参考对应消息生产者的checkMsgData方法,对应的命名空间为\SyMessageHandler\Producers
+    $data = [
+        'receivers' => [
+            '12233334444'
+        ],
+        'template_id' => 'test11233',
+        'template_sign' => '签名测试',
+        'template_params' => [
+            'code' => '123456'
+        ],
+    ];
+    $addRes = \DesignPatterns\Singletons\MessageHandlerSingleton::getInstance()->addMsgData($handlerType, $data, $queueType);
+    //将addRes的数据添加到数据库中,其中msg_id为消息ID,可作为消息处理记录的主键,方便后续查看消息处理的记录以及修改消息处理结果
+### 处理消息数据(消息队列类型必须与添加的时候一致)
+    $queueType = \SyConstant\Project::MESSAGE_QUEUE_TYPE_REDIS;
+    $msgData = \DesignPatterns\Singletons\MessageHandlerSingleton::getInstance()->getMsgData($queueType);
+    if (!empty($msgData)) {
+        try{
+            $handlerRes = \DesignPatterns\Singletons\MessageHandlerSingleton::getInstance()->invokeMsg($msgData);
+        } catch (Exception $e) {
+            \SyLog\Log::error($e->getMessage(), $e->getCode(), $e->getTraceAsString());
+            $handlerRes = [
+                'code' => 9999,
+                'msg' => $e->getMessage(),
+            ];
+        }
+        //通过msgData的msg_id和handlerRes,修改消息处理记录的处理结果
+    }
+
+## 布隆过滤器
+### 初始化
+修改libs_project/SyTrait/BloomTrait的initFilters方法,可参考现有代码自行初始化好所有的过滤器
+
+### 添加数据到布隆过滤器
+    $cacheKey = 'test1234';
+    \DesignPatterns\Factories\CacheSimpleFactory::getRedisInstance()->set($cacheKey, 123);
+    \DesignPatterns\Singletons\BloomSingleton::getInstance()->addKey('a01', $cacheKey);
+
+### 使用布隆过滤器
+    $cacheKey = 'test1234';
+    $existTag = \DesignPatterns\Singletons\BloomSingleton::getInstance()->existKey('a01', $cacheKey);
+    if ($existTag) {
+        $cacheVal = \DesignPatterns\Factories\CacheSimpleFactory::getRedisInstance()->get($cacheKey);
+    } else {
+        echo '非法键名';
+    }

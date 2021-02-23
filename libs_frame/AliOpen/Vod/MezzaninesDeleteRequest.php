@@ -3,60 +3,86 @@ namespace AliOpen\Vod;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class MezzaninesDeleteRequest extends RpcAcsRequest {
-    private $resourceOwnerId;
-    private $resourceOwnerAccount;
-    private $force;
-    private $ownerId;
-    private $videoIds;
+/**
+ * Request of DeleteMezzanines
+ * @method string getResourceOwnerId()
+ * @method string getResourceOwnerAccount()
+ * @method string getOwnerId()
+ * @method string getForce()
+ * @method string getVideoIds()
+ */
+class MezzaninesDeleteRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("vod", "2017-03-21", "DeleteMezzanines", "vod", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('vod', '2017-03-21', 'DeleteMezzanines', 'vod');
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $resourceOwnerId
+     * @return $this
+     */
+    public function setResourceOwnerId($resourceOwnerId)
+    {
+        $this->requestParameters['ResourceOwnerId'] = $resourceOwnerId;
+        $this->queryParameters['ResourceOwnerId'] = $resourceOwnerId;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $resourceOwnerAccount
+     * @return $this
+     */
+    public function setResourceOwnerAccount($resourceOwnerAccount)
+    {
+        $this->requestParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+        $this->queryParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+
+        return $this;
     }
 
-    public function getResourceOwnerAccount(){
-        return $this->resourceOwnerAccount;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function setResourceOwnerAccount($resourceOwnerAccount){
-        $this->resourceOwnerAccount = $resourceOwnerAccount;
-        $this->queryParameters["ResourceOwnerAccount"] = $resourceOwnerAccount;
+    /**
+     * @param string $force
+     * @return $this
+     */
+    public function setForce($force)
+    {
+        $this->requestParameters['Force'] = $force;
+        $this->queryParameters['Force'] = $force;
+
+        return $this;
     }
 
-    public function getForce(){
-        return $this->force;
-    }
+    /**
+     * @param string $videoIds
+     * @return $this
+     */
+    public function setVideoIds($videoIds)
+    {
+        $this->requestParameters['VideoIds'] = $videoIds;
+        $this->queryParameters['VideoIds'] = $videoIds;
 
-    public function setForce($force){
-        $this->force = $force;
-        $this->queryParameters["Force"] = $force;
-    }
-
-    public function getOwnerId(){
-        return $this->ownerId;
-    }
-
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
-    }
-
-    public function getVideoIds(){
-        return $this->videoIds;
-    }
-
-    public function setVideoIds($videoIds){
-        $this->videoIds = $videoIds;
-        $this->queryParameters["VideoIds"] = $videoIds;
+        return $this;
     }
 }

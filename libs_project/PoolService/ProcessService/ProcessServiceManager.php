@@ -7,16 +7,19 @@
  */
 namespace PoolService\ProcessService;
 
-use Constant\Project;
+use SyConstant\Project;
 
-class ProcessServiceManager extends BaseManager {
-    public function __construct(){
+class ProcessServiceManager extends BaseManager
+{
+    public function __construct()
+    {
         parent::__construct();
         $this->projectServices = [
             Project::POOL_PROCESS_SERVICE_TAG_TEST => '\PoolService\ProcessService\Test',
         ];
     }
 
-    private function __clone(){
+    private function __clone()
+    {
     }
 }

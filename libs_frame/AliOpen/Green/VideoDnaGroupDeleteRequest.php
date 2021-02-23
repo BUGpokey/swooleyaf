@@ -3,21 +3,38 @@ namespace AliOpen\Green;
 
 use AliOpen\Core\RoaAcsRequest;
 
-class VideoDnaGroupDeleteRequest extends RoaAcsRequest {
-    private $clientInfo;
+/**
+ * Request of DeleteVideoDnaGroup
+ * @method string getClientInfo()
+ */
+class VideoDnaGroupDeleteRequest extends RoaAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $uriPattern = '/green/video/dna/group/delete';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Green", "2018-05-09", "DeleteVideoDnaGroup", "green", "openAPI");
-        $this->setUriPattern("/green/video/dna/group/delete");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Green', '2018-05-09', 'DeleteVideoDnaGroup', 'green');
     }
 
-    public function getClientInfo(){
-        return $this->clientInfo;
-    }
+    /**
+     * @param string $clientInfo
+     * @return $this
+     */
+    public function setClientInfo($clientInfo)
+    {
+        $this->requestParameters['ClientInfo'] = $clientInfo;
+        $this->queryParameters['ClientInfo'] = $clientInfo;
 
-    public function setClientInfo($clientInfo){
-        $this->clientInfo = $clientInfo;
-        $this->queryParameters["ClientInfo"] = $clientInfo;
+        return $this;
     }
 }

@@ -3,21 +3,38 @@ namespace AliOpen\Ram;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class MFADeviceUnbindRequest extends RpcAcsRequest {
-    private $userName;
+/**
+ * Request of UnbindMFADevice
+ * @method string getUserName()
+ */
+class MFADeviceUnbindRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $requestScheme = 'https';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ram", "2015-05-01", "UnbindMFADevice");
-        $this->setProtocol("https");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ram', '2015-05-01', 'UnbindMFADevice', 'ram');
     }
 
-    public function getUserName(){
-        return $this->userName;
-    }
+    /**
+     * @param string $userName
+     * @return $this
+     */
+    public function setUserName($userName)
+    {
+        $this->requestParameters['UserName'] = $userName;
+        $this->queryParameters['UserName'] = $userName;
 
-    public function setUserName($userName){
-        $this->userName = $userName;
-        $this->queryParameters["UserName"] = $userName;
+        return $this;
     }
 }

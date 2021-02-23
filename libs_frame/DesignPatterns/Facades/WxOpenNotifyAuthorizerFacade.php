@@ -7,12 +7,14 @@
  */
 namespace DesignPatterns\Facades;
 
-use Traits\SimpleFacadeTrait;
+use SyTrait\SimpleFacadeTrait;
 
-abstract class WxOpenNotifyAuthorizerFacade {
+abstract class WxOpenNotifyAuthorizerFacade
+{
     use SimpleFacadeTrait;
 
-    public static function acceptNotify(array $data){
+    public static function acceptNotify(array $data)
+    {
         return static::responseNotify($data);
     }
 

@@ -3,31 +3,51 @@ namespace AliOpen\Ram;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class PublicKeyGetRequest extends RpcAcsRequest {
-    private $userPublicKeyId;
-    private $userName;
+/**
+ * Request of GetPublicKey
+ * @method string getUserPublicKeyId()
+ * @method string getUserName()
+ */
+class PublicKeyGetRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $requestScheme = 'https';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ram", "2015-05-01", "GetPublicKey");
-        $this->setProtocol("https");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ram', '2015-05-01', 'GetPublicKey', 'ram');
     }
 
-    public function getUserPublicKeyId(){
-        return $this->userPublicKeyId;
+    /**
+     * @param string $userPublicKeyId
+     * @return $this
+     */
+    public function setUserPublicKeyId($userPublicKeyId)
+    {
+        $this->requestParameters['UserPublicKeyId'] = $userPublicKeyId;
+        $this->queryParameters['UserPublicKeyId'] = $userPublicKeyId;
+
+        return $this;
     }
 
-    public function setUserPublicKeyId($userPublicKeyId){
-        $this->userPublicKeyId = $userPublicKeyId;
-        $this->queryParameters["UserPublicKeyId"] = $userPublicKeyId;
-    }
+    /**
+     * @param string $userName
+     * @return $this
+     */
+    public function setUserName($userName)
+    {
+        $this->requestParameters['UserName'] = $userName;
+        $this->queryParameters['UserName'] = $userName;
 
-    public function getUserName(){
-        return $this->userName;
-    }
-
-    public function setUserName($userName){
-        $this->userName = $userName;
-        $this->queryParameters["UserName"] = $userName;
+        return $this;
     }
 }

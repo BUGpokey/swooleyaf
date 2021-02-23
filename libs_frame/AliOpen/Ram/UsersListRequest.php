@@ -3,31 +3,51 @@ namespace AliOpen\Ram;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class UsersListRequest extends RpcAcsRequest {
-    private $marker;
-    private $maxItems;
+/**
+ * Request of ListUsers
+ * @method string getMarker()
+ * @method string getMaxItems()
+ */
+class UsersListRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $requestScheme = 'https';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ram", "2015-05-01", "ListUsers");
-        $this->setProtocol("https");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ram', '2015-05-01', 'ListUsers', 'ram');
     }
 
-    public function getMarker(){
-        return $this->marker;
+    /**
+     * @param string $marker
+     * @return $this
+     */
+    public function setMarker($marker)
+    {
+        $this->requestParameters['Marker'] = $marker;
+        $this->queryParameters['Marker'] = $marker;
+
+        return $this;
     }
 
-    public function setMarker($marker){
-        $this->marker = $marker;
-        $this->queryParameters["Marker"] = $marker;
-    }
+    /**
+     * @param string $maxItems
+     * @return $this
+     */
+    public function setMaxItems($maxItems)
+    {
+        $this->requestParameters['MaxItems'] = $maxItems;
+        $this->queryParameters['MaxItems'] = $maxItems;
 
-    public function getMaxItems(){
-        return $this->maxItems;
-    }
-
-    public function setMaxItems($maxItems){
-        $this->maxItems = $maxItems;
-        $this->queryParameters["MaxItems"] = $maxItems;
+        return $this;
     }
 }

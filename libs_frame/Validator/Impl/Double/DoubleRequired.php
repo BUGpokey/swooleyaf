@@ -7,21 +7,25 @@
  */
 namespace Validator\Impl\Double;
 
-use Constant\Project;
+use SyConstant\Project;
 use Validator\BaseValidator;
 use Validator\ValidatorService;
 
-class DoubleRequired extends BaseValidator implements ValidatorService {
-    public function __construct() {
+class DoubleRequired extends BaseValidator implements ValidatorService
+{
+    public function __construct()
+    {
         parent::__construct();
-        $this->validatorType = Project::VALIDATOR_DOUBLE_TYPE_REQUIRED;
+        $this->validatorType = Project::VALIDATOR_TYPE_DOUBLE_REQUIRED;
     }
 
-    private function __clone() {
+    private function __clone()
+    {
     }
 
-    public function validator($data, $compareData) : string {
-        if($data === null){
+    public function validator($data, $compareData) : string
+    {
+        if ($data === null) {
             return '必须填写';
         }
 

@@ -1,8 +1,9 @@
 <?php
+
 namespace Swoole;
 
 /**
- * @since 4.3.2
+ * @since 4.6.2
  */
 class Client
 {
@@ -14,139 +15,151 @@ class Client
     const SHUT_RD = 0;
     const SHUT_WR = 1;
 
-
     /**
      * @param $type[required]
      * @param $async[optional]
+     * @param $id[optional]
+     *
      * @return mixed
      */
-    public function __construct($type, $async=null){}
+    public function __construct($type, $async = null, $id = null)
+    {
+    }
 
     /**
      * @return mixed
      */
-    public function __destruct(){}
+    public function __destruct()
+    {
+    }
 
     /**
      * @param $settings[required]
+     *
      * @return mixed
      */
-    public function set($settings){}
+    public function set($settings)
+    {
+    }
 
     /**
      * @param $host[required]
      * @param $port[optional]
      * @param $timeout[optional]
      * @param $sock_flag[optional]
+     *
      * @return mixed
      */
-    public function connect($host, $port=null, $timeout=null, $sock_flag=null){}
+    public function connect($host, $port = null, $timeout = null, $sock_flag = null)
+    {
+    }
 
     /**
      * @param $size[optional]
      * @param $flag[optional]
+     *
      * @return mixed
      */
-    public function recv($size=null, $flag=null){}
+    public function recv($size = null, $flag = null)
+    {
+    }
 
     /**
      * @param $data[required]
      * @param $flag[optional]
+     *
      * @return mixed
      */
-    public function send($data, $flag=null){}
-
-    /**
-     * @param $dst_socket[required]
-     * @return mixed
-     */
-    public function pipe($dst_socket){}
+    public function send($data, $flag = null)
+    {
+    }
 
     /**
      * @param $filename[required]
      * @param $offset[optional]
      * @param $length[optional]
+     *
      * @return mixed
      */
-    public function sendfile($filename, $offset=null, $length=null){}
+    public function sendfile($filename, $offset = null, $length = null)
+    {
+    }
 
     /**
      * @param $ip[required]
      * @param $port[required]
      * @param $data[required]
+     *
      * @return mixed
      */
-    public function sendto($ip, $port, $data){}
-
-    /**
-     * @return mixed
-     */
-    public function sleep(){}
-
-    /**
-     * @return mixed
-     */
-    public function wakeup(){}
-
-    /**
-     * @return mixed
-     */
-    public function pause(){}
-
-    /**
-     * @return mixed
-     */
-    public function resume(){}
+    public function sendto($ip, $port, $data)
+    {
+    }
 
     /**
      * @param $how[required]
+     *
      * @return mixed
      */
-    public function shutdown($how){}
-
-    /**
-     * @param $callback[optional]
-     * @return mixed
-     */
-    public function enableSSL($callback=null){}
+    public function shutdown($how)
+    {
+    }
 
     /**
      * @return mixed
      */
-    public function getPeerCert(){}
+    public function enableSSL()
+    {
+    }
 
     /**
      * @return mixed
      */
-    public function verifyPeerCert(){}
+    public function getPeerCert()
+    {
+    }
 
     /**
      * @return mixed
      */
-    public function isConnected(){}
+    public function verifyPeerCert()
+    {
+    }
 
     /**
      * @return mixed
      */
-    public function getsockname(){}
+    public function isConnected()
+    {
+    }
 
     /**
      * @return mixed
      */
-    public function getpeername(){}
+    public function getsockname()
+    {
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getpeername()
+    {
+    }
 
     /**
      * @param $force[optional]
+     *
      * @return mixed
      */
-    public function close($force=null){}
+    public function close($force = null)
+    {
+    }
 
     /**
-     * @param $event_name[required]
-     * @param $callback[required]
      * @return mixed
      */
-    public function on($event_name, $callback){}
-
-
+    public function getSocket()
+    {
+    }
 }

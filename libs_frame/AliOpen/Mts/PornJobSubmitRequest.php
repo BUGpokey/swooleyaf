@@ -3,90 +3,125 @@ namespace AliOpen\Mts;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class PornJobSubmitRequest extends RpcAcsRequest {
-    private $input;
-    private $userData;
-    private $resourceOwnerId;
-    private $resourceOwnerAccount;
-    private $ownerAccount;
-    private $ownerId;
-    private $pornConfig;
-    private $pipelineId;
+/**
+ * Request of SubmitPornJob
+ * @method string getInput()
+ * @method string getUserData()
+ * @method string getResourceOwnerId()
+ * @method string getResourceOwnerAccount()
+ * @method string getOwnerAccount()
+ * @method string getOwnerId()
+ * @method string getPornConfig()
+ * @method string getPipelineId()
+ */
+class PornJobSubmitRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Mts", "2014-06-18", "SubmitPornJob", "mts", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Mts', '2014-06-18', 'SubmitPornJob', 'mts');
     }
 
-    public function getInput(){
-        return $this->input;
+    /**
+     * @param string $input
+     * @return $this
+     */
+    public function setInput($input)
+    {
+        $this->requestParameters['Input'] = $input;
+        $this->queryParameters['Input'] = $input;
+
+        return $this;
     }
 
-    public function setInput($input){
-        $this->input = $input;
-        $this->queryParameters["Input"] = $input;
+    /**
+     * @param string $userData
+     * @return $this
+     */
+    public function setUserData($userData)
+    {
+        $this->requestParameters['UserData'] = $userData;
+        $this->queryParameters['UserData'] = $userData;
+
+        return $this;
     }
 
-    public function getUserData(){
-        return $this->userData;
+    /**
+     * @param string $resourceOwnerId
+     * @return $this
+     */
+    public function setResourceOwnerId($resourceOwnerId)
+    {
+        $this->requestParameters['ResourceOwnerId'] = $resourceOwnerId;
+        $this->queryParameters['ResourceOwnerId'] = $resourceOwnerId;
+
+        return $this;
     }
 
-    public function setUserData($userData){
-        $this->userData = $userData;
-        $this->queryParameters["UserData"] = $userData;
+    /**
+     * @param string $resourceOwnerAccount
+     * @return $this
+     */
+    public function setResourceOwnerAccount($resourceOwnerAccount)
+    {
+        $this->requestParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+        $this->queryParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+
+        return $this;
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $ownerAccount
+     * @return $this
+     */
+    public function setOwnerAccount($ownerAccount)
+    {
+        $this->requestParameters['OwnerAccount'] = $ownerAccount;
+        $this->queryParameters['OwnerAccount'] = $ownerAccount;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function getResourceOwnerAccount(){
-        return $this->resourceOwnerAccount;
+    /**
+     * @param string $pornConfig
+     * @return $this
+     */
+    public function setPornConfig($pornConfig)
+    {
+        $this->requestParameters['PornConfig'] = $pornConfig;
+        $this->queryParameters['PornConfig'] = $pornConfig;
+
+        return $this;
     }
 
-    public function setResourceOwnerAccount($resourceOwnerAccount){
-        $this->resourceOwnerAccount = $resourceOwnerAccount;
-        $this->queryParameters["ResourceOwnerAccount"] = $resourceOwnerAccount;
-    }
+    /**
+     * @param string $pipelineId
+     * @return $this
+     */
+    public function setPipelineId($pipelineId)
+    {
+        $this->requestParameters['PipelineId'] = $pipelineId;
+        $this->queryParameters['PipelineId'] = $pipelineId;
 
-    public function getOwnerAccount(){
-        return $this->ownerAccount;
-    }
-
-    public function setOwnerAccount($ownerAccount){
-        $this->ownerAccount = $ownerAccount;
-        $this->queryParameters["OwnerAccount"] = $ownerAccount;
-    }
-
-    public function getOwnerId(){
-        return $this->ownerId;
-    }
-
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
-    }
-
-    public function getPornConfig(){
-        return $this->pornConfig;
-    }
-
-    public function setPornConfig($pornConfig){
-        $this->pornConfig = $pornConfig;
-        $this->queryParameters["PornConfig"] = $pornConfig;
-    }
-
-    public function getPipelineId(){
-        return $this->pipelineId;
-    }
-
-    public function setPipelineId($pipelineId){
-        $this->pipelineId = $pipelineId;
-        $this->queryParameters["PipelineId"] = $pipelineId;
+        return $this;
     }
 }

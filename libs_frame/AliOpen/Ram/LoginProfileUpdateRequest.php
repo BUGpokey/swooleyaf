@@ -3,51 +3,77 @@ namespace AliOpen\Ram;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class LoginProfileUpdateRequest extends RpcAcsRequest {
-    private $password;
-    private $passwordResetRequired;
-    private $mFABindRequired;
-    private $userName;
+/**
+ * Request of UpdateLoginProfile
+ * @method string getPassword()
+ * @method string getPasswordResetRequired()
+ * @method string getMFABindRequired()
+ * @method string getUserName()
+ */
+class LoginProfileUpdateRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $requestScheme = 'https';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ram", "2015-05-01", "UpdateLoginProfile");
-        $this->setProtocol("https");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ram', '2015-05-01', 'UpdateLoginProfile', 'ram');
     }
 
-    public function getPassword(){
-        return $this->password;
+    /**
+     * @param string $password
+     * @return $this
+     */
+    public function setPassword($password)
+    {
+        $this->requestParameters['Password'] = $password;
+        $this->queryParameters['Password'] = $password;
+
+        return $this;
     }
 
-    public function setPassword($password){
-        $this->password = $password;
-        $this->queryParameters["Password"] = $password;
+    /**
+     * @param string $passwordResetRequired
+     * @return $this
+     */
+    public function setPasswordResetRequired($passwordResetRequired)
+    {
+        $this->requestParameters['PasswordResetRequired'] = $passwordResetRequired;
+        $this->queryParameters['PasswordResetRequired'] = $passwordResetRequired;
+
+        return $this;
     }
 
-    public function getPasswordResetRequired(){
-        return $this->passwordResetRequired;
+    /**
+     * @param string $mFABindRequired
+     * @return $this
+     */
+    public function setMFABindRequired($mFABindRequired)
+    {
+        $this->requestParameters['MFABindRequired'] = $mFABindRequired;
+        $this->queryParameters['MFABindRequired'] = $mFABindRequired;
+
+        return $this;
     }
 
-    public function setPasswordResetRequired($passwordResetRequired){
-        $this->passwordResetRequired = $passwordResetRequired;
-        $this->queryParameters["PasswordResetRequired"] = $passwordResetRequired;
-    }
+    /**
+     * @param string $userName
+     * @return $this
+     */
+    public function setUserName($userName)
+    {
+        $this->requestParameters['UserName'] = $userName;
+        $this->queryParameters['UserName'] = $userName;
 
-    public function getMFABindRequired(){
-        return $this->mFABindRequired;
-    }
-
-    public function setMFABindRequired($mFABindRequired){
-        $this->mFABindRequired = $mFABindRequired;
-        $this->queryParameters["MFABindRequired"] = $mFABindRequired;
-    }
-
-    public function getUserName(){
-        return $this->userName;
-    }
-
-    public function setUserName($userName){
-        $this->userName = $userName;
-        $this->queryParameters["UserName"] = $userName;
+        return $this;
     }
 }

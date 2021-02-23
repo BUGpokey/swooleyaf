@@ -7,38 +7,42 @@
  */
 namespace Wx\Open;
 
-use Constant\ErrorCode;
-use Tool\Tool;
+use SyConstant\ErrorCode;
+use SyTool\Tool;
 use Wx\WxBaseOpen;
 use Wx\WxUtilBase;
-use Wx\WxUtilBaseAlone;
+use Wx\WxUtilAlone;
 
 /**
  * 创建开放平台
  * @package Wx\Open
  */
-class OpenCreate extends WxBaseOpen {
+class OpenCreate extends WxBaseOpen
+{
     /**
      * 公众号或小程序的app id
      * @var string
      */
     private $appid = '';
 
-    public function __construct(string $appId){
+    public function __construct(string $appId)
+    {
         parent::__construct();
         $this->serviceUrl = 'https://api.weixin.qq.com/cgi-bin/open/create?access_token=';
         $this->reqData['appid'] = $appId;
     }
 
-    public function __clone(){
+    public function __clone()
+    {
     }
 
-    public function getDetail() : array {
+    public function getDetail() : array
+    {
         $resArr = [
             'code' => 0
         ];
 
-        $this->curlConfigs[CURLOPT_URL] = $this->serviceUrl . WxUtilBaseAlone::getAccessToken($this->reqData['appid']);
+        $this->curlConfigs[CURLOPT_URL] = $this->serviceUrl . WxUtilAlone::getAccessToken($this->reqData['appid']);
         $this->curlConfigs[CURLOPT_POSTFIELDS] = Tool::jsonEncode($this->reqData, JSON_UNESCAPED_UNICODE);
         $sendRes = WxUtilBase::sendPostReq($this->curlConfigs);
         $sendData = Tool::jsonDecode($sendRes);

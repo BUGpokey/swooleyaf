@@ -7,18 +7,22 @@
  */
 namespace Request;
 
-use Constant\Project;
-use Log\Log;
-use Tool\SyPack;
-use Tool\Tool;
+use Swoole\Coroutine;
+use SyConstant\Project;
+use SyLog\Log;
+use SyServer\BaseServer;
+use SyTool\SyPack;
+use SyTool\Tool;
 
-class SyRequestRpc extends SyRequest {
+class SyRequestRpc extends SyRequest
+{
     /**
-     * @var \Tool\SyPack
+     * @var \SyTool\SyPack
      */
     private $syPack = null;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->syPack = new SyPack();
         $this->_clientConfigs = [
@@ -32,7 +36,80 @@ class SyRequestRpc extends SyRequest {
         ];
     }
 
-    private function __clone() {
+    private function __clone()
+    {
+    }
+
+    /**
+     * @param array $data 打包数据
+     * @param string $packType 打包类型 api: 接口 task: 任务
+     * @return bool|string
+     */
+    private function getPackData(array $data, string $packType)
+    {
+        $params = $data['params'];
+        $params['__req_id'] = BaseServer::getReqId();
+        if ($packType == 'api') {
+            $this->syPack->setCommandAndData(SyPack::COMMAND_TYPE_RPC_CLIENT_SEND_API_REQ, [
+                'api_uri' => $data['uri'],
+                'api_params' => $params,
+            ]);
+        } else {
+            $this->syPack->setCommandAndData(SyPack::COMMAND_TYPE_RPC_CLIENT_SEND_TASK_REQ, [
+                'task_command' => $data['command'],
+                'task_params' => $params,
+            ]);
+        }
+
+        $packData = $this->syPack->packData();
+        $this->syPack->init();
+        if ($packData === false) {
+            Log::error('pack ' . $packType . ' data fail');
+        }
+        return $packData;
+    }
+
+    /**
+     * 发送api请求
+     * @param string $uri 请求uri
+     * @param array $params 请求参数数组
+     * @param callable|null $callback
+     * @return bool|string
+     */
+    public function sendApiReq(string $uri, array $params, callable $callback = null)
+    {
+        $packData = $this->getPackData([
+            'uri' => $uri,
+            'params' => $params,
+        ], 'api');
+        if (is_bool($packData)) {
+            return $packData;
+        }
+        if ($this->_async) {
+            return $this->sendAsyncReq($packData, $callback);
+        } else {
+            return $this->sendSyncReq($packData);
+        }
+    }
+
+    /**
+     * 发送task请求
+     * @param string $command task命令
+     * @param array $params 请求参数数组
+     * @param callable|null $callback
+     * @return bool|string
+     */
+    public function sendTaskReq(string $command, array $params, callable $callback = null)
+    {
+        $packData = $this->getPackData([
+            'command' => $command,
+            'params' => $params,
+        ], 'task');
+        if (is_bool($packData)) {
+            return $packData;
+        }
+
+        return $this->sendAsyncReq($packData, $callback);
     }
 
     /**
@@ -40,7 +117,8 @@ class SyRequestRpc extends SyRequest {
      * @param string $reqData 请求数据
      * @return bool|string
      */
-    protected function sendSyncReq(string $reqData) {
+    private function sendSyncReq(string $reqData)
+    {
         $rspMsg = $this->sendBaseSyncReq($reqData);
         if ($rspMsg === false) {
             return false;
@@ -68,80 +146,44 @@ class SyRequestRpc extends SyRequest {
      * @param callable|null $callback 回调函数
      * @return bool
      */
-    protected function sendAsyncReq(string $reqData,callable $callback=null) : bool {
-        $this->sendBaseAsyncReq($reqData, $callback);
-        $this->_asyncClient->on('receive', function (\swoole_client $cli,string $data) use ($callback) {
-            if ($this->syPack->unpackData($data)) {
-                $command = $this->syPack->getCommand();
-                $rspData = $this->syPack->getData();
-                if ($command == SyPack::COMMAND_TYPE_RPC_SERVER_SEND_RSP) {
-                    if (($rspData !== false) && (!is_null($callback)) && is_callable($callback)) {
-                        $callback('success', $rspData['rsp_data']);
-                    }
-                } else {
-                    Log::error('pack data error,command=' . $command . ' data=' . Tool::jsonEncode($rspData, JSON_UNESCAPED_UNICODE));
-                }
-            } else {
+    private function sendAsyncReq(string $reqData, callable $callback = null) : bool
+    {
+        $asyncConfig = $this->getAsyncReqConfig('rpc');
+        Coroutine::create(function (array $asyncConfig, string $reqData, ?callable $callback = null) {
+            $client = new Coroutine\Client(SWOOLE_SOCK_TCP);
+            $client->set($asyncConfig['client']);
+            if (!$client->connect($asyncConfig['request']['host'], $asyncConfig['request']['port'], $asyncConfig['request']['timeout'] / 1000)) {
+                $logStr = 'rpc async connect address '
+                          . $asyncConfig['request']['host']
+                          . ':'
+                          . $asyncConfig['request']['port']
+                          . ' fail,error_code:'
+                          . $client->errCode
+                          . ',error_msg:'
+                          . socket_strerror($client->errCode);
+                Log::error($logStr);
+                return 1;
+            }
+            $client->send($reqData);
+            $data = $client->recv();
+            $client->close();
+            $coroutinePack = new SyPack();
+            if (!$coroutinePack->unpackData($data)) {
                 Log::error('unpack response data fail.');
+                return 1;
             }
 
-            $this->syPack->init();
-            $cli->close();
-        });
-
-        if(!@$this->_asyncClient->connect($this->_host, $this->_port, $this->_timeout / 1000)){
-            Log::error('rpc async connect address ' . $this->_host . ':' . $this->_port . ' fail' . ',error_code:' . $this->_asyncClient->errCode . ',error_msg:' . socket_strerror($this->_asyncClient->errCode));
-            return false;
-        }
-
+            $command = $coroutinePack->getCommand();
+            $rspData = $coroutinePack->getData();
+            if ($command != SyPack::COMMAND_TYPE_RPC_SERVER_SEND_RSP) {
+                Log::error('pack data error,command=' . $command . ' data=' . Tool::jsonEncode($rspData, JSON_UNESCAPED_UNICODE));
+                return 1;
+            }
+            if (is_callable($callback)) {
+                $callback($rspData);
+            }
+            return 0;
+        }, $asyncConfig, $reqData, $callback);
         return true;
-    }
-
-    /**
-     * 发送api请求
-     * @param string $uri 请求uri
-     * @param array $params 请求参数数组
-     * @param callable|null $callback
-     * @return bool|string
-     */
-    public function sendApiReq(string $uri,array $params,callable $callback=null) {
-        $this->syPack->setCommandAndData(SyPack::COMMAND_TYPE_RPC_CLIENT_SEND_API_REQ, [
-            'api_uri' => $uri,
-            'api_params' => $params,
-        ]);
-        $packData = $this->syPack->packData();
-        $this->syPack->init();
-        if ($packData === false) {
-            Log::error('pack api data fail');
-            return false;
-        }
-
-        if($this->_async){
-            return $this->sendAsyncReq($packData, $callback);
-        } else {
-            return $this->sendSyncReq($packData);
-        }
-    }
-
-    /**
-     * 发送task请求
-     * @param string $command task命令
-     * @param array $params 请求参数数组
-     * @param callable|null $callback
-     * @return bool|string
-     */
-    public function sendTaskReq(string $command,array $params,callable $callback=null) {
-        $this->syPack->setCommandAndData(SyPack::COMMAND_TYPE_RPC_CLIENT_SEND_TASK_REQ, [
-            'task_command' => $command,
-            'task_params' => $params,
-        ]);
-        $packData = $this->syPack->packData();
-        $this->syPack->init();
-        if ($packData === false) {
-            Log::error('pack task data fail');
-            return false;
-        }
-
-        return $this->sendAsyncReq($packData, $callback);
     }
 }

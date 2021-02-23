@@ -7,14 +7,16 @@
  */
 namespace SyError;
 
-use Constant\ErrorCode;
-use Constant\Server;
-use Exception\Common\ErrorException;
-use Log\Log;
+use SyConstant\ErrorCode;
+use SyConstant\SyInner;
+use SyException\Common\ErrorException;
+use SyLog\Log;
 use Yaf\Registry;
 
-class ErrorHandler {
-    private function __construct(){
+class ErrorHandler
+{
+    private function __construct()
+    {
     }
 
     /**
@@ -23,15 +25,16 @@ class ErrorHandler {
      * @param string $errStr
      * @param string $errFile
      * @param int $errLine
-     * @throws \Exception\Common\ErrorException
+     * @throws \SyException\Common\ErrorException
      */
-    public static function handleError($errNo, $errStr, $errFile, $errLine) {
+    public static function handleError($errNo, $errStr, $errFile, $errLine)
+    {
         switch ($errNo) {
             case E_NOTICE:
             case E_WARNING:
             case E_COMPILE_WARNING:
             case E_USER_NOTICE:
-                Registry::set(Server::REGISTRY_NAME_SERVICE_ERROR, ErrorCode::COMMON_SERVER_ERROR);
+                Registry::set(SyInner::REGISTRY_NAME_SERVICE_ERROR, ErrorCode::COMMON_SERVER_ERROR);
                 $errMsg = $errStr . ' at ' . str_replace(SY_ROOT, '.', $errFile) . '(' . $errLine . ')';
                 throw new ErrorException($errMsg, ErrorCode::COMMON_SERVER_ERROR);
                 break;
@@ -41,20 +44,22 @@ class ErrorHandler {
     /**
      * 处理未捕获异常
      */
-    public static function handleException(\Throwable $exception) {
+    public static function handleException(\Throwable $exception)
+    {
         $msg = 'sy exception - ' . $exception->getMessage();
         Log::error($msg, $exception->getCode(), $exception->getTraceAsString());
 
-        Registry::set(Server::REGISTRY_NAME_SERVICE_ERROR, ErrorCode::COMMON_SERVER_EXCEPTION);
+        Registry::set(SyInner::REGISTRY_NAME_SERVICE_ERROR, ErrorCode::COMMON_SERVER_EXCEPTION);
     }
 
     /**
      * 处理致命错误
      */
-    public static function handleFatalError(){
+    public static function handleFatalError()
+    {
         $error = error_get_last();
         if (!empty($error)) {
-            switch($error['type']){
+            switch ($error['type']) {
                 case E_ERROR:
                 case E_PARSE:
                 case E_CORE_ERROR:
@@ -64,7 +69,7 @@ class ErrorHandler {
                     $msg = 'sy fatal error - ' . $error['message'] . ' at ' . $error['file'] . '(' . $error['line'] . ')';
                     Log::error($msg);
                     unset($msg);
-                    Registry::set(Server::REGISTRY_NAME_SERVICE_ERROR, ErrorCode::COMMON_SERVER_FATAL);
+                    Registry::set(SyInner::REGISTRY_NAME_SERVICE_ERROR, ErrorCode::COMMON_SERVER_FATAL);
                     break;
             }
         }

@@ -3,80 +3,125 @@ namespace AliOpen\Vod;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class WatermarkAddRequest extends RpcAcsRequest {
-    private $resourceOwnerId;
-    private $resourceOwnerAccount;
-    private $name;
-    private $fileUrl;
-    private $ownerId;
-    private $type;
-    private $watermarkConfig;
+/**
+ * Request of AddWatermark
+ * @method string getResourceOwnerId()
+ * @method string getType()
+ * @method string getResourceOwnerAccount()
+ * @method string getOwnerId()
+ * @method string getWatermarkConfig()
+ * @method string getAppId()
+ * @method string getName()
+ * @method string getFileUrl()
+ */
+class WatermarkAddRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("vod", "2017-03-21", "AddWatermark", "vod", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('vod', '2017-03-21', 'AddWatermark', 'vod');
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $resourceOwnerId
+     * @return $this
+     */
+    public function setResourceOwnerId($resourceOwnerId)
+    {
+        $this->requestParameters['ResourceOwnerId'] = $resourceOwnerId;
+        $this->queryParameters['ResourceOwnerId'] = $resourceOwnerId;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $type
+     * @return $this
+     */
+    public function setType($type)
+    {
+        $this->requestParameters['Type'] = $type;
+        $this->queryParameters['Type'] = $type;
+
+        return $this;
     }
 
-    public function getResourceOwnerAccount(){
-        return $this->resourceOwnerAccount;
+    /**
+     * @param string $resourceOwnerAccount
+     * @return $this
+     */
+    public function setResourceOwnerAccount($resourceOwnerAccount)
+    {
+        $this->requestParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+        $this->queryParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+
+        return $this;
     }
 
-    public function setResourceOwnerAccount($resourceOwnerAccount){
-        $this->resourceOwnerAccount = $resourceOwnerAccount;
-        $this->queryParameters["ResourceOwnerAccount"] = $resourceOwnerAccount;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function getName(){
-        return $this->name;
+    /**
+     * @param string $watermarkConfig
+     * @return $this
+     */
+    public function setWatermarkConfig($watermarkConfig)
+    {
+        $this->requestParameters['WatermarkConfig'] = $watermarkConfig;
+        $this->queryParameters['WatermarkConfig'] = $watermarkConfig;
+
+        return $this;
     }
 
-    public function setName($name){
-        $this->name = $name;
-        $this->queryParameters["Name"] = $name;
+    /**
+     * @param string $appId
+     * @return $this
+     */
+    public function setAppId($appId)
+    {
+        $this->requestParameters['AppId'] = $appId;
+        $this->queryParameters['AppId'] = $appId;
+
+        return $this;
     }
 
-    public function getFileUrl(){
-        return $this->fileUrl;
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->requestParameters['Name'] = $name;
+        $this->queryParameters['Name'] = $name;
+
+        return $this;
     }
 
-    public function setFileUrl($fileUrl){
-        $this->fileUrl = $fileUrl;
-        $this->queryParameters["FileUrl"] = $fileUrl;
-    }
+    /**
+     * @param string $fileUrl
+     * @return $this
+     */
+    public function setFileUrl($fileUrl)
+    {
+        $this->requestParameters['FileUrl'] = $fileUrl;
+        $this->queryParameters['FileUrl'] = $fileUrl;
 
-    public function getOwnerId(){
-        return $this->ownerId;
-    }
-
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
-    }
-
-    public function getType(){
-        return $this->type;
-    }
-
-    public function setType($type){
-        $this->type = $type;
-        $this->queryParameters["Type"] = $type;
-    }
-
-    public function getWatermarkConfig(){
-        return $this->watermarkConfig;
-    }
-
-    public function setWatermarkConfig($watermarkConfig){
-        $this->watermarkConfig = $watermarkConfig;
-        $this->queryParameters["WatermarkConfig"] = $watermarkConfig;
+        return $this;
     }
 }

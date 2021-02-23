@@ -7,20 +7,24 @@
  */
 namespace Validator\Impl\String;
 
-use Constant\Project;
+use SyConstant\Project;
 use Validator\BaseValidator;
 use Validator\ValidatorService;
 
-class StringLng extends BaseValidator implements ValidatorService {
-    public function __construct() {
+class StringLng extends BaseValidator implements ValidatorService
+{
+    public function __construct()
+    {
         parent::__construct();
-        $this->validatorType = Project::VALIDATOR_STRING_TYPE_LNG;
+        $this->validatorType = Project::VALIDATOR_TYPE_STRING_LNG;
     }
 
-    private function __clone() {
+    private function __clone()
+    {
     }
 
-    public function validator($data, $compareData) : string {
+    public function validator($data, $compareData) : string
+    {
         if ($data === null) {
             return '';
         }
@@ -28,14 +32,14 @@ class StringLng extends BaseValidator implements ValidatorService {
         $trueData = $this->verifyStringData($data);
         if ($trueData === null) {
             return '必须是字符串';
-        } else if((strlen($trueData) == 0) && !$compareData){
+        } elseif ((strlen($trueData) == 0) && !$compareData) {
             return '';
-        } else if(!is_numeric($trueData)){
+        } elseif (!is_numeric($trueData)) {
             return '必须是数值';
-        } else if(($trueData < -180) || ($trueData > 180)){
+        } elseif (($trueData < -180) || ($trueData > 180)) {
             return '格式不合法';
-        } else {
-            return '';
         }
+
+        return '';
     }
 }

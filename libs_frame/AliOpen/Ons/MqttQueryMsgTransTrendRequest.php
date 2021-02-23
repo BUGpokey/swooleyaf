@@ -3,120 +3,138 @@ namespace AliOpen\Ons;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class MqttQueryMsgTransTrendRequest extends RpcAcsRequest {
-    private $preventCache;
-    private $onsRegionId;
-    private $onsPlatform;
-    private $qos;
-    private $transType;
-    private $endTime;
-    private $beginTime;
-    private $tpsType;
-    private $parentTopic;
-    private $msgType;
-    private $subTopic;
+/**
+ * Request of OnsMqttQueryMsgTransTrend
+ * @method string getTransType()
+ * @method string getEndTime()
+ * @method string getBeginTime()
+ * @method string getTpsType()
+ * @method string getParentTopic()
+ * @method string getInstanceId()
+ * @method string getQos()
+ * @method string getMsgType()
+ * @method string getSubTopic()
+ */
+class MqttQueryMsgTransTrendRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ons", "2017-09-18", "OnsMqttQueryMsgTransTrend");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ons', '2019-02-14', 'OnsMqttQueryMsgTransTrend', 'ons');
     }
 
-    public function getPreventCache(){
-        return $this->preventCache;
+    /**
+     * @param string $transType
+     * @return $this
+     */
+    public function setTransType($transType)
+    {
+        $this->requestParameters['TransType'] = $transType;
+        $this->queryParameters['TransType'] = $transType;
+
+        return $this;
     }
 
-    public function setPreventCache($preventCache){
-        $this->preventCache = $preventCache;
-        $this->queryParameters["PreventCache"] = $preventCache;
+    /**
+     * @param string $endTime
+     * @return $this
+     */
+    public function setEndTime($endTime)
+    {
+        $this->requestParameters['EndTime'] = $endTime;
+        $this->queryParameters['EndTime'] = $endTime;
+
+        return $this;
     }
 
-    public function getOnsRegionId(){
-        return $this->onsRegionId;
+    /**
+     * @param string $beginTime
+     * @return $this
+     */
+    public function setBeginTime($beginTime)
+    {
+        $this->requestParameters['BeginTime'] = $beginTime;
+        $this->queryParameters['BeginTime'] = $beginTime;
+
+        return $this;
     }
 
-    public function setOnsRegionId($onsRegionId){
-        $this->onsRegionId = $onsRegionId;
-        $this->queryParameters["OnsRegionId"] = $onsRegionId;
+    /**
+     * @param string $tpsType
+     * @return $this
+     */
+    public function setTpsType($tpsType)
+    {
+        $this->requestParameters['TpsType'] = $tpsType;
+        $this->queryParameters['TpsType'] = $tpsType;
+
+        return $this;
     }
 
-    public function getOnsPlatform(){
-        return $this->onsPlatform;
+    /**
+     * @param string $parentTopic
+     * @return $this
+     */
+    public function setParentTopic($parentTopic)
+    {
+        $this->requestParameters['ParentTopic'] = $parentTopic;
+        $this->queryParameters['ParentTopic'] = $parentTopic;
+
+        return $this;
     }
 
-    public function setOnsPlatform($onsPlatform){
-        $this->onsPlatform = $onsPlatform;
-        $this->queryParameters["OnsPlatform"] = $onsPlatform;
+    /**
+     * @param string $instanceId
+     * @return $this
+     */
+    public function setInstanceId($instanceId)
+    {
+        $this->requestParameters['InstanceId'] = $instanceId;
+        $this->queryParameters['InstanceId'] = $instanceId;
+
+        return $this;
     }
 
-    public function getQos(){
-        return $this->qos;
+    /**
+     * @param string $qos
+     * @return $this
+     */
+    public function setQos($qos)
+    {
+        $this->requestParameters['Qos'] = $qos;
+        $this->queryParameters['Qos'] = $qos;
+
+        return $this;
     }
 
-    public function setQos($qos){
-        $this->qos = $qos;
-        $this->queryParameters["Qos"] = $qos;
+    /**
+     * @param string $msgType
+     * @return $this
+     */
+    public function setMsgType($msgType)
+    {
+        $this->requestParameters['MsgType'] = $msgType;
+        $this->queryParameters['MsgType'] = $msgType;
+
+        return $this;
     }
 
-    public function getTransType(){
-        return $this->transType;
-    }
+    /**
+     * @param string $subTopic
+     * @return $this
+     */
+    public function setSubTopic($subTopic)
+    {
+        $this->requestParameters['SubTopic'] = $subTopic;
+        $this->queryParameters['SubTopic'] = $subTopic;
 
-    public function setTransType($transType){
-        $this->transType = $transType;
-        $this->queryParameters["TransType"] = $transType;
-    }
-
-    public function getEndTime(){
-        return $this->endTime;
-    }
-
-    public function setEndTime($endTime){
-        $this->endTime = $endTime;
-        $this->queryParameters["EndTime"] = $endTime;
-    }
-
-    public function getBeginTime(){
-        return $this->beginTime;
-    }
-
-    public function setBeginTime($beginTime){
-        $this->beginTime = $beginTime;
-        $this->queryParameters["BeginTime"] = $beginTime;
-    }
-
-    public function getTpsType(){
-        return $this->tpsType;
-    }
-
-    public function setTpsType($tpsType){
-        $this->tpsType = $tpsType;
-        $this->queryParameters["TpsType"] = $tpsType;
-    }
-
-    public function getParentTopic(){
-        return $this->parentTopic;
-    }
-
-    public function setParentTopic($parentTopic){
-        $this->parentTopic = $parentTopic;
-        $this->queryParameters["ParentTopic"] = $parentTopic;
-    }
-
-    public function getMsgType(){
-        return $this->msgType;
-    }
-
-    public function setMsgType($msgType){
-        $this->msgType = $msgType;
-        $this->queryParameters["MsgType"] = $msgType;
-    }
-
-    public function getSubTopic(){
-        return $this->subTopic;
-    }
-
-    public function setSubTopic($subTopic){
-        $this->subTopic = $subTopic;
-        $this->queryParameters["SubTopic"] = $subTopic;
+        return $this;
     }
 }

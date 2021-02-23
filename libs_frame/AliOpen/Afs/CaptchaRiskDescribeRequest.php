@@ -3,50 +3,73 @@ namespace AliOpen\Afs;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class CaptchaRiskDescribeRequest extends RpcAcsRequest {
-    private $resourceOwnerId;
-    private $sourceIp;
-    private $configName;
-    private $time;
+/**
+ * Request of DescribeCaptchaRisk
+ * @method string getSourceIp()
+ * @method string getConfigName()
+ * @method string getRefExtId()
+ * @method string getTime()
+ */
+class CaptchaRiskDescribeRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("afs", "2018-01-12", "DescribeCaptchaRisk");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('afs', '2018-01-12', 'DescribeCaptchaRisk', 'afs');
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $sourceIp
+     * @return $this
+     */
+    public function setSourceIp($sourceIp)
+    {
+        $this->requestParameters['SourceIp'] = $sourceIp;
+        $this->queryParameters['SourceIp'] = $sourceIp;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $configName
+     * @return $this
+     */
+    public function setConfigName($configName)
+    {
+        $this->requestParameters['ConfigName'] = $configName;
+        $this->queryParameters['ConfigName'] = $configName;
+
+        return $this;
     }
 
-    public function getSourceIp(){
-        return $this->sourceIp;
+    /**
+     * @param string $refExtId
+     * @return $this
+     */
+    public function setRefExtId($refExtId)
+    {
+        $this->requestParameters['RefExtId'] = $refExtId;
+        $this->queryParameters['RefExtId'] = $refExtId;
+
+        return $this;
     }
 
-    public function setSourceIp($sourceIp){
-        $this->sourceIp = $sourceIp;
-        $this->queryParameters["SourceIp"] = $sourceIp;
-    }
+    /**
+     * @param string $time
+     * @return $this
+     */
+    public function setTime($time)
+    {
+        $this->requestParameters['Time'] = $time;
+        $this->queryParameters['Time'] = $time;
 
-    public function getConfigName(){
-        return $this->configName;
-    }
-
-    public function setConfigName($configName){
-        $this->configName = $configName;
-        $this->queryParameters["ConfigName"] = $configName;
-    }
-
-    public function getTime(){
-        return $this->time;
-    }
-
-    public function setTime($time){
-        $this->time = $time;
-        $this->queryParameters["Time"] = $time;
+        return $this;
     }
 }

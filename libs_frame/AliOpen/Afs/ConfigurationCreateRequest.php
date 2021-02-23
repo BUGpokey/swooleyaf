@@ -3,80 +3,99 @@ namespace AliOpen\Afs;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class ConfigurationCreateRequest extends RpcAcsRequest {
-    private $resourceOwnerId;
-    private $sourceIp;
-    private $configurationName;
-    private $maxPV;
-    private $configurationMethod;
-    private $applyType;
-    private $scene;
+/**
+ * Request of CreateConfiguration
+ * @method string getSourceIp()
+ * @method string getConfigurationName()
+ * @method string getMaxPV()
+ * @method string getConfigurationMethod()
+ * @method string getApplyType()
+ * @method string getScene()
+ */
+class ConfigurationCreateRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("afs", "2018-01-12", "CreateConfiguration");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('afs', '2018-01-12', 'CreateConfiguration', 'afs');
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $sourceIp
+     * @return $this
+     */
+    public function setSourceIp($sourceIp)
+    {
+        $this->requestParameters['SourceIp'] = $sourceIp;
+        $this->queryParameters['SourceIp'] = $sourceIp;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $configurationName
+     * @return $this
+     */
+    public function setConfigurationName($configurationName)
+    {
+        $this->requestParameters['ConfigurationName'] = $configurationName;
+        $this->queryParameters['ConfigurationName'] = $configurationName;
+
+        return $this;
     }
 
-    public function getSourceIp(){
-        return $this->sourceIp;
+    /**
+     * @param string $maxPV
+     * @return $this
+     */
+    public function setMaxPV($maxPV)
+    {
+        $this->requestParameters['MaxPV'] = $maxPV;
+        $this->queryParameters['MaxPV'] = $maxPV;
+
+        return $this;
     }
 
-    public function setSourceIp($sourceIp){
-        $this->sourceIp = $sourceIp;
-        $this->queryParameters["SourceIp"] = $sourceIp;
+    /**
+     * @param string $configurationMethod
+     * @return $this
+     */
+    public function setConfigurationMethod($configurationMethod)
+    {
+        $this->requestParameters['ConfigurationMethod'] = $configurationMethod;
+        $this->queryParameters['ConfigurationMethod'] = $configurationMethod;
+
+        return $this;
     }
 
-    public function getConfigurationName(){
-        return $this->configurationName;
+    /**
+     * @param string $applyType
+     * @return $this
+     */
+    public function setApplyType($applyType)
+    {
+        $this->requestParameters['ApplyType'] = $applyType;
+        $this->queryParameters['ApplyType'] = $applyType;
+
+        return $this;
     }
 
-    public function setConfigurationName($configurationName){
-        $this->configurationName = $configurationName;
-        $this->queryParameters["ConfigurationName"] = $configurationName;
-    }
+    /**
+     * @param string $scene
+     * @return $this
+     */
+    public function setScene($scene)
+    {
+        $this->requestParameters['Scene'] = $scene;
+        $this->queryParameters['Scene'] = $scene;
 
-    public function getMaxPV(){
-        return $this->maxPV;
-    }
-
-    public function setMaxPV($maxPV){
-        $this->maxPV = $maxPV;
-        $this->queryParameters["MaxPV"] = $maxPV;
-    }
-
-    public function getConfigurationMethod(){
-        return $this->configurationMethod;
-    }
-
-    public function setConfigurationMethod($configurationMethod){
-        $this->configurationMethod = $configurationMethod;
-        $this->queryParameters["ConfigurationMethod"] = $configurationMethod;
-    }
-
-    public function getApplyType(){
-        return $this->applyType;
-    }
-
-    public function setApplyType($applyType){
-        $this->applyType = $applyType;
-        $this->queryParameters["ApplyType"] = $applyType;
-    }
-
-    public function getScene(){
-        return $this->scene;
-    }
-
-    public function setScene($scene){
-        $this->scene = $scene;
-        $this->queryParameters["Scene"] = $scene;
+        return $this;
     }
 }

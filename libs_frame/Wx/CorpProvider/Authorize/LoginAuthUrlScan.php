@@ -7,17 +7,18 @@
  */
 namespace Wx\CorpProvider\Authorize;
 
-use Constant\ErrorCode;
+use SyConstant\ErrorCode;
 use DesignPatterns\Singletons\WxConfigSingleton;
-use Exception\Wx\WxCorpProviderException;
-use Tool\Tool;
+use SyException\Wx\WxCorpProviderException;
+use SyTool\Tool;
 use Wx\WxBaseCorpProvider;
 
 /**
  * 获取扫码登录授权引导地址
  * @package Wx\CorpProvider\Authorize
  */
-class LoginAuthUrlScan extends WxBaseCorpProvider {
+class LoginAuthUrlScan extends WxBaseCorpProvider
+{
     /**
      * 服务商企业ID
      * @var string
@@ -39,7 +40,8 @@ class LoginAuthUrlScan extends WxBaseCorpProvider {
      */
     private $usertype = '';
 
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
         $providerConfig = WxConfigSingleton::getInstance()->getCorpProviderConfig();
         $this->reqData['appid'] = $providerConfig->getCorpId();
@@ -48,15 +50,17 @@ class LoginAuthUrlScan extends WxBaseCorpProvider {
         $this->reqData['usertype'] = 'admin';
     }
 
-    private function __clone(){
+    private function __clone()
+    {
     }
 
     /**
      * @param string $state
-     * @throws \Exception\Wx\WxCorpProviderException
+     * @throws \SyException\Wx\WxCorpProviderException
      */
-    public function setState(string $state){
-        if(ctype_alnum($state) && (strlen($state) <= 128)){
+    public function setState(string $state)
+    {
+        if (ctype_alnum($state) && (strlen($state) <= 128)) {
             $this->reqData['state'] = $state;
         } else {
             throw new WxCorpProviderException('防跨域攻击标识不合法', ErrorCode::WXPROVIDER_CORP_PARAM_ERROR);
@@ -65,17 +69,19 @@ class LoginAuthUrlScan extends WxBaseCorpProvider {
 
     /**
      * @param string $userType
-     * @throws \Exception\Wx\WxCorpProviderException
+     * @throws \SyException\Wx\WxCorpProviderException
      */
-    public function setUserType(string $userType){
-        if(in_array($userType, ['admin', 'member'])){
+    public function setUserType(string $userType)
+    {
+        if (in_array($userType, ['admin', 'member'], true)) {
             $this->reqData['usertype'] = $userType;
         } else {
             throw new WxCorpProviderException('登录类型不合法', ErrorCode::WXPROVIDER_CORP_PARAM_ERROR);
         }
     }
 
-    public function getDetail() : array {
+    public function getDetail() : array
+    {
         return [
             'url' => 'https://open.work.weixin.qq.com/wwopen/sso/3rd_qrConnect?' . http_build_query($this->reqData),
         ];

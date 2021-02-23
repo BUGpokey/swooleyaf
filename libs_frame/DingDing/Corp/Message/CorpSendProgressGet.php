@@ -7,18 +7,19 @@
  */
 namespace DingDing\Corp\Message;
 
-use Constant\ErrorCode;
+use SyConstant\ErrorCode;
 use DesignPatterns\Singletons\DingTalkConfigSingleton;
 use DingDing\TalkBaseCorp;
 use DingDing\TalkTraitCorp;
-use Exception\DingDing\TalkException;
-use Tool\Tool;
+use SyException\DingDing\TalkException;
+use SyTool\Tool;
 
 /**
  * 查询工作通知消息的发送进度
  * @package DingDing\Corp\Message
  */
-class CorpSendProgressGet extends TalkBaseCorp {
+class CorpSendProgressGet extends TalkBaseCorp
+{
     use TalkTraitCorp;
 
     /**
@@ -32,7 +33,8 @@ class CorpSendProgressGet extends TalkBaseCorp {
      */
     private $task_id = 0;
 
-    public function __construct(string $corpId,string $agentTag){
+    public function __construct(string $corpId, string $agentTag)
+    {
         parent::__construct();
         $this->_corpId = $corpId;
         $this->_agentTag = $agentTag;
@@ -40,23 +42,26 @@ class CorpSendProgressGet extends TalkBaseCorp {
         $this->reqData['agent_id'] = $agentInfo['id'];
     }
 
-    private function __clone(){
+    private function __clone()
+    {
     }
 
     /**
      * @param int $taskId
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setTaskId(int $taskId){
-        if($taskId > 0){
+    public function setTaskId(int $taskId)
+    {
+        if ($taskId > 0) {
             $this->reqData['task_id'] = $taskId;
         } else {
             throw new TalkException('任务ID不合法', ErrorCode::DING_TALK_PARAM_ERROR);
         }
     }
 
-    public function getDetail() : array {
-        if(!isset($this->reqData['task_id'])){
+    public function getDetail() : array
+    {
+        if (!isset($this->reqData['task_id'])) {
             throw new TalkException('任务ID不能为空', ErrorCode::DING_TALK_PARAM_ERROR);
         }
 

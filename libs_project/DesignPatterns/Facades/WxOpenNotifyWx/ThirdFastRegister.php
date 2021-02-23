@@ -7,18 +7,20 @@
  */
 namespace DesignPatterns\Facades\WxOpenNotifyWx;
 
-use Constant\Project;
 use DesignPatterns\Facades\WxOpenNotifyWxFacade;
-use Tool\ProjectTool;
-use Traits\SimpleFacadeTrait;
+use SyConstant\Project;
+use SyTool\ProjectWxTool;
+use SyTrait\SimpleFacadeTrait;
 use Wx\WxUtilOpenBase;
 
-class ThirdFastRegister extends WxOpenNotifyWxFacade {
+class ThirdFastRegister extends WxOpenNotifyWxFacade
+{
     use SimpleFacadeTrait;
 
-    protected static function handleNotify(array $data){
+    protected static function handleNotify(array $data)
+    {
         if ($data['status'] == 0) {
-            ProjectTool::handleAppAuthForWxOpen(Project::WX_COMPONENT_AUTHORIZER_OPTION_TYPE_AUTHORIZED, [
+            ProjectWxTool::handleAppAuthForOpen(Project::WX_COMPONENT_AUTHORIZER_OPTION_TYPE_AUTHORIZED, [
                 'AuthorizerAppid' => $data['appid'],
                 'AuthorizationCode' => $data['auth_code'],
             ]);

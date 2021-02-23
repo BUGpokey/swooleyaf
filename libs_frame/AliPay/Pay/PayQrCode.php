@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 统一收单线下交易预创建
  * User: 姜伟
  * Date: 2018/9/6 0006
  * Time: 14:49
@@ -8,38 +8,45 @@
 namespace AliPay\Pay;
 
 use AliPay\AliPayBase;
-use Constant\ErrorCode;
 use DesignPatterns\Singletons\AliPayConfigSingleton;
-use Exception\AliPay\AliPayPayException;
+use SyConstant\ErrorCode;
+use SyException\AliPay\AliPayPayException;
 
-class PayQrCode extends AliPayBase {
+class PayQrCode extends AliPayBase
+{
     /**
      * 商户订单号
+     *
      * @var string
      */
     private $out_trade_no = '';
     /**
      * 订单总金额,单位为分
+     *
      * @var string
      */
     private $total_amount = '';
     /**
      * 订单标题
+     *
      * @var string
      */
     private $subject = '';
     /**
      * 商品的描述
+     *
      * @var string
      */
     private $body = '';
     /**
      * 订单允许的最晚付款时间，逾期将关闭交易
+     *
      * @var string
      */
     private $timeout_express = '';
 
-    public function __construct(string $appId) {
+    public function __construct(string $appId)
+    {
         parent::__construct($appId);
         $payConfig = AliPayConfigSingleton::getInstance()->getPayConfig($appId);
         $this->notify_url = $payConfig->getUrlNotify();
@@ -47,16 +54,19 @@ class PayQrCode extends AliPayBase {
         $this->setMethod('alipay.trade.precreate');
     }
 
-    private function __clone(){
+    private function __clone()
+    {
     }
 
     /**
      * @param string $subject
-     * @throws \Exception\AliPay\AliPayPayException
+     *
+     * @throws \SyException\AliPay\AliPayPayException
      */
-    public function setSubject(string $subject) {
+    public function setSubject(string $subject)
+    {
         $title = mb_substr(trim($subject), 0, 128);
-        if(strlen($title) > 0){
+        if (strlen($title) > 0) {
             $this->biz_content['subject'] = $title;
         } else {
             throw new AliPayPayException('订单标题不合法', ErrorCode::ALIPAY_PAY_PARAM_ERROR);
@@ -65,9 +75,11 @@ class PayQrCode extends AliPayBase {
 
     /**
      * @param string $outTradeNo
-     * @throws \Exception\AliPay\AliPayPayException
+     *
+     * @throws \SyException\AliPay\AliPayPayException
      */
-    public function setOutTradeNo(string $outTradeNo) {
+    public function setOutTradeNo(string $outTradeNo)
+    {
         if (ctype_digit($outTradeNo)) {
             $this->biz_content['out_trade_no'] = $outTradeNo;
         } else {
@@ -78,7 +90,8 @@ class PayQrCode extends AliPayBase {
     /**
      * @param string $timeoutExpress
      */
-    public function setTimeoutExpress(string $timeoutExpress) {
+    public function setTimeoutExpress(string $timeoutExpress)
+    {
         if (strlen($timeoutExpress) > 0) {
             $this->biz_content['timeout_express'] = $timeoutExpress;
         }
@@ -86,9 +99,11 @@ class PayQrCode extends AliPayBase {
 
     /**
      * @param int $totalAmount
-     * @throws \Exception\AliPay\AliPayPayException
+     *
+     * @throws \SyException\AliPay\AliPayPayException
      */
-    public function setTotalAmount(int $totalAmount) {
+    public function setTotalAmount(int $totalAmount)
+    {
         if ($totalAmount > 0) {
             $this->biz_content['total_amount'] = number_format(($totalAmount / 100), 2, '.', '');
         } else {
@@ -98,13 +113,14 @@ class PayQrCode extends AliPayBase {
 
     /**
      * @param string $body
-     * @throws \Exception\AliPay\AliPayPayException
      */
-    public function setBody(string $body){
+    public function setBody(string $body)
+    {
         $this->biz_content['body'] = substr(trim($body), 0, 128);
     }
 
-    public function getDetail() : array {
+    public function getDetail() : array
+    {
         if (!isset($this->biz_content['subject'])) {
             throw new AliPayPayException('订单标题不能为空', ErrorCode::ALIPAY_PAY_PARAM_ERROR);
         }

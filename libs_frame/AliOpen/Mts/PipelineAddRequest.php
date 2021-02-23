@@ -3,100 +3,138 @@ namespace AliOpen\Mts;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class PipelineAddRequest extends RpcAcsRequest {
-    private $resourceOwnerId;
-    private $role;
-    private $resourceOwnerAccount;
-    private $ownerAccount;
-    private $name;
-    private $notifyConfig;
-    private $ownerId;
-    private $speedLevel;
-    private $speed;
+/**
+ * Request of AddPipeline
+ * @method string getResourceOwnerId()
+ * @method string getRole()
+ * @method string getResourceOwnerAccount()
+ * @method string getOwnerAccount()
+ * @method string getName()
+ * @method string getNotifyConfig()
+ * @method string getOwnerId()
+ * @method string getSpeedLevel()
+ * @method string getSpeed()
+ */
+class PipelineAddRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Mts", "2014-06-18", "AddPipeline", "mts", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Mts', '2014-06-18', 'AddPipeline', 'mts');
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $resourceOwnerId
+     * @return $this
+     */
+    public function setResourceOwnerId($resourceOwnerId)
+    {
+        $this->requestParameters['ResourceOwnerId'] = $resourceOwnerId;
+        $this->queryParameters['ResourceOwnerId'] = $resourceOwnerId;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $role
+     * @return $this
+     */
+    public function setRole($role)
+    {
+        $this->requestParameters['Role'] = $role;
+        $this->queryParameters['Role'] = $role;
+
+        return $this;
     }
 
-    public function getRole(){
-        return $this->role;
+    /**
+     * @param string $resourceOwnerAccount
+     * @return $this
+     */
+    public function setResourceOwnerAccount($resourceOwnerAccount)
+    {
+        $this->requestParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+        $this->queryParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+
+        return $this;
     }
 
-    public function setRole($role){
-        $this->role = $role;
-        $this->queryParameters["Role"] = $role;
+    /**
+     * @param string $ownerAccount
+     * @return $this
+     */
+    public function setOwnerAccount($ownerAccount)
+    {
+        $this->requestParameters['OwnerAccount'] = $ownerAccount;
+        $this->queryParameters['OwnerAccount'] = $ownerAccount;
+
+        return $this;
     }
 
-    public function getResourceOwnerAccount(){
-        return $this->resourceOwnerAccount;
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->requestParameters['Name'] = $name;
+        $this->queryParameters['Name'] = $name;
+
+        return $this;
     }
 
-    public function setResourceOwnerAccount($resourceOwnerAccount){
-        $this->resourceOwnerAccount = $resourceOwnerAccount;
-        $this->queryParameters["ResourceOwnerAccount"] = $resourceOwnerAccount;
+    /**
+     * @param string $notifyConfig
+     * @return $this
+     */
+    public function setNotifyConfig($notifyConfig)
+    {
+        $this->requestParameters['NotifyConfig'] = $notifyConfig;
+        $this->queryParameters['NotifyConfig'] = $notifyConfig;
+
+        return $this;
     }
 
-    public function getOwnerAccount(){
-        return $this->ownerAccount;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function setOwnerAccount($ownerAccount){
-        $this->ownerAccount = $ownerAccount;
-        $this->queryParameters["OwnerAccount"] = $ownerAccount;
+    /**
+     * @param string $speedLevel
+     * @return $this
+     */
+    public function setSpeedLevel($speedLevel)
+    {
+        $this->requestParameters['SpeedLevel'] = $speedLevel;
+        $this->queryParameters['SpeedLevel'] = $speedLevel;
+
+        return $this;
     }
 
-    public function getName(){
-        return $this->name;
-    }
+    /**
+     * @param string $speed
+     * @return $this
+     */
+    public function setSpeed($speed)
+    {
+        $this->requestParameters['Speed'] = $speed;
+        $this->queryParameters['Speed'] = $speed;
 
-    public function setName($name){
-        $this->name = $name;
-        $this->queryParameters["Name"] = $name;
-    }
-
-    public function getNotifyConfig(){
-        return $this->notifyConfig;
-    }
-
-    public function setNotifyConfig($notifyConfig){
-        $this->notifyConfig = $notifyConfig;
-        $this->queryParameters["NotifyConfig"] = $notifyConfig;
-    }
-
-    public function getOwnerId(){
-        return $this->ownerId;
-    }
-
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
-    }
-
-    public function getSpeedLevel(){
-        return $this->speedLevel;
-    }
-
-    public function setSpeedLevel($speedLevel){
-        $this->speedLevel = $speedLevel;
-        $this->queryParameters["SpeedLevel"] = $speedLevel;
-    }
-
-    public function getSpeed(){
-        return $this->speed;
-    }
-
-    public function setSpeed($speed){
-        $this->speed = $speed;
-        $this->queryParameters["Speed"] = $speed;
+        return $this;
     }
 }

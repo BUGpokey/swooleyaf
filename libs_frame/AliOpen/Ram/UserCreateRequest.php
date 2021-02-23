@@ -3,61 +3,90 @@ namespace AliOpen\Ram;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class UserCreateRequest extends RpcAcsRequest {
-    private $comments;
-    private $displayName;
-    private $mobilePhone;
-    private $email;
-    private $userName;
+/**
+ * Request of CreateUser
+ * @method string getComments()
+ * @method string getDisplayName()
+ * @method string getMobilePhone()
+ * @method string getEmail()
+ * @method string getUserName()
+ */
+class UserCreateRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $requestScheme = 'https';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ram", "2015-05-01", "CreateUser");
-        $this->setProtocol("https");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ram', '2015-05-01', 'CreateUser', 'ram');
     }
 
-    public function getComments(){
-        return $this->comments;
+    /**
+     * @param string $comments
+     * @return $this
+     */
+    public function setComments($comments)
+    {
+        $this->requestParameters['Comments'] = $comments;
+        $this->queryParameters['Comments'] = $comments;
+
+        return $this;
     }
 
-    public function setComments($comments){
-        $this->comments = $comments;
-        $this->queryParameters["Comments"] = $comments;
+    /**
+     * @param string $displayName
+     * @return $this
+     */
+    public function setDisplayName($displayName)
+    {
+        $this->requestParameters['DisplayName'] = $displayName;
+        $this->queryParameters['DisplayName'] = $displayName;
+
+        return $this;
     }
 
-    public function getDisplayName(){
-        return $this->displayName;
+    /**
+     * @param string $mobilePhone
+     * @return $this
+     */
+    public function setMobilePhone($mobilePhone)
+    {
+        $this->requestParameters['MobilePhone'] = $mobilePhone;
+        $this->queryParameters['MobilePhone'] = $mobilePhone;
+
+        return $this;
     }
 
-    public function setDisplayName($displayName){
-        $this->displayName = $displayName;
-        $this->queryParameters["DisplayName"] = $displayName;
+    /**
+     * @param string $email
+     * @return $this
+     */
+    public function setEmail($email)
+    {
+        $this->requestParameters['Email'] = $email;
+        $this->queryParameters['Email'] = $email;
+
+        return $this;
     }
 
-    public function getMobilePhone(){
-        return $this->mobilePhone;
-    }
+    /**
+     * @param string $userName
+     * @return $this
+     */
+    public function setUserName($userName)
+    {
+        $this->requestParameters['UserName'] = $userName;
+        $this->queryParameters['UserName'] = $userName;
 
-    public function setMobilePhone($mobilePhone){
-        $this->mobilePhone = $mobilePhone;
-        $this->queryParameters["MobilePhone"] = $mobilePhone;
-    }
-
-    public function getEmail(){
-        return $this->email;
-    }
-
-    public function setEmail($email){
-        $this->email = $email;
-        $this->queryParameters["Email"] = $email;
-    }
-
-    public function getUserName(){
-        return $this->userName;
-    }
-
-    public function setUserName($userName){
-        $this->userName = $userName;
-        $this->queryParameters["UserName"] = $userName;
+        return $this;
     }
 }

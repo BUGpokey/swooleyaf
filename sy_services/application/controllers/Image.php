@@ -5,8 +5,10 @@
  * Date: 2017-04-16
  * Time: 18:02
  */
-class ImageController extends CommonController {
-    public function init() {
+class ImageController extends CommonController
+{
+    public function init()
+    {
         parent::init();
     }
 
@@ -16,30 +18,30 @@ class ImageController extends CommonController {
      * @apiDescription 生成二维码图片
      * @apiGroup Image
      * @apiParam {string{1..255}} url 链接地址
-     * @apiParam {string} [error_level=L] 容错级别，取值为H L M Q，越在前级别越低
+     * @apiParam {number} [error_level=0] 容错级别,取值为0-3,越在前级别越低
      * @apiParam {number{1-10}} [image_size=5] 图片大小
-     * @apiParam {number{0-200}} [margin_size=2] 外边框间隙，单位为px
-     * @apiSuccess {string} Body 图片字节流
-     * @apiUse CommonFail
+     * @apiParam {number{0-200}} [margin_size=2] 外边框间隙,单位为px
      * @SyFilter-{"field": "url","explain": "链接地址","type": "string","rules": {"required": 1,"url": 1}}
-     * @SyFilter-{"field": "error_level","explain": "容错级别","type": "string","rules": {"regex": "/^[HLMQ]{1}$/"}}
+     * @SyFilter-{"field": "error_level","explain": "容错级别","type": "int","rules": {"min": 0,"max": 3}}
      * @SyFilter-{"field": "image_size","explain": "图片大小","type": "int","rules": {"min": 1,"max": 10}}
      * @SyFilter-{"field": "margin_size","explain": "外边框间隙","type": "int","rules": {"min": 0,"max": 200}}
+     * @apiSuccess {String} Body 图片字节流
+     * @apiUse ResponseFail
      */
-    public function createQrImageAction() {
+    public function createQrImageAction()
+    {
         $url = (string)\Request\SyRequest::getParams('url');
-        ob_start();
-        \Qrcode\SyQrCode::createImage($url, [
-            'error_level' => \Request\SyRequest::getParams('error_level', \Qrcode\SyQrCode::QR_ERROR_LEVEL_ONE),
+        $qrBase = new \SyQr\QrBase($url, \SyServer\BaseServer::getServerConfig('storepath_cache'), [
+            'error_level' => (int)\Request\SyRequest::getParams('error_level', 0),
             'image_size' => (int)\Request\SyRequest::getParams('image_size', 5),
             'margin_size' => (int)\Request\SyRequest::getParams('margin_size', 2),
         ]);
-        $image = ob_get_contents();
-        ob_end_clean();
 
         $this->SyResult->setData([
-            'image' => 'data:image/png;base64,' . base64_encode($image),
+            'image' => $qrBase->getContent(),
         ]);
+        unset($qrBase);
+
         $this->sendRsp();
     }
 
@@ -58,19 +60,20 @@ class ImageController extends CommonController {
      * @SyFilter-{"field": "page_scene","explain": "页面场景","type": "string","rules": {"required": 1,"min": 1,"max": 32}}
      * @SyFilter-{"field": "image_size","explain": "图片大小","type": "int","rules": {"min": 50,"max": 5000}}
      * @SyFilter-{"field": "hyaline","explain": "透明背景标识","type": "int","rules": {"min": 0,"max": 1}}
-     * @apiUse CommonSuccess
-     * @apiUse CommonFail
+     * @apiUse ResponseSuccess
+     * @apiUse ResponseFail
      */
-    public function createQrImageWxMiniAction() {
+    public function createQrImageWxMiniAction()
+    {
         $wxAppId = trim(\Request\SyRequest::getParams('wx_appid'));
         $pageUrl = trim(\Request\SyRequest::getParams('page_url'));
         $pageScene = trim(\Request\SyRequest::getParams('page_scene'));
-        if(strlen($wxAppId) == 0){
-            $this->SyResult->setCodeMsg(\Constant\ErrorCode::COMMON_PARAM_ERROR, '小程序appid不能为空');
-        } else if(strlen($pageUrl) == 0){
-            $this->SyResult->setCodeMsg(\Constant\ErrorCode::COMMON_PARAM_ERROR, '页面地址不能为空');
-        } else if(strlen($pageScene) == 0){
-            $this->SyResult->setCodeMsg(\Constant\ErrorCode::COMMON_PARAM_ERROR, '页面场景不能为空');
+        if (strlen($wxAppId) == 0) {
+            $this->SyResult->setCodeMsg(\SyConstant\ErrorCode::COMMON_PARAM_ERROR, '小程序appid不能为空');
+        } elseif (strlen($pageUrl) == 0) {
+            $this->SyResult->setCodeMsg(\SyConstant\ErrorCode::COMMON_PARAM_ERROR, '页面地址不能为空');
+        } elseif (strlen($pageScene) == 0) {
+            $this->SyResult->setCodeMsg(\SyConstant\ErrorCode::COMMON_PARAM_ERROR, '页面场景不能为空');
         } else {
             $imageSize = (int)\Request\SyRequest::getParams('image_size', 430);
             $hyaline = (int)\Request\SyRequest::getParams('hyaline', 1);
@@ -79,14 +82,14 @@ class ImageController extends CommonController {
             $qrCode->setScene($pageScene);
             $qrCode->setAutoColor(false);
             $qrCode->setWidth($imageSize);
-            if($hyaline == 1){
+            if ($hyaline == 1) {
                 $qrCode->setIsHyaline(true);
             } else {
                 $qrCode->setIsHyaline(false);
             }
             $createRes = $qrCode->getDetail();
             unset($qrCode);
-            if($createRes['code'] == 0){
+            if ($createRes['code'] == 0) {
                 $this->SyResult->setData($createRes['data']);
             } else {
                 $this->SyResult->setCodeMsg($createRes['code'], $createRes['message']);
@@ -110,19 +113,20 @@ class ImageController extends CommonController {
      * @SyFilter-{"field": "upload_type","explain": "上传类型","type": "int","rules": {"required": 1,"min": 1}}
      * @SyFilter-{"field": "image_width","explain": "图片限制宽度","type": "int","rules": {"required": 1,"min": 1,"max": 5000}}
      * @SyFilter-{"field": "image_height","explain": "图片限制高度","type": "int","rules": {"required": 1,"min": 1,"max": 5000}}
-     * @apiUse CommonSuccess
-     * @apiUse CommonFail
+     * @apiUse ResponseSuccess
+     * @apiUse ResponseFail
      */
-    public function uploadImageAction() {
-        $cacheKey = \Constant\Project::REDIS_PREFIX_IMAGE_DATA . \Request\SyRequest::getParams('_syfile_tag', '');
+    public function uploadImageAction()
+    {
+        $cacheKey = \SyConstant\Project::REDIS_PREFIX_IMAGE_DATA . \Request\SyRequest::getParams('_syfile_tag', '');
         $cacheData = \DesignPatterns\Factories\CacheSimpleFactory::getRedisInstance()->get($cacheKey);
         if ($cacheData === false) {
-            $this->SyResult->setCodeMsg(\Constant\ErrorCode::COMMON_SERVER_ERROR, '图片缓存内容不存在');
+            $this->SyResult->setCodeMsg(\SyConstant\ErrorCode::COMMON_SERVER_ERROR, '图片缓存内容不存在');
         } else {
             \DesignPatterns\Factories\CacheSimpleFactory::getRedisInstance()->del($cacheKey);
             $imageWidth = (int)\Request\SyRequest::getParams('image_width');
             $imageHeight = (int)\Request\SyRequest::getParams('image_height');
-            $syImage = new Images\SyImageImagick($cacheData);
+            $syImage = new \SyImage\ImageImagick($cacheData, \SyConstant\SyInner::IMAGE_DATA_TYPE_BINARY);
             $fileName = $syImage->resizeImage($imageWidth, $imageHeight)
                 ->setQuality(100)
                 ->writeImage(\SyServer\BaseServer::getServerConfig('storepath_cache'));

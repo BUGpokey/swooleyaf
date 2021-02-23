@@ -7,10 +7,11 @@
  */
 namespace SyMessagePush;
 
-use Constant\ErrorCode;
-use Exception\MessagePush\XinGePushException;
+use SyConstant\ErrorCode;
+use SyException\MessagePush\XinGePushException;
 
-class ConfigXinGe {
+class ConfigXinGe
+{
     const PLATFORM_TYPE_IOS = 'ios';
     const PLATFORM_TYPE_ANDROID = 'android';
 
@@ -30,25 +31,29 @@ class ConfigXinGe {
      */
     private $platform = '';
 
-    public function __construct(){
+    public function __construct()
+    {
     }
 
-    private function __clone(){
+    private function __clone()
+    {
     }
 
     /**
      * @return string
      */
-    public function getAppId() : string {
+    public function getAppId() : string
+    {
         return $this->appId;
     }
 
     /**
      * @param string $appId
-     * @throws \Exception\MessagePush\XinGePushException
+     * @throws \SyException\MessagePush\XinGePushException
      */
-    public function setAppId(string $appId){
-        if(ctype_alnum($appId)){
+    public function setAppId(string $appId)
+    {
+        if (ctype_alnum($appId)) {
             $this->appId = $appId;
         } else {
             throw new XinGePushException('应用ID不合法', ErrorCode::MESSAGE_PUSH_PARAM_ERROR);
@@ -58,16 +63,18 @@ class ConfigXinGe {
     /**
      * @return string
      */
-    public function getAppSecret() : string {
+    public function getAppSecret() : string
+    {
         return $this->appSecret;
     }
 
     /**
      * @param string $appSecret
-     * @throws \Exception\MessagePush\XinGePushException
+     * @throws \SyException\MessagePush\XinGePushException
      */
-    public function setAppSecret(string $appSecret){
-        if(ctype_alnum($appSecret)){
+    public function setAppSecret(string $appSecret)
+    {
+        if (ctype_alnum($appSecret)) {
             $this->appSecret = $appSecret;
         } else {
             throw new XinGePushException('应用密钥不合法', ErrorCode::MESSAGE_PUSH_PARAM_ERROR);
@@ -77,16 +84,18 @@ class ConfigXinGe {
     /**
      * @return string
      */
-    public function getPlatform() : string {
+    public function getPlatform() : string
+    {
         return $this->platform;
     }
 
     /**
      * @param string $platform
-     * @throws \Exception\MessagePush\XinGePushException
+     * @throws \SyException\MessagePush\XinGePushException
      */
-    public function setPlatform(string $platform){
-        if(in_array($platform, [self::PLATFORM_TYPE_IOS, self::PLATFORM_TYPE_ANDROID])){
+    public function setPlatform(string $platform)
+    {
+        if (in_array($platform, [self::PLATFORM_TYPE_IOS, self::PLATFORM_TYPE_ANDROID], true)) {
             $this->platform = $platform;
         } else {
             throw new XinGePushException('平台类型不合法', ErrorCode::MESSAGE_PUSH_PARAM_ERROR);

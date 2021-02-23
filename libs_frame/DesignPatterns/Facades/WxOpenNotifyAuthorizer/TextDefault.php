@@ -8,12 +8,14 @@
 namespace DesignPatterns\Facades\WxOpenNotifyAuthorizer;
 
 use DesignPatterns\Facades\WxOpenNotifyAuthorizerFacade;
-use Traits\SimpleFacadeTrait;
+use SyTrait\SimpleFacadeTrait;
 
-class TextDefault extends WxOpenNotifyAuthorizerFacade {
+class TextDefault extends WxOpenNotifyAuthorizerFacade
+{
     use SimpleFacadeTrait;
 
-    protected static function responseNotify(array $data) : array {
+    protected static function responseNotify(array $data) : array
+    {
         return [
             'ToUserName' => $data['FromUserName'],
             'FromUserName' => $data['ToUserName'],

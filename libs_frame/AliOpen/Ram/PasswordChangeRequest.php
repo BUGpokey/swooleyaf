@@ -3,31 +3,51 @@ namespace AliOpen\Ram;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class PasswordChangeRequest extends RpcAcsRequest {
-    private $oldPassword;
-    private $newPassword;
+/**
+ * Request of ChangePassword
+ * @method string getOldPassword()
+ * @method string getNewPassword()
+ */
+class PasswordChangeRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $requestScheme = 'https';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ram", "2015-05-01", "ChangePassword");
-        $this->setProtocol("https");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ram', '2015-05-01', 'ChangePassword', 'ram');
     }
 
-    public function getOldPassword(){
-        return $this->oldPassword;
+    /**
+     * @param string $oldPassword
+     * @return $this
+     */
+    public function setOldPassword($oldPassword)
+    {
+        $this->requestParameters['OldPassword'] = $oldPassword;
+        $this->queryParameters['OldPassword'] = $oldPassword;
+
+        return $this;
     }
 
-    public function setOldPassword($oldPassword){
-        $this->oldPassword = $oldPassword;
-        $this->queryParameters["OldPassword"] = $oldPassword;
-    }
+    /**
+     * @param string $newPassword
+     * @return $this
+     */
+    public function setNewPassword($newPassword)
+    {
+        $this->requestParameters['NewPassword'] = $newPassword;
+        $this->queryParameters['NewPassword'] = $newPassword;
 
-    public function getNewPassword(){
-        return $this->newPassword;
-    }
-
-    public function setNewPassword($newPassword){
-        $this->newPassword = $newPassword;
-        $this->queryParameters["NewPassword"] = $newPassword;
+        return $this;
     }
 }

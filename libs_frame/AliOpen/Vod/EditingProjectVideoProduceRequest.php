@@ -3,120 +3,164 @@ namespace AliOpen\Vod;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class EditingProjectVideoProduceRequest extends RpcAcsRequest {
-    private $resourceOwnerId;
-    private $mediaMetadata;
-    private $resourceOwnerAccount;
-    private $description;
-    private $ownerId;
-    private $title;
-    private $coverURL;
-    private $userData;
-    private $timeline;
-    private $produceConfig;
-    private $projectId;
+/**
+ * Request of ProduceEditingProjectVideo
+ * @method string getResourceOwnerId()
+ * @method string getDescription()
+ * @method string getTitle()
+ * @method string getCoverURL()
+ * @method string getUserData()
+ * @method string getProduceConfig()
+ * @method string getProjectId()
+ * @method string getMediaMetadata()
+ * @method string getResourceOwnerAccount()
+ * @method string getOwnerId()
+ * @method string getTimeline()
+ */
+class EditingProjectVideoProduceRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("vod", "2017-03-21", "ProduceEditingProjectVideo", "vod", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('vod', '2017-03-21', 'ProduceEditingProjectVideo', 'vod');
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $resourceOwnerId
+     * @return $this
+     */
+    public function setResourceOwnerId($resourceOwnerId)
+    {
+        $this->requestParameters['ResourceOwnerId'] = $resourceOwnerId;
+        $this->queryParameters['ResourceOwnerId'] = $resourceOwnerId;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $description
+     * @return $this
+     */
+    public function setDescription($description)
+    {
+        $this->requestParameters['Description'] = $description;
+        $this->queryParameters['Description'] = $description;
+
+        return $this;
     }
 
-    public function getMediaMetadata(){
-        return $this->mediaMetadata;
+    /**
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        $this->requestParameters['Title'] = $title;
+        $this->queryParameters['Title'] = $title;
+
+        return $this;
     }
 
-    public function setMediaMetadata($mediaMetadata){
-        $this->mediaMetadata = $mediaMetadata;
-        $this->queryParameters["MediaMetadata"] = $mediaMetadata;
+    /**
+     * @param string $coverURL
+     * @return $this
+     */
+    public function setCoverURL($coverURL)
+    {
+        $this->requestParameters['CoverURL'] = $coverURL;
+        $this->queryParameters['CoverURL'] = $coverURL;
+
+        return $this;
     }
 
-    public function getResourceOwnerAccount(){
-        return $this->resourceOwnerAccount;
+    /**
+     * @param string $userData
+     * @return $this
+     */
+    public function setUserData($userData)
+    {
+        $this->requestParameters['UserData'] = $userData;
+        $this->queryParameters['UserData'] = $userData;
+
+        return $this;
     }
 
-    public function setResourceOwnerAccount($resourceOwnerAccount){
-        $this->resourceOwnerAccount = $resourceOwnerAccount;
-        $this->queryParameters["ResourceOwnerAccount"] = $resourceOwnerAccount;
+    /**
+     * @param string $produceConfig
+     * @return $this
+     */
+    public function setProduceConfig($produceConfig)
+    {
+        $this->requestParameters['ProduceConfig'] = $produceConfig;
+        $this->queryParameters['ProduceConfig'] = $produceConfig;
+
+        return $this;
     }
 
-    public function getDescription(){
-        return $this->description;
+    /**
+     * @param string $projectId
+     * @return $this
+     */
+    public function setProjectId($projectId)
+    {
+        $this->requestParameters['ProjectId'] = $projectId;
+        $this->queryParameters['ProjectId'] = $projectId;
+
+        return $this;
     }
 
-    public function setDescription($description){
-        $this->description = $description;
-        $this->queryParameters["Description"] = $description;
+    /**
+     * @param string $mediaMetadata
+     * @return $this
+     */
+    public function setMediaMetadata($mediaMetadata)
+    {
+        $this->requestParameters['MediaMetadata'] = $mediaMetadata;
+        $this->queryParameters['MediaMetadata'] = $mediaMetadata;
+
+        return $this;
     }
 
-    public function getOwnerId(){
-        return $this->ownerId;
+    /**
+     * @param string $resourceOwnerAccount
+     * @return $this
+     */
+    public function setResourceOwnerAccount($resourceOwnerAccount)
+    {
+        $this->requestParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+        $this->queryParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+
+        return $this;
     }
 
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function getTitle(){
-        return $this->title;
-    }
+    /**
+     * @param string $timeline
+     * @return $this
+     */
+    public function setTimeline($timeline)
+    {
+        $this->requestParameters['Timeline'] = $timeline;
+        $this->queryParameters['Timeline'] = $timeline;
 
-    public function setTitle($title){
-        $this->title = $title;
-        $this->queryParameters["Title"] = $title;
-    }
-
-    public function getCoverURL(){
-        return $this->coverURL;
-    }
-
-    public function setCoverURL($coverURL){
-        $this->coverURL = $coverURL;
-        $this->queryParameters["CoverURL"] = $coverURL;
-    }
-
-    public function getUserData(){
-        return $this->userData;
-    }
-
-    public function setUserData($userData){
-        $this->userData = $userData;
-        $this->queryParameters["UserData"] = $userData;
-    }
-
-    public function getTimeline(){
-        return $this->timeline;
-    }
-
-    public function setTimeline($timeline){
-        $this->timeline = $timeline;
-        $this->queryParameters["Timeline"] = $timeline;
-    }
-
-    public function getProduceConfig(){
-        return $this->produceConfig;
-    }
-
-    public function setProduceConfig($produceConfig){
-        $this->produceConfig = $produceConfig;
-        $this->queryParameters["ProduceConfig"] = $produceConfig;
-    }
-
-    public function getProjectId(){
-        return $this->projectId;
-    }
-
-    public function setProjectId($projectId){
-        $this->projectId = $projectId;
-        $this->queryParameters["ProjectId"] = $projectId;
+        return $this;
     }
 }

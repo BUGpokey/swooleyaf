@@ -6,38 +6,34 @@ use Grafika\ImageType;
 
 /**
  * Image class for Imagick.
+ *
  * @package Grafika\Gd
  */
-final class Image implements ImageInterface {
-
+final class Image implements ImageInterface
+{
     /**
      * @var \Imagick Imagick instance
      */
     private $imagick;
-
     /**
      * @var string File path to image
      */
     private $imageFile;
-
     /**
      * @var int Image width in pixels
      */
     private $width;
-
     /**
      * @var int Image height in pixels
      */
     private $height;
-
     /**
      * @var string Image type. Return value of Imagick::queryFormats(). See http://phpimagick.com/Imagick/queryFormats
-     * Sample values: JPEG, PNG, GIF, WBMP
+     *             Sample values: JPEG, PNG, GIF, WBMP
      */
     private $type;
-
     /**
-     * @var bool True if image is an animated GIF.
+     * @var bool true if image is an animated GIF
      */
     private $animated;
 
@@ -45,19 +41,20 @@ final class Image implements ImageInterface {
      * Image constructor.
      *
      * @param \Imagick $imagick
-     * @param string $imageFile
-     * @param int $width
-     * @param int $height
-     * @param string $type
-     * @param bool $animated
+     * @param string   $imageFile
+     * @param int      $width
+     * @param int      $height
+     * @param string   $type
+     * @param bool     $animated
      */
-    public function __construct( \Imagick $imagick, $imageFile, $width, $height, $type, $animated = false ) {
-        $this->imagick   = $imagick;
+    public function __construct(\Imagick $imagick, $imageFile, $width, $height, $type, $animated = false)
+    {
+        $this->imagick = $imagick;
         $this->imageFile = $imageFile;
-        $this->width     = $width;
-        $this->height    = $height;
-        $this->type      = $type;
-        $this->animated  = $animated;
+        $this->width = $width;
+        $this->height = $height;
+        $this->type = $type;
+        $this->animated = $animated;
     }
 
     public function __clone()
@@ -70,11 +67,12 @@ final class Image implements ImageInterface {
     /**
      * Output a binary raw dump of an image in a specified format.
      *
-     * @param string|ImageType $type Image format of the dump.
+     * @param string|ImageType $type image format of the dump
      *
-     * @throws \Exception When unsupported type.
+     * @throws \Exception when unsupported type
      */
-    public function blob( $type = 'PNG' ) {
+    public function blob($type = 'PNG')
+    {
         $this->imagick->setImageFormat($type);
         echo $this->imagick->getImageBlob();
     }
@@ -83,57 +81,53 @@ final class Image implements ImageInterface {
      * @param $imageFile
      *
      * @return Image
+     *
      * @throws \Exception
      */
-    public static function createFromFile( $imageFile ){
-        $imageFile = realpath( $imageFile );
+    public static function createFromFile($imageFile)
+    {
+        $imageFile = realpath($imageFile);
 
-        if ( ! file_exists( $imageFile ) ) {
-            throw new \Exception( sprintf('Could not open image file "%s"', $imageFile) );
+        if (!file_exists($imageFile)) {
+            throw new \Exception(sprintf('Could not open image file "%s"', $imageFile));
         }
 
-        $imagick = new \Imagick( realpath($imageFile) );
+        $imagick = new \Imagick(realpath($imageFile));
         $animated = false;
         if ($imagick->getImageIterations() > 0) {
             $animated = true;
         }
 
-        return new self(
-            $imagick,
-            $imageFile,
-            $imagick->getImageWidth(),
-            $imagick->getImageHeight(),
-            $imagick->getImageFormat(),
-            $animated
-        );
+        return new self($imagick, $imageFile, $imagick->getImageWidth(), $imagick->getImageHeight(), $imagick->getImageFormat(), $animated);
     }
 
     /**
      * Create an Image from an instance of Imagick.
      *
-     * @param \Imagick $imagick Instance of Imagick.
+     * @param \Imagick $imagick instance of Imagick
      *
      * @return Image
      */
-    public static function createFromCore( $imagick ) {
-        return new self( $imagick, '', $imagick->getImageWidth(), $imagick->getImageHeight(), $imagick->getImageFormat() );
+    public static function createFromCore($imagick)
+    {
+        return new self($imagick, '', $imagick->getImageWidth(), $imagick->getImageHeight(), $imagick->getImageFormat());
     }
 
     /**
      * Create a blank image.
      *
-     * @param int $width Width in pixels.
-     * @param int $height Height in pixels.
+     * @param int $width  width in pixels
+     * @param int $height height in pixels
      *
      * @return self
      */
-    public static function createBlank($width = 1, $height = 1){
+    public static function createBlank($width = 1, $height = 1)
+    {
         $imagick = new \Imagick();
         $imagick->newImage($width, $height, new \ImagickPixel('black'));
         $imagick->setImageFormat('png'); // Default to PNG.
 
-        return new self( $imagick, '', $imagick->getImageWidth(), $imagick->getImageHeight(), $imagick->getImageFormat());
-
+        return new self($imagick, '', $imagick->getImageWidth(), $imagick->getImageHeight(), $imagick->getImageFormat());
     }
 
     /**
@@ -141,16 +135,18 @@ final class Image implements ImageInterface {
      *
      * @return \Imagick
      */
-    public function getCore() {
+    public function getCore()
+    {
         return $this->imagick;
     }
 
     /**
      * Get image file path.
      *
-     * @return string File path to image.
+     * @return string file path to image
      */
-    public function getImageFile() {
+    public function getImageFile()
+    {
         return $this->imageFile;
     }
 
@@ -159,7 +155,8 @@ final class Image implements ImageInterface {
      *
      * @return int
      */
-    public function getWidth() {
+    public function getWidth()
+    {
         return $this->width;
     }
 
@@ -168,7 +165,8 @@ final class Image implements ImageInterface {
      *
      * @return int
      */
-    public function getHeight() {
+    public function getHeight()
+    {
         return $this->height;
     }
 
@@ -177,7 +175,8 @@ final class Image implements ImageInterface {
      *
      * @return string
      */
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
@@ -190,8 +189,7 @@ final class Image implements ImageInterface {
      */
     public function histogram($slice = null)
     {
-
-        if(null === $slice){
+        if (null === $slice) {
             $sliceX = 0;
             $sliceY = 0;
             $sliceW = $this->getWidth();
@@ -203,44 +201,45 @@ final class Image implements ImageInterface {
             $sliceH = $slice[1][1];
         }
 
-        $rBin = array();
-        $gBin = array();
-        $bBin = array();
-        $aBin = array();
+        $rBin = [];
+        $gBin = [];
+        $bBin = [];
+        $aBin = [];
 
         // Loop using image
         $pixelIterator = $this->getCore()->getPixelIterator();
         foreach ($pixelIterator as $y => $rows) { /* Loop through pixel rows */
-            if($y >= $sliceY and $y < $sliceY+$sliceH) {
+            if ($y >= $sliceY and $y < $sliceY + $sliceH) {
                 foreach ($rows as $x => $px) { /* Loop through the pixels in the row (columns) */
-                    if($x >= $sliceX and $x < $sliceX+$sliceW) {
+                    if ($x >= $sliceX and $x < $sliceX + $sliceW) {
                         /**
-                         * @var $px \ImagickPixel */
+                         * @var \ImagickPixel
+                         */
                         $pixel = $px->getColor();
                         $r = $pixel['r'];
                         $g = $pixel['g'];
                         $b = $pixel['b'];
                         $a = $pixel['a'];
 
-                        if ( ! isset($rBin[$r])) {
+                        if (!isset($rBin[$r])) {
                             $rBin[$r] = 1;
                         } else {
                             $rBin[$r]++;
                         }
 
-                        if ( ! isset($gBin[$g])) {
+                        if (!isset($gBin[$g])) {
                             $gBin[$g] = 1;
                         } else {
                             $gBin[$g]++;
                         }
 
-                        if ( ! isset($bBin[$b])) {
+                        if (!isset($bBin[$b])) {
                             $bBin[$b] = 1;
                         } else {
                             $bBin[$b]++;
                         }
 
-                        if ( ! isset($aBin[$a])) {
+                        if (!isset($aBin[$a])) {
                             $aBin[$a] = 1;
                         } else {
                             $aBin[$a]++;
@@ -249,21 +248,22 @@ final class Image implements ImageInterface {
                 }
             }
         }
-        return array(
+
+        return [
             'r' => $rBin,
             'g' => $gBin,
             'b' => $bBin,
-            'a' => $aBin
-        );
+            'a' => $aBin,
+        ];
     }
 
     /**
      * Returns animated flag.
      *
-     * @return bool True if animated GIF.
+     * @return bool true if animated GIF
      */
-    public function isAnimated() {
+    public function isAnimated()
+    {
         return $this->animated;
     }
-
 }

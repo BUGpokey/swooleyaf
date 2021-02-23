@@ -1,9 +1,28 @@
 <?php
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 namespace AliOpen\Core;
 
 use AliOpen\Core\Auth\BearerTokenCredential;
 
-abstract class RoaAcsRequest extends AcsRequest {
+abstract class RoaAcsRequest extends AcsRequest
+{
     /**
      * @var string
      */
@@ -23,7 +42,7 @@ abstract class RoaAcsRequest extends AcsRequest {
     /**
      * @var string
      */
-    private static $headerSeparator = PHP_EOL;
+    private static $headerSeparator = "\n";
     /**
      * @var string
      */
@@ -43,7 +62,8 @@ abstract class RoaAcsRequest extends AcsRequest {
      * @param $domain
      * @return mixed|string
      */
-    public function composeUrl($iSigner, $credential, $domain){
+    public function composeUrl($iSigner, $credential, $domain)
+    {
         $this->headers['x-acs-version'] = &$this->version;
 
         $this->prepareHeader($iSigner, $credential);
@@ -76,6 +96,7 @@ abstract class RoaAcsRequest extends AcsRequest {
             $queryString = substr($queryString, 0, - 1);
         }
         $signString .= $queryString;
+        $this->stringToBeSigned = $signString;
         $this->headers['Authorization'] =
             'acs ' . $credential->getAccessKeyId() . ':' . $iSigner->signString($signString, $credential->getAccessSecret());
         $requestUrl = $this->getProtocol() . '://' . $domain . $queryString;
@@ -86,7 +107,8 @@ abstract class RoaAcsRequest extends AcsRequest {
     /**
      * @return string
      */
-    private function concatQueryString(){
+    private function concatQueryString()
+    {
         $sortMap = $this->queryParameters;
         if (null == $sortMap || count($sortMap) == 0) {
             return '';
@@ -112,7 +134,8 @@ abstract class RoaAcsRequest extends AcsRequest {
      * @param $iSigner
      * @param $credential
      */
-    private function prepareHeader($iSigner, $credential){
+    private function prepareHeader($iSigner, $credential)
+    {
         $this->headers['Date'] = gmdate($this->dateTimeFormat);
         if (null == $this->acceptFormat) {
             $this->acceptFormat = 'RAW';
@@ -144,7 +167,8 @@ abstract class RoaAcsRequest extends AcsRequest {
     /**
      * @return mixed|string
      */
-    private function replaceOccupiedParameters(){
+    private function replaceOccupiedParameters()
+    {
         $result = $this->uriPattern;
         foreach ($this->pathParameters as $pathParameterKey => $apiParameterValue) {
             $target = '[' . $pathParameterKey . ']';
@@ -157,7 +181,8 @@ abstract class RoaAcsRequest extends AcsRequest {
     /**
      * @return string
      */
-    private function buildCanonicalHeaders(){
+    private function buildCanonicalHeaders()
+    {
         $sortMap = [];
         foreach ($this->headers as $headerKey => $headerValue) {
             $key = strtolower($headerKey);
@@ -178,7 +203,8 @@ abstract class RoaAcsRequest extends AcsRequest {
      * @param $uri
      * @return array
      */
-    private function splitSubResource($uri){
+    private function splitSubResource($uri)
+    {
         $queIndex = strpos($uri, '?');
         $uriParts = [];
         if (null != $queIndex) {
@@ -195,7 +221,8 @@ abstract class RoaAcsRequest extends AcsRequest {
      * @param $uri
      * @return bool|mixed|string
      */
-    private function buildQueryString($uri){
+    private function buildQueryString($uri)
+    {
         $uriParts = $this->splitSubResource($uri);
         $sortMap = $this->queryParameters;
         if (isset($uriParts[1])) {
@@ -224,7 +251,8 @@ abstract class RoaAcsRequest extends AcsRequest {
      * @param $acceptFormat
      * @return string
      */
-    private function formatToAccept($acceptFormat){
+    private function formatToAccept($acceptFormat)
+    {
         if ($acceptFormat === 'JSON') {
             return 'application/json';
         }
@@ -239,7 +267,8 @@ abstract class RoaAcsRequest extends AcsRequest {
     /**
      * @return array
      */
-    public function getPathParameters(){
+    public function getPathParameters()
+    {
         return $this->pathParameters;
     }
 
@@ -247,14 +276,16 @@ abstract class RoaAcsRequest extends AcsRequest {
      * @param $name
      * @param $value
      */
-    public function putPathParameter($name, $value){
+    public function putPathParameter($name, $value)
+    {
         $this->pathParameters[$name] = $value;
     }
 
     /**
      * @return array
      */
-    public function getDomainParameter(){
+    public function getDomainParameter()
+    {
         return $this->domainParameters;
     }
 
@@ -262,14 +293,16 @@ abstract class RoaAcsRequest extends AcsRequest {
      * @param $name
      * @param $value
      */
-    public function putDomainParameters($name, $value){
+    public function putDomainParameters($name, $value)
+    {
         $this->domainParameters[$name] = $value;
     }
 
     /**
      * @return string
      */
-    public function getUriPattern(){
+    public function getUriPattern()
+    {
         return $this->uriPattern;
     }
 
@@ -277,7 +310,8 @@ abstract class RoaAcsRequest extends AcsRequest {
      * @param $uriPattern
      * @return mixed
      */
-    public function setUriPattern($uriPattern){
+    public function setUriPattern($uriPattern)
+    {
         return $this->uriPattern = $uriPattern;
     }
 }

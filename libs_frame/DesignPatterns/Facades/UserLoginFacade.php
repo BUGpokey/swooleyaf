@@ -7,16 +7,19 @@
  */
 namespace DesignPatterns\Facades;
 
-use Traits\SimpleFacadeTrait;
+use SyTrait\SimpleFacadeTrait;
 
-abstract class UserLoginFacade {
+abstract class UserLoginFacade
+{
     use SimpleFacadeTrait;
 
-    public static function handleCheckParams(array $data){
+    public static function handleCheckParams(array $data)
+    {
         return static::checkParams($data);
     }
 
-    public static function handleLogin(array $data){
+    public static function handleLogin(array $data)
+    {
         return static::login($data);
     }
 

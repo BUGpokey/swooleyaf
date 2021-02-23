@@ -3,17 +3,19 @@ namespace Grafika\Imagick\DrawingObject;
 
 use Grafika\DrawingObject\QuadraticBezier as Base;
 use Grafika\DrawingObjectInterface;
-use Grafika\Imagick\Image;
 use Grafika\ImageInterface;
+use Grafika\Imagick\Image;
 
 /**
  * Class QuadraticBezier
+ *
  * @package Grafika
  */
 class QuadraticBezier extends Base implements DrawingObjectInterface
 {
     /**
      * @param ImageInterface $image
+     *
      * @return Image
      */
     public function draw($image)
@@ -32,16 +34,16 @@ class QuadraticBezier extends Base implements DrawingObjectInterface
         $draw->setStrokeColor($strokeColor);
         $draw->setFillColor($fillColor);
 
-
-
         list($x1, $y1) = $this->point1;
         list($x2, $y2) = $this->control;
         list($x3, $y3) = $this->point2;
         $draw->pathStart();
         $draw->pathMoveToAbsolute($x1, $y1);
         $draw->pathCurveToQuadraticBezierAbsolute(
-            $x2, $y2,
-            $x3, $y3
+            $x2,
+            $y2,
+            $x3,
+            $y3
         );
         $draw->pathFinish();
 
@@ -50,6 +52,7 @@ class QuadraticBezier extends Base implements DrawingObjectInterface
 
         $type = $image->getType();
         $file = $image->getImageFile();
+
         return new Image($imagick, $file, $width, $height, $type); // Create new image with updated core
     }
 }

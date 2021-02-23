@@ -3,21 +3,38 @@ namespace AliOpen\Ram;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class VirtualMFADeviceCreateRequest extends RpcAcsRequest {
-    private $virtualMFADeviceName;
+/**
+ * Request of CreateVirtualMFADevice
+ * @method string getVirtualMFADeviceName()
+ */
+class VirtualMFADeviceCreateRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $requestScheme = 'https';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ram", "2015-05-01", "CreateVirtualMFADevice");
-        $this->setProtocol("https");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ram', '2015-05-01', 'CreateVirtualMFADevice', 'ram');
     }
 
-    public function getVirtualMFADeviceName(){
-        return $this->virtualMFADeviceName;
-    }
+    /**
+     * @param string $virtualMFADeviceName
+     * @return $this
+     */
+    public function setVirtualMFADeviceName($virtualMFADeviceName)
+    {
+        $this->requestParameters['VirtualMFADeviceName'] = $virtualMFADeviceName;
+        $this->queryParameters['VirtualMFADeviceName'] = $virtualMFADeviceName;
 
-    public function setVirtualMFADeviceName($virtualMFADeviceName){
-        $this->virtualMFADeviceName = $virtualMFADeviceName;
-        $this->queryParameters["VirtualMFADeviceName"] = $virtualMFADeviceName;
+        return $this;
     }
 }

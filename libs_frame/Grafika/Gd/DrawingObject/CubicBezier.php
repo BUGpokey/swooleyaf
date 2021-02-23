@@ -8,13 +8,14 @@ use Grafika\ImageInterface;
 
 /**
  * Class CubicBezier
+ *
  * @package Grafika
  */
 class CubicBezier extends Base implements DrawingObjectInterface
 {
-
     /**
      * @param ImageInterface $image
+     *
      * @return Image
      */
     public function draw($image)
@@ -33,6 +34,7 @@ class CubicBezier extends Base implements DrawingObjectInterface
 
         $type = $image->getType();
         $file = $image->getImageFile();
+
         return new Image($gd, $file, $width, $height, $type); // Create new image with updated core
     }
 
@@ -58,7 +60,7 @@ class CubicBezier extends Base implements DrawingObjectInterface
         $fy3 = 0;
         $t1 = $xb * $xb - $xa * $xc;
         $t2 = 0;
-        $t = array();
+        $t = [];
         /* sub-divide curve at gradient sign changes */
         if ($xa == 0) { /* horizontal */
             if (abs($xc) < 2 * abs($xb)) {
@@ -172,6 +174,7 @@ class CubicBezier extends Base implements DrawingObjectInterface
             $sx = floor((3 * $x1 - $x0 + 1) / 2);
             $sy = floor((3 * $y1 - $y0 + 1) / 2); /* new midpoint */
             $this->plotQuadSegment($gd, $x0, $y0, $sx, $sy, $x3, $y3);
+
             return;
         }
         $x1 = ($x1 - $x0) * ($x1 - $x0) + ($y1 - $y0) * ($y1 - $y0) + 1; /* line lengths */
@@ -188,7 +191,7 @@ class CubicBezier extends Base implements DrawingObjectInterface
             $bc *= $f;
             $ex *= $f * $f; /* increase resolution */
             $xy = 9 * ($ab + $ac + $bc) / 8;
-            $ba = 8 * ($xa - $ya);/* init differences of 1st degree */
+            $ba = 8 * ($xa - $ya); /* init differences of 1st degree */
             $dx = 27 * (8 * $ab * ($yb * $yb - $ya * $yc) + $ex * ($ya + 2 * $yb + $yc)) / 64 - $ya * $ya * ($xy - $ya);
             $dy = 27 * (8 * $ab * ($xb * $xb - $xa * $xc) - $ex * ($xa + 2 * $xb + $xc)) / 64 - $xa * $xa * ($xy + $xa);
             /* init differences of 2nd degree */
@@ -266,6 +269,7 @@ class CubicBezier extends Base implements DrawingObjectInterface
                     $fx += $f; /* x step */
                 }
             }
+
             break; /* finish curve by line */
             exits:
             if (2 * $ex < $dy && 2 * $fy <= $f + 2) { /* round x+ approximation pixel */
@@ -370,7 +374,7 @@ class CubicBezier extends Base implements DrawingObjectInterface
         $err = $dx + $dy;
         $e2 = $x2 = 0; /* $error value e_xy */
         $ed = $dx - $dy == 0 ? 1 : sqrt((float)$dx * $dx + (float)$dy * $dy);
-        for (; ;) { /* pixel loop */
+        for (;;) { /* pixel loop */
             $this->setPixel($gd, $x0, $y0, abs($err - $dx - $dy) / $ed);
             $e2 = $err;
             $x2 = $x0;
@@ -399,9 +403,9 @@ class CubicBezier extends Base implements DrawingObjectInterface
 
     /**
      * @param resource $gd
-     * @param int $x
-     * @param int $y
-     * @param float $ar Alpha ratio
+     * @param int      $x
+     * @param int      $y
+     * @param float    $ar Alpha ratio
      */
     protected function setPixel($gd, $x, $y, $ar)
     {

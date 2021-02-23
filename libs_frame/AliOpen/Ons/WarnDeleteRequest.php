@@ -3,60 +3,60 @@ namespace AliOpen\Ons;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class WarnDeleteRequest extends RpcAcsRequest {
-    private $preventCache;
-    private $onsRegionId;
-    private $onsPlatform;
-    private $consumerId;
-    private $topic;
+/**
+ * Request of OnsWarnDelete
+ * @method string getGroupId()
+ * @method string getInstanceId()
+ * @method string getTopic()
+ */
+class WarnDeleteRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ons", "2017-09-18", "OnsWarnDelete");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ons', '2019-02-14', 'OnsWarnDelete', 'ons');
     }
 
-    public function getPreventCache(){
-        return $this->preventCache;
+    /**
+     * @param string $groupId
+     * @return $this
+     */
+    public function setGroupId($groupId)
+    {
+        $this->requestParameters['GroupId'] = $groupId;
+        $this->queryParameters['GroupId'] = $groupId;
+
+        return $this;
     }
 
-    public function setPreventCache($preventCache){
-        $this->preventCache = $preventCache;
-        $this->queryParameters["PreventCache"] = $preventCache;
+    /**
+     * @param string $instanceId
+     * @return $this
+     */
+    public function setInstanceId($instanceId)
+    {
+        $this->requestParameters['InstanceId'] = $instanceId;
+        $this->queryParameters['InstanceId'] = $instanceId;
+
+        return $this;
     }
 
-    public function getOnsRegionId(){
-        return $this->onsRegionId;
-    }
+    /**
+     * @param string $topic
+     * @return $this
+     */
+    public function setTopic($topic)
+    {
+        $this->requestParameters['Topic'] = $topic;
+        $this->queryParameters['Topic'] = $topic;
 
-    public function setOnsRegionId($onsRegionId){
-        $this->onsRegionId = $onsRegionId;
-        $this->queryParameters["OnsRegionId"] = $onsRegionId;
-    }
-
-    public function getOnsPlatform(){
-        return $this->onsPlatform;
-    }
-
-    public function setOnsPlatform($onsPlatform){
-        $this->onsPlatform = $onsPlatform;
-        $this->queryParameters["OnsPlatform"] = $onsPlatform;
-    }
-
-    public function getConsumerId(){
-        return $this->consumerId;
-    }
-
-    public function setConsumerId($consumerId){
-        $this->consumerId = $consumerId;
-        $this->queryParameters["ConsumerId"] = $consumerId;
-    }
-
-    public function getTopic(){
-        return $this->topic;
-    }
-
-    public function setTopic($topic){
-        $this->topic = $topic;
-        $this->queryParameters["Topic"] = $topic;
+        return $this;
     }
 }

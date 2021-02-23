@@ -3,120 +3,138 @@ namespace AliOpen\Ons;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class WarnCreateRequest extends RpcAcsRequest {
-    private $preventCache;
-    private $onsRegionId;
-    private $onsPlatform;
-    private $blockTime;
-    private $level;
-    private $consumerId;
-    private $delayTime;
-    private $topic;
-    private $threshold;
-    private $alertTime;
-    private $contacts;
+/**
+ * Request of OnsWarnCreate
+ * @method string getLevel()
+ * @method string getGroupId()
+ * @method string getDelayTime()
+ * @method string getThreshold()
+ * @method string getAlertTime()
+ * @method string getInstanceId()
+ * @method string getBlockTime()
+ * @method string getTopic()
+ * @method string getContacts()
+ */
+class WarnCreateRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ons", "2017-09-18", "OnsWarnCreate");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ons', '2019-02-14', 'OnsWarnCreate', 'ons');
     }
 
-    public function getPreventCache(){
-        return $this->preventCache;
+    /**
+     * @param string $level
+     * @return $this
+     */
+    public function setLevel($level)
+    {
+        $this->requestParameters['Level'] = $level;
+        $this->queryParameters['Level'] = $level;
+
+        return $this;
     }
 
-    public function setPreventCache($preventCache){
-        $this->preventCache = $preventCache;
-        $this->queryParameters["PreventCache"] = $preventCache;
+    /**
+     * @param string $groupId
+     * @return $this
+     */
+    public function setGroupId($groupId)
+    {
+        $this->requestParameters['GroupId'] = $groupId;
+        $this->queryParameters['GroupId'] = $groupId;
+
+        return $this;
     }
 
-    public function getOnsRegionId(){
-        return $this->onsRegionId;
+    /**
+     * @param string $delayTime
+     * @return $this
+     */
+    public function setDelayTime($delayTime)
+    {
+        $this->requestParameters['DelayTime'] = $delayTime;
+        $this->queryParameters['DelayTime'] = $delayTime;
+
+        return $this;
     }
 
-    public function setOnsRegionId($onsRegionId){
-        $this->onsRegionId = $onsRegionId;
-        $this->queryParameters["OnsRegionId"] = $onsRegionId;
+    /**
+     * @param string $threshold
+     * @return $this
+     */
+    public function setThreshold($threshold)
+    {
+        $this->requestParameters['Threshold'] = $threshold;
+        $this->queryParameters['Threshold'] = $threshold;
+
+        return $this;
     }
 
-    public function getOnsPlatform(){
-        return $this->onsPlatform;
+    /**
+     * @param string $alertTime
+     * @return $this
+     */
+    public function setAlertTime($alertTime)
+    {
+        $this->requestParameters['AlertTime'] = $alertTime;
+        $this->queryParameters['AlertTime'] = $alertTime;
+
+        return $this;
     }
 
-    public function setOnsPlatform($onsPlatform){
-        $this->onsPlatform = $onsPlatform;
-        $this->queryParameters["OnsPlatform"] = $onsPlatform;
+    /**
+     * @param string $instanceId
+     * @return $this
+     */
+    public function setInstanceId($instanceId)
+    {
+        $this->requestParameters['InstanceId'] = $instanceId;
+        $this->queryParameters['InstanceId'] = $instanceId;
+
+        return $this;
     }
 
-    public function getBlockTime(){
-        return $this->blockTime;
+    /**
+     * @param string $blockTime
+     * @return $this
+     */
+    public function setBlockTime($blockTime)
+    {
+        $this->requestParameters['BlockTime'] = $blockTime;
+        $this->queryParameters['BlockTime'] = $blockTime;
+
+        return $this;
     }
 
-    public function setBlockTime($blockTime){
-        $this->blockTime = $blockTime;
-        $this->queryParameters["BlockTime"] = $blockTime;
+    /**
+     * @param string $topic
+     * @return $this
+     */
+    public function setTopic($topic)
+    {
+        $this->requestParameters['Topic'] = $topic;
+        $this->queryParameters['Topic'] = $topic;
+
+        return $this;
     }
 
-    public function getLevel(){
-        return $this->level;
-    }
+    /**
+     * @param string $contacts
+     * @return $this
+     */
+    public function setContacts($contacts)
+    {
+        $this->requestParameters['Contacts'] = $contacts;
+        $this->queryParameters['Contacts'] = $contacts;
 
-    public function setLevel($level){
-        $this->level = $level;
-        $this->queryParameters["Level"] = $level;
-    }
-
-    public function getConsumerId(){
-        return $this->consumerId;
-    }
-
-    public function setConsumerId($consumerId){
-        $this->consumerId = $consumerId;
-        $this->queryParameters["ConsumerId"] = $consumerId;
-    }
-
-    public function getDelayTime(){
-        return $this->delayTime;
-    }
-
-    public function setDelayTime($delayTime){
-        $this->delayTime = $delayTime;
-        $this->queryParameters["DelayTime"] = $delayTime;
-    }
-
-    public function getTopic(){
-        return $this->topic;
-    }
-
-    public function setTopic($topic){
-        $this->topic = $topic;
-        $this->queryParameters["Topic"] = $topic;
-    }
-
-    public function getThreshold(){
-        return $this->threshold;
-    }
-
-    public function setThreshold($threshold){
-        $this->threshold = $threshold;
-        $this->queryParameters["Threshold"] = $threshold;
-    }
-
-    public function getAlertTime(){
-        return $this->alertTime;
-    }
-
-    public function setAlertTime($alertTime){
-        $this->alertTime = $alertTime;
-        $this->queryParameters["AlertTime"] = $alertTime;
-    }
-
-    public function getContacts(){
-        return $this->contacts;
-    }
-
-    public function setContacts($contacts){
-        $this->contacts = $contacts;
-        $this->queryParameters["Contacts"] = $contacts;
+        return $this;
     }
 }

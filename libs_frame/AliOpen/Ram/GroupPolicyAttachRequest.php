@@ -3,41 +3,64 @@ namespace AliOpen\Ram;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class GroupPolicyAttachRequest extends RpcAcsRequest {
-    private $policyType;
-    private $policyName;
-    private $groupName;
+/**
+ * Request of AttachPolicyToGroup
+ * @method string getPolicyType()
+ * @method string getPolicyName()
+ * @method string getGroupName()
+ */
+class GroupPolicyAttachRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $requestScheme = 'https';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ram", "2015-05-01", "AttachPolicyToGroup");
-        $this->setProtocol("https");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ram', '2015-05-01', 'AttachPolicyToGroup', 'ram');
     }
 
-    public function getPolicyType(){
-        return $this->policyType;
+    /**
+     * @param string $policyType
+     * @return $this
+     */
+    public function setPolicyType($policyType)
+    {
+        $this->requestParameters['PolicyType'] = $policyType;
+        $this->queryParameters['PolicyType'] = $policyType;
+
+        return $this;
     }
 
-    public function setPolicyType($policyType){
-        $this->policyType = $policyType;
-        $this->queryParameters["PolicyType"] = $policyType;
+    /**
+     * @param string $policyName
+     * @return $this
+     */
+    public function setPolicyName($policyName)
+    {
+        $this->requestParameters['PolicyName'] = $policyName;
+        $this->queryParameters['PolicyName'] = $policyName;
+
+        return $this;
     }
 
-    public function getPolicyName(){
-        return $this->policyName;
-    }
+    /**
+     * @param string $groupName
+     * @return $this
+     */
+    public function setGroupName($groupName)
+    {
+        $this->requestParameters['GroupName'] = $groupName;
+        $this->queryParameters['GroupName'] = $groupName;
 
-    public function setPolicyName($policyName){
-        $this->policyName = $policyName;
-        $this->queryParameters["PolicyName"] = $policyName;
-    }
-
-    public function getGroupName(){
-        return $this->groupName;
-    }
-
-    public function setGroupName($groupName){
-        $this->groupName = $groupName;
-        $this->queryParameters["GroupName"] = $groupName;
+        return $this;
     }
 }

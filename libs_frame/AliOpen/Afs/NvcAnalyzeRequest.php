@@ -3,50 +3,60 @@ namespace AliOpen\Afs;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class NvcAnalyzeRequest extends RpcAcsRequest {
-    private $resourceOwnerId;
-    private $sourceIp;
-    private $data;
-    private $scoreJsonStr;
+/**
+ * Request of AnalyzeNvc
+ * @method string getSourceIp()
+ * @method string getData()
+ * @method string getScoreJsonStr()
+ */
+class NvcAnalyzeRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("afs", "2018-01-12", "AnalyzeNvc");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('afs', '2018-01-12', 'AnalyzeNvc', 'afs');
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $sourceIp
+     * @return $this
+     */
+    public function setSourceIp($sourceIp)
+    {
+        $this->requestParameters['SourceIp'] = $sourceIp;
+        $this->queryParameters['SourceIp'] = $sourceIp;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $data
+     * @return $this
+     */
+    public function setData($data)
+    {
+        $this->requestParameters['Data'] = $data;
+        $this->queryParameters['Data'] = $data;
+
+        return $this;
     }
 
-    public function getSourceIp(){
-        return $this->sourceIp;
-    }
+    /**
+     * @param string $scoreJsonStr
+     * @return $this
+     */
+    public function setScoreJsonStr($scoreJsonStr)
+    {
+        $this->requestParameters['ScoreJsonStr'] = $scoreJsonStr;
+        $this->queryParameters['ScoreJsonStr'] = $scoreJsonStr;
 
-    public function setSourceIp($sourceIp){
-        $this->sourceIp = $sourceIp;
-        $this->queryParameters["SourceIp"] = $sourceIp;
-    }
-
-    public function getData(){
-        return $this->data;
-    }
-
-    public function setData($data){
-        $this->data = $data;
-        $this->queryParameters["Data"] = $data;
-    }
-
-    public function getScoreJsonStr(){
-        return $this->scoreJsonStr;
-    }
-
-    public function setScoreJsonStr($scoreJsonStr){
-        $this->scoreJsonStr = $scoreJsonStr;
-        $this->queryParameters["ScoreJsonStr"] = $scoreJsonStr;
+        return $this;
     }
 }

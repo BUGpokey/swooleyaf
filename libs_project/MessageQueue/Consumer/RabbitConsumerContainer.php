@@ -7,12 +7,14 @@
  */
 namespace MessageQueue\Consumer;
 
-use Constant\Project;
 use MessageQueue\Consumer\Rabbit\Test;
-use Tool\BaseContainer;
+use SyConstant\Project;
+use SyTool\BaseContainer;
 
-class RabbitConsumerContainer extends BaseContainer {
-    public function __construct(){
+class RabbitConsumerContainer extends BaseContainer
+{
+    public function __construct()
+    {
         $this->registryMap = [
             Project::MESSAGE_QUEUE_TOPIC_TEST,
         ];

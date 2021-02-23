@@ -3,21 +3,38 @@ namespace AliOpen\Ram;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class RoleGetRequest extends RpcAcsRequest {
-    private $roleName;
+/**
+ * Request of GetRole
+ * @method string getRoleName()
+ */
+class RoleGetRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $requestScheme = 'https';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ram", "2015-05-01", "GetRole");
-        $this->setProtocol("https");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ram', '2015-05-01', 'GetRole', 'ram');
     }
 
-    public function getRoleName(){
-        return $this->roleName;
-    }
+    /**
+     * @param string $roleName
+     * @return $this
+     */
+    public function setRoleName($roleName)
+    {
+        $this->requestParameters['RoleName'] = $roleName;
+        $this->queryParameters['RoleName'] = $roleName;
 
-    public function setRoleName($roleName){
-        $this->roleName = $roleName;
-        $this->queryParameters["RoleName"] = $roleName;
+        return $this;
     }
 }

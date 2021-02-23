@@ -3,50 +3,73 @@ namespace AliOpen\Vod;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class PlayTopVideosDescribeRequest extends RpcAcsRequest {
-    private $bizDate;
-    private $pageNo;
-    private $pageSize;
-    private $ownerId;
+/**
+ * Request of DescribePlayTopVideos
+ * @method string getPageSize()
+ * @method string getOwnerId()
+ * @method string getBizDate()
+ * @method string getPageNo()
+ */
+class PlayTopVideosDescribeRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("vod", "2017-03-21", "DescribePlayTopVideos", "vod", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('vod', '2017-03-21', 'DescribePlayTopVideos', 'vod');
     }
 
-    public function getBizDate(){
-        return $this->bizDate;
+    /**
+     * @param string $pageSize
+     * @return $this
+     */
+    public function setPageSize($pageSize)
+    {
+        $this->requestParameters['PageSize'] = $pageSize;
+        $this->queryParameters['PageSize'] = $pageSize;
+
+        return $this;
     }
 
-    public function setBizDate($bizDate){
-        $this->bizDate = $bizDate;
-        $this->queryParameters["BizDate"] = $bizDate;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function getPageNo(){
-        return $this->pageNo;
+    /**
+     * @param string $bizDate
+     * @return $this
+     */
+    public function setBizDate($bizDate)
+    {
+        $this->requestParameters['BizDate'] = $bizDate;
+        $this->queryParameters['BizDate'] = $bizDate;
+
+        return $this;
     }
 
-    public function setPageNo($pageNo){
-        $this->pageNo = $pageNo;
-        $this->queryParameters["PageNo"] = $pageNo;
-    }
+    /**
+     * @param string $pageNo
+     * @return $this
+     */
+    public function setPageNo($pageNo)
+    {
+        $this->requestParameters['PageNo'] = $pageNo;
+        $this->queryParameters['PageNo'] = $pageNo;
 
-    public function getPageSize(){
-        return $this->pageSize;
-    }
-
-    public function setPageSize($pageSize){
-        $this->pageSize = $pageSize;
-        $this->queryParameters["PageSize"] = $pageSize;
-    }
-
-    public function getOwnerId(){
-        return $this->ownerId;
-    }
-
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
+        return $this;
     }
 }

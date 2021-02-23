@@ -3,31 +3,51 @@ namespace AliOpen\Ram;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class PolicyEntitiesListRequest extends RpcAcsRequest {
-    private $policyType;
-    private $policyName;
+/**
+ * Request of ListEntitiesForPolicy
+ * @method string getPolicyType()
+ * @method string getPolicyName()
+ */
+class PolicyEntitiesListRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $requestScheme = 'https';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ram", "2015-05-01", "ListEntitiesForPolicy");
-        $this->setProtocol("https");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ram', '2015-05-01', 'ListEntitiesForPolicy', 'ram');
     }
 
-    public function getPolicyType(){
-        return $this->policyType;
+    /**
+     * @param string $policyType
+     * @return $this
+     */
+    public function setPolicyType($policyType)
+    {
+        $this->requestParameters['PolicyType'] = $policyType;
+        $this->queryParameters['PolicyType'] = $policyType;
+
+        return $this;
     }
 
-    public function setPolicyType($policyType){
-        $this->policyType = $policyType;
-        $this->queryParameters["PolicyType"] = $policyType;
-    }
+    /**
+     * @param string $policyName
+     * @return $this
+     */
+    public function setPolicyName($policyName)
+    {
+        $this->requestParameters['PolicyName'] = $policyName;
+        $this->queryParameters['PolicyName'] = $policyName;
 
-    public function getPolicyName(){
-        return $this->policyName;
-    }
-
-    public function setPolicyName($policyName){
-        $this->policyName = $policyName;
-        $this->queryParameters["PolicyName"] = $policyName;
+        return $this;
     }
 }

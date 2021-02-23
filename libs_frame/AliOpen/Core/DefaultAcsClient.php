@@ -1,15 +1,37 @@
 <?php
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 namespace AliOpen\Core;
 
 use AliOpen\Core\Auth\EcsRamRoleService;
 use AliOpen\Core\Auth\RamRoleArnService;
 use AliOpen\Core\Exception\ClientException;
 use AliOpen\Core\Exception\ServerException;
-use AliOpen\Core\Regions\EndpointProvider;
 use AliOpen\Core\Http\HttpHelper;
+use AliOpen\Core\Regions\EndpointProvider;
 use AliOpen\Core\Regions\LocationService;
 
-class DefaultAcsClient implements IAcsClient {
+/**
+ * Class AliOpen\Core\DefaultAcsClient
+ */
+class DefaultAcsClient implements IAcsClient
+{
     /**
      * @var \AliOpen\Core\Profile\IClientProfile
      */
@@ -35,7 +57,8 @@ class DefaultAcsClient implements IAcsClient {
      * AliOpen\Core\DefaultAcsClient constructor.
      * @param $iClientProfile
      */
-    public function __construct($iClientProfile){
+    public function __construct($iClientProfile)
+    {
         $this->iClientProfile = $iClientProfile;
         $this->__urlTestFlag__ = false;
         $this->locationService = new LocationService($this->iClientProfile);
@@ -48,7 +71,7 @@ class DefaultAcsClient implements IAcsClient {
     }
 
     /**
-     * @param      $request
+     * @param \AliOpen\Core\AcsRequest $request
      * @param null $iSigner
      * @param null $credential
      * @param bool $autoRetry
@@ -61,18 +84,19 @@ class DefaultAcsClient implements IAcsClient {
         $iSigner = null,
         $credential = null,
         $autoRetry = true,
-        $maxRetryNumber = 3){
+        $maxRetryNumber = 3)
+    {
         $httpResponse = $this->doActionImpl($request, $iSigner, $credential, $autoRetry, $maxRetryNumber);
         $respObject = $this->parseAcsResponse($httpResponse->getBody(), $request->getAcceptFormat());
-        if (false == $httpResponse->isSuccess()) {
-            $this->buildApiException($respObject, $httpResponse->getStatus());
+        if (false === $httpResponse->isSuccess()) {
+            $this->buildApiException($respObject, $httpResponse->getStatus(), $request);
         }
 
         return $respObject;
     }
 
     /**
-     * @param      $request
+     * @param \AliOpen\Core\AcsRequest $request
      * @param null $iSigner
      * @param null $credential
      * @param bool $autoRetry
@@ -80,7 +104,8 @@ class DefaultAcsClient implements IAcsClient {
      * @return \AliOpen\Core\Http\HttpResponse
      * @throws \AliOpen\Core\Exception\ClientException
      */
-    private function doActionImpl($request, $iSigner = null, $credential = null, $autoRetry = true, $maxRetryNumber = 3){
+    private function doActionImpl($request, $iSigner = null, $credential = null, $autoRetry = true, $maxRetryNumber = 3)
+    {
         if (null == $this->iClientProfile
             && (null == $iSigner || null == $credential
                 || null == $request->getRegionId()
@@ -155,17 +180,19 @@ class DefaultAcsClient implements IAcsClient {
      * @return \AliOpen\Core\Http\HttpResponse|mixed
      * @throws \AliOpen\Core\Exception\ClientException
      */
-    public function doAction($request, $iSigner = null, $credential = null, $autoRetry = true, $maxRetryNumber = 3){
+    public function doAction($request, $iSigner = null, $credential = null, $autoRetry = true, $maxRetryNumber = 3)
+    {
         trigger_error('doAction() is deprecated. Please use getAcsResponse() instead.', E_USER_NOTICE);
 
         return $this->doActionImpl($request, $iSigner, $credential, $autoRetry, $maxRetryNumber);
     }
 
     /**
-     * @param $request
+     * @param \AliOpen\Core\AcsRequest $request
      * @return mixed
      */
-    private function prepareRequest($request){
+    private function prepareRequest($request)
+    {
         if (null == $request->getRegionId()) {
             $request->setRegionId($this->iClientProfile->getRegionId());
         }
@@ -182,23 +209,40 @@ class DefaultAcsClient implements IAcsClient {
     /**
      * @param object $respObject
      * @param int $httpStatus
+     * @param \AliOpen\Core\AcsRequest $request
      * @throws \AliOpen\Core\Exception\ServerException
      */
-    private function buildApiException($respObject, $httpStatus){
+    private function buildApiException($respObject, $httpStatus, AcsRequest $request)
+    {
+        $errorCode = 'UnknownServerError';
+        $errorMessage = 'The server returned an error without a detailed message. ';
+        $requestId = 'None';
+
         // Compatible with different results
         if (isset($respObject->Message, $respObject->Code, $respObject->RequestId)) {
-            throw new ServerException($respObject->Message, $respObject->Code, $httpStatus, $respObject->RequestId);
+            $errorCode = $respObject->Code;
+            $errorMessage = $respObject->Message;
+            $requestId = $respObject->RequestId;
         }
 
         if (isset($respObject->message, $respObject->code, $respObject->requestId)) {
-            throw new ServerException($respObject->message, $respObject->code, $httpStatus, $respObject->requestId);
+            $errorCode = $respObject->code;
+            $errorMessage = $respObject->message;
+            $requestId = $respObject->requestId;
         }
 
         if (isset($respObject->errorMsg, $respObject->errorCode)) {
-            throw new ServerException($respObject->errorMsg, $respObject->errorCode, $httpStatus, 'None');
+            $errorCode = $respObject->errorCode;
+            $errorMessage = $respObject->errorMsg;
         }
 
-        throw new ServerException('The server returned an error without a detailed message. ', 'UnknownServerError', $httpStatus, 'None');
+        if ($httpStatus === 400 && $errorCode === 'SignatureDoesNotMatch'
+            && strpos($errorMessage, $request->stringToBeSigned()) !== false) {
+            $errorCode = 'InvalidAccessKeySecret';
+            $errorMessage = 'Specified Access Key Secret is not valid.';
+        }
+
+        throw new ServerException($errorMessage, $errorCode, $httpStatus, $requestId);
     }
 
     /**
@@ -206,7 +250,8 @@ class DefaultAcsClient implements IAcsClient {
      * @param $format
      * @return mixed|\SimpleXMLElement
      */
-    private function parseAcsResponse($body, $format){
+    private function parseAcsResponse($body, $format)
+    {
         if ('JSON' === $format) {
             $respObject = json_decode($body);
         } elseif ('XML' === $format) {

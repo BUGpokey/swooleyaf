@@ -7,14 +7,15 @@
  */
 namespace SyMessageQueue\Redis;
 
-use Constant\ErrorCode;
-use Constant\Project;
+use SyConstant\ErrorCode;
+use SyConstant\Project;
 use DesignPatterns\Factories\CacheSimpleFactory;
-use Exception\MessageQueue\MessageQueueException;
+use SyException\MessageQueue\MessageQueueException;
 use SyMessageQueue\ConsumerBase;
-use Tool\Tool;
+use SyTool\Tool;
 
-class Producer {
+class Producer
+{
     /**
      * @var \SyMessageQueue\Redis\Producer
      */
@@ -25,17 +26,20 @@ class Producer {
      */
     private $keyManager = '';
 
-    private function __construct(){
+    private function __construct()
+    {
         $this->keyManager = Project::REDIS_PREFIX_MESSAGE_QUEUE . 'manager';
     }
 
-    private function __clone(){
+    private function __clone()
+    {
     }
 
     /**
      * @return \SyMessageQueue\Redis\Producer
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (is_null(self::$instance)) {
             self::$instance = new self();
         }
@@ -47,10 +51,11 @@ class Producer {
      * 添加消费者
      * @param \SyMessageQueue\ConsumerBase $consumer 消费者对象
      * @return bool
-     * @throws \Exception\MessageQueue\MessageQueueException
+     * @throws \SyException\MessageQueue\MessageQueueException
      */
-    public function addConsumer(ConsumerBase $consumer) {
-        if($consumer->getMqType() != Project::MESSAGE_QUEUE_TYPE_REDIS){
+    public function addConsumer(ConsumerBase $consumer)
+    {
+        if ($consumer->getMqType() != Project::MESSAGE_QUEUE_TYPE_REDIS) {
             throw new MessageQueueException('消息队列类型必须是redis', ErrorCode::MESSAGE_QUEUE_PARAM_ERROR);
         }
 
@@ -59,7 +64,7 @@ class Producer {
             'unique_key' => $this->keyManager,
             $topic => '\\' . get_class($consumer),
         ];
-        if(!CacheSimpleFactory::getRedisInstance()->hMset($this->keyManager, $cacheData)){
+        if (!CacheSimpleFactory::getRedisInstance()->hMset($this->keyManager, $cacheData)) {
             throw new MessageQueueException('添加主题失败', ErrorCode::MESSAGE_QUEUE_TOPIC_ERROR);
         }
 
@@ -70,10 +75,11 @@ class Producer {
      * 删除消费者
      * @param \SyMessageQueue\ConsumerBase $consumer
      * @return int
-     * @throws \Exception\MessageQueue\MessageQueueException
+     * @throws \SyException\MessageQueue\MessageQueueException
      */
-    public function deleteConsumer(ConsumerBase $consumer) {
-        if($consumer->getMqType() != Project::MESSAGE_QUEUE_TYPE_REDIS){
+    public function deleteConsumer(ConsumerBase $consumer)
+    {
+        if ($consumer->getMqType() != Project::MESSAGE_QUEUE_TYPE_REDIS) {
             throw new MessageQueueException('消息队列类型必须是redis', ErrorCode::MESSAGE_QUEUE_PARAM_ERROR);
         }
 
@@ -85,10 +91,11 @@ class Producer {
      * @param string $topic
      * @param array $data
      */
-    public function addTopicData(string $topic,array $data) {
-        $topicName = SY_ENV . SY_PROJECT . $topic;
+    public function addTopicData(string $topic, array $data)
+    {
+        $redisKey = Project::REDIS_PREFIX_MESSAGE_QUEUE . $topic;
         foreach ($data as $eData) {
-            CacheSimpleFactory::getRedisInstance()->rPush(Project::REDIS_PREFIX_MESSAGE_QUEUE . $topicName, Tool::jsonEncode($eData, JSON_UNESCAPED_UNICODE));
+            CacheSimpleFactory::getRedisInstance()->rPush($redisKey, Tool::jsonEncode($eData, JSON_UNESCAPED_UNICODE));
         }
     }
 }

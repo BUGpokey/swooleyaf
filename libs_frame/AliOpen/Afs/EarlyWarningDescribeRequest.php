@@ -3,30 +3,34 @@ namespace AliOpen\Afs;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class EarlyWarningDescribeRequest extends RpcAcsRequest {
-    private $resourceOwnerId;
-    private $sourceIp;
+/**
+ * Request of DescribeEarlyWarning
+ * @method string getSourceIp()
+ */
+class EarlyWarningDescribeRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("afs", "2018-01-12", "DescribeEarlyWarning");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('afs', '2018-01-12', 'DescribeEarlyWarning', 'afs');
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
-    }
+    /**
+     * @param string $sourceIp
+     * @return $this
+     */
+    public function setSourceIp($sourceIp)
+    {
+        $this->requestParameters['SourceIp'] = $sourceIp;
+        $this->queryParameters['SourceIp'] = $sourceIp;
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
-    }
-
-    public function getSourceIp(){
-        return $this->sourceIp;
-    }
-
-    public function setSourceIp($sourceIp){
-        $this->sourceIp = $sourceIp;
-        $this->queryParameters["SourceIp"] = $sourceIp;
+        return $this;
     }
 }

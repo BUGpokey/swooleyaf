@@ -7,17 +7,18 @@
  */
 namespace DingDing\Corp\SmartHrm;
 
-use Constant\ErrorCode;
+use SyConstant\ErrorCode;
 use DingDing\TalkBaseCorp;
 use DingDing\TalkTraitCorp;
-use Exception\DingDing\TalkException;
-use Tool\Tool;
+use SyException\DingDing\TalkException;
+use SyTool\Tool;
 
 /**
  * 查询企业在职员工列表
  * @package DingDing\Corp\SmartHrm
  */
-class EmployeeOnJobQuery extends TalkBaseCorp {
+class EmployeeOnJobQuery extends TalkBaseCorp
+{
     use TalkTraitCorp;
 
     /**
@@ -36,7 +37,8 @@ class EmployeeOnJobQuery extends TalkBaseCorp {
      */
     private $size = 0;
 
-    public function __construct(string $corpId,string $agentTag){
+    public function __construct(string $corpId, string $agentTag)
+    {
         parent::__construct();
         $this->_corpId = $corpId;
         $this->_agentTag = $agentTag;
@@ -44,19 +46,24 @@ class EmployeeOnJobQuery extends TalkBaseCorp {
         $this->reqData['size'] = 10;
     }
 
+    private function __clone()
+    {
+    }
+
     /**
      * @param array $statusList
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setStatusList(array $statusList){
+    public function setStatusList(array $statusList)
+    {
         $statusArr = [];
         foreach ($statusList as $eStatus) {
-            if(is_int($eStatus)){
+            if (is_int($eStatus)) {
                 $statusArr[$eStatus] = 1;
             }
         }
 
-        if(count($statusArr) == 0){
+        if (count($statusArr) == 0) {
             throw new TalkException('状态列表不能为空', ErrorCode::DING_TALK_PARAM_ERROR);
         }
         $this->reqData['status_list'] = implode(',', array_keys($statusArr));
@@ -64,10 +71,11 @@ class EmployeeOnJobQuery extends TalkBaseCorp {
 
     /**
      * @param int $offset
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setOffset(int $offset){
-        if($offset >= 0){
+    public function setOffset(int $offset)
+    {
+        if ($offset >= 0) {
             $this->reqData['offset'] = $offset;
         } else {
             throw new TalkException('偏移量不合法', ErrorCode::DING_TALK_PARAM_ERROR);
@@ -76,21 +84,20 @@ class EmployeeOnJobQuery extends TalkBaseCorp {
 
     /**
      * @param int $size
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setSize(int $size){
-        if($size > 0){
+    public function setSize(int $size)
+    {
+        if ($size > 0) {
             $this->reqData['size'] = $size > 20 ? 20 : $size;
         } else {
             throw new TalkException('分页大小不合法', ErrorCode::DING_TALK_PARAM_ERROR);
         }
     }
 
-    private function __clone(){
-    }
-
-    public function getDetail() : array {
-        if(!isset($this->reqData['status_list'])){
+    public function getDetail() : array
+    {
+        if (!isset($this->reqData['status_list'])) {
             throw new TalkException('状态列表不能为空', ErrorCode::DING_TALK_PARAM_ERROR);
         }
 

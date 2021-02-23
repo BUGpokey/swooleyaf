@@ -3,110 +3,203 @@ namespace AliOpen\Vod;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class MessageCallbackSetRequest extends RpcAcsRequest {
-    private $callbackType;
-    private $authKey;
-    private $resourceOwnerId;
-    private $callbackSwitch;
-    private $resourceOwnerAccount;
-    private $ownerAccount;
-    private $eventTypeList;
-    private $authSwitch;
-    private $callbackURL;
-    private $ownerId;
+/**
+ * Request of SetMessageCallback
+ * @method string getAuthKey()
+ * @method string getResourceOwnerId()
+ * @method string getResourceRealOwnerId()
+ * @method string getCallbackType()
+ * @method string getCallbackSwitch()
+ * @method string getResourceOwnerAccount()
+ * @method string getOwnerAccount()
+ * @method string getEventTypeList()
+ * @method string getMnsQueueName()
+ * @method string getOwnerId()
+ * @method string getMnsEndpoint()
+ * @method string getAppId()
+ * @method string getAuthSwitch()
+ * @method string getCallbackURL()
+ */
+class MessageCallbackSetRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("vod", "2017-03-21", "SetMessageCallback", "vod", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('vod', '2017-03-21', 'SetMessageCallback', 'vod');
     }
 
-    public function getCallbackType(){
-        return $this->callbackType;
+    /**
+     * @param string $authKey
+     * @return $this
+     */
+    public function setAuthKey($authKey)
+    {
+        $this->requestParameters['AuthKey'] = $authKey;
+        $this->queryParameters['AuthKey'] = $authKey;
+
+        return $this;
     }
 
-    public function setCallbackType($callbackType){
-        $this->callbackType = $callbackType;
-        $this->queryParameters["CallbackType"] = $callbackType;
+    /**
+     * @param string $resourceOwnerId
+     * @return $this
+     */
+    public function setResourceOwnerId($resourceOwnerId)
+    {
+        $this->requestParameters['ResourceOwnerId'] = $resourceOwnerId;
+        $this->queryParameters['ResourceOwnerId'] = $resourceOwnerId;
+
+        return $this;
     }
 
-    public function getAuthKey(){
-        return $this->authKey;
+    /**
+     * @param string $resourceRealOwnerId
+     * @return $this
+     */
+    public function setResourceRealOwnerId($resourceRealOwnerId)
+    {
+        $this->requestParameters['ResourceRealOwnerId'] = $resourceRealOwnerId;
+        $this->queryParameters['ResourceRealOwnerId'] = $resourceRealOwnerId;
+
+        return $this;
     }
 
-    public function setAuthKey($authKey){
-        $this->authKey = $authKey;
-        $this->queryParameters["AuthKey"] = $authKey;
+    /**
+     * @param string $callbackType
+     * @return $this
+     */
+    public function setCallbackType($callbackType)
+    {
+        $this->requestParameters['CallbackType'] = $callbackType;
+        $this->queryParameters['CallbackType'] = $callbackType;
+
+        return $this;
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $callbackSwitch
+     * @return $this
+     */
+    public function setCallbackSwitch($callbackSwitch)
+    {
+        $this->requestParameters['CallbackSwitch'] = $callbackSwitch;
+        $this->queryParameters['CallbackSwitch'] = $callbackSwitch;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $resourceOwnerAccount
+     * @return $this
+     */
+    public function setResourceOwnerAccount($resourceOwnerAccount)
+    {
+        $this->requestParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+        $this->queryParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+
+        return $this;
     }
 
-    public function getCallbackSwitch(){
-        return $this->callbackSwitch;
+    /**
+     * @param string $ownerAccount
+     * @return $this
+     */
+    public function setOwnerAccount($ownerAccount)
+    {
+        $this->requestParameters['OwnerAccount'] = $ownerAccount;
+        $this->queryParameters['OwnerAccount'] = $ownerAccount;
+
+        return $this;
     }
 
-    public function setCallbackSwitch($callbackSwitch){
-        $this->callbackSwitch = $callbackSwitch;
-        $this->queryParameters["CallbackSwitch"] = $callbackSwitch;
+    /**
+     * @param string $eventTypeList
+     * @return $this
+     */
+    public function setEventTypeList($eventTypeList)
+    {
+        $this->requestParameters['EventTypeList'] = $eventTypeList;
+        $this->queryParameters['EventTypeList'] = $eventTypeList;
+
+        return $this;
     }
 
-    public function getResourceOwnerAccount(){
-        return $this->resourceOwnerAccount;
+    /**
+     * @param string $mnsQueueName
+     * @return $this
+     */
+    public function setMnsQueueName($mnsQueueName)
+    {
+        $this->requestParameters['MnsQueueName'] = $mnsQueueName;
+        $this->queryParameters['MnsQueueName'] = $mnsQueueName;
+
+        return $this;
     }
 
-    public function setResourceOwnerAccount($resourceOwnerAccount){
-        $this->resourceOwnerAccount = $resourceOwnerAccount;
-        $this->queryParameters["ResourceOwnerAccount"] = $resourceOwnerAccount;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function getOwnerAccount(){
-        return $this->ownerAccount;
+    /**
+     * @param string $mnsEndpoint
+     * @return $this
+     */
+    public function setMnsEndpoint($mnsEndpoint)
+    {
+        $this->requestParameters['MnsEndpoint'] = $mnsEndpoint;
+        $this->queryParameters['MnsEndpoint'] = $mnsEndpoint;
+
+        return $this;
     }
 
-    public function setOwnerAccount($ownerAccount){
-        $this->ownerAccount = $ownerAccount;
-        $this->queryParameters["OwnerAccount"] = $ownerAccount;
+    /**
+     * @param string $appId
+     * @return $this
+     */
+    public function setAppId($appId)
+    {
+        $this->requestParameters['AppId'] = $appId;
+        $this->queryParameters['AppId'] = $appId;
+
+        return $this;
     }
 
-    public function getEventTypeList(){
-        return $this->eventTypeList;
+    /**
+     * @param string $authSwitch
+     * @return $this
+     */
+    public function setAuthSwitch($authSwitch)
+    {
+        $this->requestParameters['AuthSwitch'] = $authSwitch;
+        $this->queryParameters['AuthSwitch'] = $authSwitch;
+
+        return $this;
     }
 
-    public function setEventTypeList($eventTypeList){
-        $this->eventTypeList = $eventTypeList;
-        $this->queryParameters["EventTypeList"] = $eventTypeList;
-    }
+    /**
+     * @param string $callbackURL
+     * @return $this
+     */
+    public function setCallbackURL($callbackURL)
+    {
+        $this->requestParameters['CallbackURL'] = $callbackURL;
+        $this->queryParameters['CallbackURL'] = $callbackURL;
 
-    public function getAuthSwitch(){
-        return $this->authSwitch;
-    }
-
-    public function setAuthSwitch($authSwitch){
-        $this->authSwitch = $authSwitch;
-        $this->queryParameters["AuthSwitch"] = $authSwitch;
-    }
-
-    public function getCallbackURL(){
-        return $this->callbackURL;
-    }
-
-    public function setCallbackURL($callbackURL){
-        $this->callbackURL = $callbackURL;
-        $this->queryParameters["CallbackURL"] = $callbackURL;
-    }
-
-    public function getOwnerId(){
-        return $this->ownerId;
-    }
-
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
+        return $this;
     }
 }

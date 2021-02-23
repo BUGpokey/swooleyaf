@@ -8,12 +8,14 @@
 namespace PoolService\ProcessService;
 
 use Response\Result;
-use Traits\SimpleTrait;
+use SyTrait\SimpleTrait;
 
-class EnvInfo extends BaseService {
+class EnvInfo extends BaseService
+{
     use SimpleTrait;
 
-    protected static function handleMessage(array $data) : Result {
+    protected static function handleMessage(array $data) : Result
+    {
         ob_start();
         phpinfo();
         $phpInfo = ob_get_contents();

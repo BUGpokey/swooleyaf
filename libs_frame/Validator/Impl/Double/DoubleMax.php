@@ -7,20 +7,24 @@
  */
 namespace Validator\Impl\Double;
 
-use Constant\Project;
+use SyConstant\Project;
 use Validator\BaseValidator;
 use Validator\ValidatorService;
 
-class DoubleMax  extends BaseValidator implements ValidatorService {
-    public function __construct() {
+class DoubleMax extends BaseValidator implements ValidatorService
+{
+    public function __construct()
+    {
         parent::__construct();
-        $this->validatorType = Project::VALIDATOR_DOUBLE_TYPE_MAX;
+        $this->validatorType = Project::VALIDATOR_TYPE_DOUBLE_MAX;
     }
 
-    private function __clone() {
+    private function __clone()
+    {
     }
 
-    public function validator($data, $compareData) : string {
+    public function validator($data, $compareData) : string
+    {
         if ($data === null) {
             return '';
         }
@@ -28,14 +32,12 @@ class DoubleMax  extends BaseValidator implements ValidatorService {
         $trueData = $this->verifyDoubleData($data);
         if ($trueData === null) {
             return '必须是数值';
-        } else if(is_numeric($compareData)){
-            if(bccomp((string)$compareData, (string)$trueData) < 0) {
-                return '不能大于' . $compareData;
-            }
-
-            return '';
-        } else {
-            return '规则不合法';
+        } elseif (!is_numeric($compareData)) {
+            return '规则值必须是数值';
+        } elseif (bccomp((string)$compareData, (string)$trueData) < 0) {
+            return '不能大于' . $compareData;
         }
+
+        return '';
     }
 }

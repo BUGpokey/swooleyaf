@@ -7,11 +7,14 @@
  */
 namespace DesignPatterns\Singletons;
 
+use SyConstant\ErrorCode;
+use SyException\SyPrint\FeYinException;
 use SyPrint\ConfigFeYin;
-use Tool\Tool;
-use Traits\SingletonTrait;
+use SyTool\Tool;
+use SyTrait\SingletonTrait;
 
-class PrintConfigSingleton {
+class PrintConfigSingleton
+{
     use SingletonTrait;
 
     /**
@@ -20,21 +23,16 @@ class PrintConfigSingleton {
      */
     private $feYinConfigs = null;
 
-    private function __construct(){
-        $configs = Tool::getConfig('print.' . SY_ENV . SY_PROJECT);
-
-        $feYinConfig = new ConfigFeYin();
-        $feYinConfig->setAppId((string)Tool::getArrayVal($configs, 'feyin.app.id', '', true));
-        $feYinConfig->setAppKey((string)Tool::getArrayVal($configs, 'feyin.app.key', '', true));
-        $feYinConfig->setMemberCode((string)Tool::getArrayVal($configs, 'feyin.member.code', '', true));
-        $this->feYinConfigs[$feYinConfig->getAppId()] = $feYinConfig;
+    private function __construct()
+    {
     }
 
     /**
      * @return \DesignPatterns\Singletons\PrintConfigSingleton
      */
-    public static function getInstance(){
-        if(is_null(self::$instance)){
+    public static function getInstance()
+    {
+        if (is_null(self::$instance)) {
             self::$instance = new self();
         }
 
@@ -42,31 +40,36 @@ class PrintConfigSingleton {
     }
 
     /**
-     * @return array
-     */
-    public function getFeYinConfigs() : array {
-        return $this->feYinConfigs;
-    }
-
-    /**
-     * @param \SyPrint\ConfigFeYin $config
-     */
-    public function addFeYinConfig(ConfigFeYin $config){
-        $this->feYinConfigs[$config->getAppId()] = $config;
-    }
-
-    /**
      * @param string $appId
      */
-    public function removeFeYinConfig(string $appId){
+    public function removeFeYinConfig(string $appId)
+    {
         unset($this->feYinConfigs[$appId]);
     }
 
     /**
      * @param string $appId
-     * @return \SyPrint\ConfigFeYin|null
+     * @return \SyPrint\ConfigFeYin
+     * @throws \SyException\SyPrint\FeYinException
      */
-    public function getFeYinConfig(string $appId) {
-        return $this->feYinConfigs[$appId] ?? null;
+    public function getFeYinConfig(string $appId)
+    {
+        if (is_null($this->feYinConfigs)) {
+            $this->feYinConfigs = [];
+            $configs = Tool::getConfig('print.' . SY_ENV . SY_PROJECT);
+            foreach ($configs['feyin'] as $eConfig) {
+                $feYinConfig = new ConfigFeYin();
+                $feYinConfig->setAppId((string)Tool::getArrayVal($eConfig, 'app.id', '', true));
+                $feYinConfig->setAppKey((string)Tool::getArrayVal($eConfig, 'app.key', '', true));
+                $feYinConfig->setMemberCode((string)Tool::getArrayVal($eConfig, 'member.code', '', true));
+                $this->feYinConfigs[$feYinConfig->getAppId()] = $feYinConfig;
+            }
+        }
+
+        if (isset($this->feYinConfigs[$appId])) {
+            return $this->feYinConfigs[$appId];
+        } else {
+            throw new FeYinException('飞印配置不存在', ErrorCode::PRINT_PARAM_ERROR);
+        }
     }
 }

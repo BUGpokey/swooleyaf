@@ -7,15 +7,17 @@
  */
 namespace DesignPatterns\Facades\WxProviderCorpNotifyWx;
 
-use Constant\Project;
 use DesignPatterns\Facades\WxProviderCorpNotifyWxFacade;
-use Tool\ProjectTool;
-use Traits\SimpleFacadeTrait;
+use SyConstant\Project;
+use SyTool\ProjectWxTool;
+use SyTrait\SimpleFacadeTrait;
 
-class AuthChange extends WxProviderCorpNotifyWxFacade {
+class AuthChange extends WxProviderCorpNotifyWxFacade
+{
     use SimpleFacadeTrait;
 
-    protected static function handleNotify(array $data){
-        ProjectTool::handleAuthForWxCorpProvider(Project::WX_PROVIDER_CORP_AUTHORIZER_OPTION_TYPE_AUTH_CHANGE, $data);
+    protected static function handleNotify(array $data)
+    {
+        ProjectWxTool::handleAuthForCorpProvider(Project::WX_PROVIDER_CORP_AUTHORIZER_OPTION_TYPE_AUTH_CHANGE, $data);
     }
 }

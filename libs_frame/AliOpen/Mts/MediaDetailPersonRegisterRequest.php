@@ -3,90 +3,125 @@ namespace AliOpen\Mts;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class MediaDetailPersonRegisterRequest extends RpcAcsRequest {
-    private $resourceOwnerId;
-    private $images;
-    private $resourceOwnerAccount;
-    private $ownerAccount;
-    private $personLib;
-    private $ownerId;
-    private $category;
-    private $personName;
+/**
+ * Request of RegisterMediaDetailPerson
+ * @method string getResourceOwnerId()
+ * @method string getImages()
+ * @method string getResourceOwnerAccount()
+ * @method string getOwnerAccount()
+ * @method string getPersonLib()
+ * @method string getOwnerId()
+ * @method string getCategory()
+ * @method string getPersonName()
+ */
+class MediaDetailPersonRegisterRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Mts", "2014-06-18", "RegisterMediaDetailPerson", "mts", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Mts', '2014-06-18', 'RegisterMediaDetailPerson', 'mts');
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $resourceOwnerId
+     * @return $this
+     */
+    public function setResourceOwnerId($resourceOwnerId)
+    {
+        $this->requestParameters['ResourceOwnerId'] = $resourceOwnerId;
+        $this->queryParameters['ResourceOwnerId'] = $resourceOwnerId;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $images
+     * @return $this
+     */
+    public function setImages($images)
+    {
+        $this->requestParameters['Images'] = $images;
+        $this->queryParameters['Images'] = $images;
+
+        return $this;
     }
 
-    public function getImages(){
-        return $this->images;
+    /**
+     * @param string $resourceOwnerAccount
+     * @return $this
+     */
+    public function setResourceOwnerAccount($resourceOwnerAccount)
+    {
+        $this->requestParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+        $this->queryParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+
+        return $this;
     }
 
-    public function setImages($images){
-        $this->images = $images;
-        $this->queryParameters["Images"] = $images;
+    /**
+     * @param string $ownerAccount
+     * @return $this
+     */
+    public function setOwnerAccount($ownerAccount)
+    {
+        $this->requestParameters['OwnerAccount'] = $ownerAccount;
+        $this->queryParameters['OwnerAccount'] = $ownerAccount;
+
+        return $this;
     }
 
-    public function getResourceOwnerAccount(){
-        return $this->resourceOwnerAccount;
+    /**
+     * @param string $personLib
+     * @return $this
+     */
+    public function setPersonLib($personLib)
+    {
+        $this->requestParameters['PersonLib'] = $personLib;
+        $this->queryParameters['PersonLib'] = $personLib;
+
+        return $this;
     }
 
-    public function setResourceOwnerAccount($resourceOwnerAccount){
-        $this->resourceOwnerAccount = $resourceOwnerAccount;
-        $this->queryParameters["ResourceOwnerAccount"] = $resourceOwnerAccount;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function getOwnerAccount(){
-        return $this->ownerAccount;
+    /**
+     * @param string $category
+     * @return $this
+     */
+    public function setCategory($category)
+    {
+        $this->requestParameters['Category'] = $category;
+        $this->queryParameters['Category'] = $category;
+
+        return $this;
     }
 
-    public function setOwnerAccount($ownerAccount){
-        $this->ownerAccount = $ownerAccount;
-        $this->queryParameters["OwnerAccount"] = $ownerAccount;
-    }
+    /**
+     * @param string $personName
+     * @return $this
+     */
+    public function setPersonName($personName)
+    {
+        $this->requestParameters['PersonName'] = $personName;
+        $this->queryParameters['PersonName'] = $personName;
 
-    public function getPersonLib(){
-        return $this->personLib;
-    }
-
-    public function setPersonLib($personLib){
-        $this->personLib = $personLib;
-        $this->queryParameters["PersonLib"] = $personLib;
-    }
-
-    public function getOwnerId(){
-        return $this->ownerId;
-    }
-
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
-    }
-
-    public function getCategory(){
-        return $this->category;
-    }
-
-    public function setCategory($category){
-        $this->category = $category;
-        $this->queryParameters["Category"] = $category;
-    }
-
-    public function getPersonName(){
-        return $this->personName;
-    }
-
-    public function setPersonName($personName){
-        $this->personName = $personName;
-        $this->queryParameters["PersonName"] = $personName;
+        return $this;
     }
 }

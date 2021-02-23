@@ -7,15 +7,16 @@
  */
 namespace Wx\OpenCommon;
 
-use Constant\ErrorCode;
+use SyConstant\ErrorCode;
 use DesignPatterns\Singletons\WxConfigSingleton;
-use Exception\Wx\WxOpenException;
-use Tool\Tool;
+use SyException\Wx\WxOpenException;
+use SyTool\Tool;
 use Wx\WxBaseOpenCommon;
 use Wx\WxUtilBase;
 use Wx\WxUtilOpenBase;
 
-class AuthorizerOptionGet extends WxBaseOpenCommon {
+class AuthorizerOptionGet extends WxBaseOpenCommon
+{
     /**
      * 第三方平台appid
      * @var string
@@ -32,30 +33,34 @@ class AuthorizerOptionGet extends WxBaseOpenCommon {
      */
     private $option_name = '';
 
-    public function __construct(string $appId){
+    public function __construct(string $appId)
+    {
         parent::__construct();
         $this->serviceUrl = 'https://api.weixin.qq.com/cgi-bin/component/api_get_authorizer_option?component_access_token=';
         $this->reqData['component_appid'] = WxConfigSingleton::getInstance()->getOpenCommonConfig()->getAppId();
         $this->reqData['authorizer_appid'] = $appId;
     }
 
-    public function __clone(){
+    public function __clone()
+    {
     }
 
     /**
      * @param string $optionName
-     * @throws \Exception\Wx\WxOpenException
+     * @throws \SyException\Wx\WxOpenException
      */
-    public function setOptionName(string $optionName) {
-        if(strlen($optionName) > 0){
+    public function setOptionName(string $optionName)
+    {
+        if (strlen($optionName) > 0) {
             $this->reqData['option_name'] = $optionName;
         } else {
             throw new WxOpenException('选项名称不合法', ErrorCode::WXOPEN_PARAM_ERROR);
         }
     }
 
-    public function getDetail() : array {
-        if(!isset($this->reqData['option_name'])){
+    public function getDetail() : array
+    {
+        if (!isset($this->reqData['option_name'])) {
             throw new WxOpenException('选项名称不能为空', ErrorCode::WXOPEN_PARAM_ERROR);
         }
 
@@ -67,7 +72,7 @@ class AuthorizerOptionGet extends WxBaseOpenCommon {
         $this->curlConfigs[CURLOPT_POSTFIELDS] = Tool::jsonEncode($this->reqData, JSON_UNESCAPED_UNICODE);
         $sendRes = WxUtilBase::sendPostReq($this->curlConfigs);
         $sendData = Tool::jsonDecode($sendRes);
-        if(isset($sendData['authorizer_appid'])){
+        if (isset($sendData['authorizer_appid'])) {
             $resArr['data'] = $sendData;
         } else {
             $resArr['code'] = ErrorCode::WXOPEN_POST_ERROR;

@@ -7,12 +7,14 @@
  */
 namespace Dao;
 
-use Traits\SimpleDaoTrait;
+use SyTrait\SimpleDaoTrait;
 
-class ImageDao {
+class ImageDao
+{
     use SimpleDaoTrait;
 
-    public static function uploadImage(array $data){
+    public static function uploadImage(array $data)
+    {
         return [];
     }
 }

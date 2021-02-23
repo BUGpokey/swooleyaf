@@ -8,16 +8,19 @@
 namespace PoolService\ProcessService;
 
 use Response\Result;
-use Traits\SimpleTrait;
+use SyTrait\SimpleTrait;
 
-class Test extends BaseService {
+class Test extends BaseService
+{
     use SimpleTrait;
 
-    protected static function handleMessage(array $data) : Result {
+    protected static function handleMessage(array $data) : Result
+    {
         $result = new Result();
         $result->setData([
             'msg' => 'hello world',
         ]);
+
         return $result;
     }
 }

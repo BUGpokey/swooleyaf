@@ -7,27 +7,29 @@
  */
 namespace SyPrint;
 
-use Constant\ErrorCode;
-use Exception\SyPrint\FeYinException;
-use Tool\Tool;
-use Traits\SimpleTrait;
+use SyConstant\ErrorCode;
+use SyException\SyPrint\FeYinException;
+use SyTool\Tool;
+use SyTrait\SimpleTrait;
 
-abstract class PrintUtilBase {
+abstract class PrintUtilBase
+{
     use SimpleTrait;
 
     /**
      * 发送post请求
      * @param array $curlConfig
      * @return mixed
-     * @throws \Exception\SyPrint\FeYinException
+     * @throws \SyException\SyPrint\FeYinException
      */
-    public static function sendPostReq(array $curlConfig) {
+    public static function sendPostReq(array $curlConfig)
+    {
         $curlConfig[CURLOPT_POST] = true;
         $curlConfig[CURLOPT_RETURNTRANSFER] = true;
-        if(!isset($curlConfig[CURLOPT_TIMEOUT_MS])){
+        if (!isset($curlConfig[CURLOPT_TIMEOUT_MS])) {
             $curlConfig[CURLOPT_TIMEOUT_MS] = 3000;
         }
-        if(!isset($curlConfig[CURLOPT_HEADER])){
+        if (!isset($curlConfig[CURLOPT_HEADER])) {
             $curlConfig[CURLOPT_HEADER] = false;
         }
         $sendRes = Tool::sendCurlReq($curlConfig);
@@ -42,14 +44,15 @@ abstract class PrintUtilBase {
      * 发送get请求
      * @param array $curlConfig
      * @return mixed
-     * @throws \Exception\SyPrint\FeYinException
+     * @throws \SyException\SyPrint\FeYinException
      */
-    public static function sendGetReq(array $curlConfig) {
+    public static function sendGetReq(array $curlConfig)
+    {
         $curlConfig[CURLOPT_SSL_VERIFYPEER] = false;
         $curlConfig[CURLOPT_SSL_VERIFYHOST] = false;
         $curlConfig[CURLOPT_HEADER] = false;
         $curlConfig[CURLOPT_RETURNTRANSFER] = true;
-        if(!isset($curlConfig[CURLOPT_TIMEOUT_MS])){
+        if (!isset($curlConfig[CURLOPT_TIMEOUT_MS])) {
             $curlConfig[CURLOPT_TIMEOUT_MS] = 2000;
         }
         $sendRes = Tool::sendCurlReq($curlConfig);

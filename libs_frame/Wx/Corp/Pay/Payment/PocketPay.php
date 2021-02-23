@@ -5,22 +5,26 @@
  * Date: 2018/9/11 0011
  * Time: 17:46
  */
+
 namespace Wx\Corp\Pay\Payment;
 
-use Constant\ErrorCode;
 use DesignPatterns\Singletons\WxConfigSingleton;
-use Exception\Wx\WxException;
-use Log\Log;
-use Tool\Tool;
+use SyConstant\ErrorCode;
+use SyConstant\ProjectBase;
+use SyException\Wx\WxException;
+use SyLog\Log;
+use SyTool\Tool;
 use Wx\WxBaseCorp;
 use Wx\WxUtilBase;
 use Wx\WxUtilCorp;
 
 /**
  * 向员工付款
+ *
  * @package Wx\Corp\Pay\Payment
  */
-class PocketPay extends WxBaseCorp {
+class PocketPay extends WxBaseCorp
+{
     const MSG_TYPE_NORMAL = 'NORMAL_MSG'; //付款消息类型-普通付款消息
     const MSG_TYPE_APPROVAL = 'APPROVAL_MSG'; //付款消息类型-审批付款消息
     const CHECK_NAME_TYPE_NO = 'NO_CHECK'; //校验姓名类型-不校验
@@ -28,91 +32,109 @@ class PocketPay extends WxBaseCorp {
 
     /**
      * 企业ID
+     *
      * @var string
      */
     private $appid = '';
     /**
      * 商户号
+     *
      * @var string
      */
     private $mch_id = '';
     /**
      * 设备号
+     *
      * @var string
      */
     private $device_info = '';
     /**
      * 随机字符串
+     *
      * @var string
      */
     private $nonce_str = '';
     /**
      * 商户订单号
+     *
      * @var string
      */
     private $partner_trade_no = '';
     /**
      * 用户openid
+     *
      * @var string
      */
     private $openid = '';
     /**
      * 校验用户姓名选项
+     *
      * @var string
      */
     private $check_name = '';
     /**
      * 收款用户姓名
+     *
      * @var string
      */
     private $re_user_name = '';
     /**
      * 金额
+     *
      * @var int
      */
     private $amount = 0;
     /**
      * 付款说明
+     *
      * @var string
      */
     private $desc = '';
     /**
      * Ip地址
+     *
      * @var string
      */
     private $spbill_create_ip = '';
     /**
      * 付款消息类型
+     *
      * @var string
      */
     private $ww_msg_type = '';
     /**
      * 审批单号
+     *
      * @var string
      */
     private $approval_number = '';
     /**
      * 审批类型
+     *
      * @var int
      */
     private $approval_type = 0;
     /**
      * 项目名称
+     *
      * @var string
      */
     private $act_name = '';
     /**
      * 应用id
+     *
      * @var string
      */
     private $agentid = '';
     /**
      * 应用密钥
+     *
      * @var string
      */
     private $agentSecret = '';
 
-    public function __construct(string $corpId,string $agentTag){
+    public function __construct(string $corpId, string $agentTag)
+    {
         parent::__construct();
         $this->serviceUrl = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/paywwsptrans2pocket';
         $corpConfig = WxConfigSingleton::getInstance()->getCorpConfig($corpId);
@@ -128,15 +150,16 @@ class PocketPay extends WxBaseCorp {
         $this->agentSecret = $agentInfo['secret'];
     }
 
-    public function __clone(){
+    public function __clone()
+    {
     }
 
     /**
-     * @param string $deviceInfo
-     * @throws \Exception\Wx\WxException
+     * @throws \SyException\Wx\WxException
      */
-    public function setDeviceInfo(string $deviceInfo){
-        if(ctype_alnum($deviceInfo) && (strlen($deviceInfo) <= 32)){
+    public function setDeviceInfo(string $deviceInfo)
+    {
+        if (ctype_alnum($deviceInfo) && (\strlen($deviceInfo) <= 32)) {
             $this->reqData['device_info'] = $deviceInfo;
         } else {
             throw new WxException('设备号不合法', ErrorCode::WX_PARAM_ERROR);
@@ -144,11 +167,11 @@ class PocketPay extends WxBaseCorp {
     }
 
     /**
-     * @param string $partnerTradeNo
-     * @throws \Exception\Wx\WxException
+     * @throws \SyException\Wx\WxException
      */
-    public function setPartnerTradeNo(string $partnerTradeNo) {
-        if(ctype_digit($partnerTradeNo) && (strlen($partnerTradeNo) <= 32)){
+    public function setPartnerTradeNo(string $partnerTradeNo)
+    {
+        if (ctype_digit($partnerTradeNo) && (\strlen($partnerTradeNo) <= 32)) {
             $this->reqData['partner_trade_no'] = $partnerTradeNo;
         } else {
             throw new WxException('商户订单号不合法', ErrorCode::WX_PARAM_ERROR);
@@ -156,11 +179,11 @@ class PocketPay extends WxBaseCorp {
     }
 
     /**
-     * @param string $openid
-     * @throws \Exception\Wx\WxException
+     * @throws \SyException\Wx\WxException
      */
-    public function setOpenid(string $openid) {
-        if (preg_match('/^[0-9a-zA-Z\-\_]{28}$/', $openid) > 0) {
+    public function setOpenid(string $openid)
+    {
+        if (preg_match(ProjectBase::REGEX_WX_OPEN_ID, $openid) > 0) {
             $this->reqData['openid'] = $openid;
         } else {
             throw new WxException('用户openid不合法', ErrorCode::WX_PARAM_ERROR);
@@ -168,34 +191,32 @@ class PocketPay extends WxBaseCorp {
     }
 
     /**
-     * @param string $checkName
-     * @throws \Exception\Wx\WxException
+     * @throws \SyException\Wx\WxException
      */
-    public function setCheckName(string $checkName) {
-        if($checkName == self::CHECK_NAME_TYPE_NO){
+    public function setCheckName(string $checkName)
+    {
+        if (self::CHECK_NAME_TYPE_NO == $checkName) {
             $this->reqData['check_name'] = $checkName;
             unset($this->reqData['re_user_name']);
-        } else if($checkName == self::CHECK_NAME_TYPE_FORCE){
+        } elseif (self::CHECK_NAME_TYPE_FORCE == $checkName) {
             $this->reqData['check_name'] = $checkName;
         } else {
             throw new WxException('校验用户姓名选项不合法', ErrorCode::WX_PARAM_ERROR);
         }
     }
 
-    /**
-     * @param string $userName
-     */
-    public function setReUserName(string $userName) {
-        if(($this->reqData['check_name'] == self::CHECK_NAME_TYPE_FORCE) && (strlen($userName) > 0)){
+    public function setReUserName(string $userName)
+    {
+        if ((self::CHECK_NAME_TYPE_FORCE == $this->reqData['check_name']) && (\strlen($userName) > 0)) {
             $this->reqData['re_user_name'] = mb_substr($userName, 0, 32);
         }
     }
 
     /**
-     * @param int $amount
-     * @throws \Exception\Wx\WxException
+     * @throws \SyException\Wx\WxException
      */
-    public function setAmount(int $amount) {
+    public function setAmount(int $amount)
+    {
         if ($amount > 0) {
             $this->reqData['amount'] = $amount;
         } else {
@@ -204,11 +225,11 @@ class PocketPay extends WxBaseCorp {
     }
 
     /**
-     * @param string $desc
-     * @throws \Exception\Wx\WxException
+     * @throws \SyException\Wx\WxException
      */
-    public function setDesc(string $desc) {
-        if (strlen($desc) > 0) {
+    public function setDesc(string $desc)
+    {
+        if (\strlen($desc) > 0) {
             $this->reqData['desc'] = $desc;
         } else {
             throw new WxException('付款说明不合法', ErrorCode::WX_PARAM_ERROR);
@@ -216,14 +237,14 @@ class PocketPay extends WxBaseCorp {
     }
 
     /**
-     * @param string $msgType
-     * @throws \Exception\Wx\WxException
+     * @throws \SyException\Wx\WxException
      */
-    public function setMsgType(string $msgType){
-        if($msgType == self::MSG_TYPE_NORMAL){
+    public function setMsgType(string $msgType)
+    {
+        if (self::MSG_TYPE_NORMAL == $msgType) {
             $this->reqData['ww_msg_type'] = $msgType;
             unset($this->reqData['approval_number'], $this->reqData['approval_type']);
-        } else if($msgType == self::MSG_TYPE_APPROVAL){
+        } elseif (self::MSG_TYPE_APPROVAL == $msgType) {
             $this->reqData['ww_msg_type'] = $msgType;
             $this->reqData['approval_type'] = 1;
         } else {
@@ -232,12 +253,12 @@ class PocketPay extends WxBaseCorp {
     }
 
     /**
-     * @param string $approvalNumber
-     * @throws \Exception\Wx\WxException
+     * @throws \SyException\Wx\WxException
      */
-    public function setApprovalNumber(string $approvalNumber){
-        if($this->reqData['ww_msg_type'] == self::MSG_TYPE_APPROVAL){
-            if(ctype_alnum($approvalNumber)){
+    public function setApprovalNumber(string $approvalNumber)
+    {
+        if (self::MSG_TYPE_APPROVAL == $this->reqData['ww_msg_type']) {
+            if (ctype_alnum($approvalNumber)) {
                 $this->reqData['approval_number'] = $approvalNumber;
             } else {
                 throw new WxException('审批单号不合法', ErrorCode::WX_PARAM_ERROR);
@@ -246,37 +267,38 @@ class PocketPay extends WxBaseCorp {
     }
 
     /**
-     * @param string $actName
-     * @throws \Exception\Wx\WxException
+     * @throws \SyException\Wx\WxException
      */
-    public function setActName(string $actName){
-        if(strlen($actName) > 0){
+    public function setActName(string $actName)
+    {
+        if (\strlen($actName) > 0) {
             $this->reqData['act_name'] = mb_substr($actName, 0, 25);
         } else {
             throw new WxException('项目名称不合法', ErrorCode::WX_PARAM_ERROR);
         }
     }
 
-    public function getDetail() : array {
-        if(!isset($this->reqData['partner_trade_no'])){
+    public function getDetail(): array
+    {
+        if (!isset($this->reqData['partner_trade_no'])) {
             throw new WxException('商户订单号不能为空', ErrorCode::WX_PARAM_ERROR);
         }
-        if(!isset($this->reqData['openid'])){
+        if (!isset($this->reqData['openid'])) {
             throw new WxException('用户openid不能为空', ErrorCode::WX_PARAM_ERROR);
         }
-        if(($this->reqData['check_name'] == 'FORCE_CHECK') && !isset($this->reqData['re_user_name'])){
+        if (('FORCE_CHECK' == $this->reqData['check_name']) && !isset($this->reqData['re_user_name'])) {
             throw new WxException('收款用户姓名不能为空', ErrorCode::WX_PARAM_ERROR);
         }
-        if($this->reqData['amount'] <= 0){
+        if ($this->reqData['amount'] <= 0) {
             throw new WxException('付款金额必须大于0', ErrorCode::WX_PARAM_ERROR);
         }
-        if(!isset($this->reqData['desc'])){
+        if (!isset($this->reqData['desc'])) {
             throw new WxException('付款描述信息不能为空', ErrorCode::WX_PARAM_ERROR);
         }
-        if(($this->reqData['ww_msg_type'] == self::MSG_TYPE_APPROVAL) && !isset($this->reqData['approval_number'])){
+        if ((self::MSG_TYPE_APPROVAL == $this->reqData['ww_msg_type']) && !isset($this->reqData['approval_number'])) {
             throw new WxException('审批单号不能为空', ErrorCode::WX_PARAM_ERROR);
         }
-        if(!isset($this->reqData['act_name'])){
+        if (!isset($this->reqData['act_name'])) {
             throw new WxException('项目名称不能为空', ErrorCode::WX_PARAM_ERROR);
         }
 
@@ -314,11 +336,11 @@ class PocketPay extends WxBaseCorp {
         fclose($tmpKey);
         fclose($tmpCert);
         $sendData = Tool::xmlToArray($sendRes);
-        if ($sendData['return_code'] == 'FAIL') {
+        if ('FAIL' == $sendData['return_code']) {
             Log::error($sendData['return_msg'], ErrorCode::WX_PARAM_ERROR);
             $resArr['code'] = ErrorCode::WX_POST_ERROR;
             $resArr['message'] = $sendData['return_msg'];
-        } else if ($sendData['result_code'] == 'FAIL') {
+        } elseif ('FAIL' == $sendData['result_code']) {
             Log::error($sendData['err_code'], ErrorCode::WX_PARAM_ERROR);
             $resArr['code'] = ErrorCode::WX_POST_ERROR;
             $resArr['message'] = $sendData['err_code_des'];

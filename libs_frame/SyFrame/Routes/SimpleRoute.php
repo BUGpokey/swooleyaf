@@ -7,35 +7,39 @@
  */
 namespace SyFrame\Routes;
 
-use Constant\ErrorCode;
-use Exception\Validator\ValidatorException;
+use SyConstant\ErrorCode;
+use SyException\Validator\ValidatorException;
 use SyFrame\SimpleBootstrap;
 use Yaf\Request_Abstract;
 use Yaf\Route_Interface;
 
-class SimpleRoute extends Request_Abstract implements Route_Interface {
+class SimpleRoute extends Request_Abstract implements Route_Interface
+{
     /**
      * 允许的模块列表
      * @var array
      */
     private $acceptModules = [];
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->acceptModules = SimpleBootstrap::getAcceptModules();
     }
 
-    private function __clone() {
+    private function __clone()
+    {
     }
 
     /**
      * @param \Yaf\Request_Abstract $request
      * @return bool
-     * @throws \Exception\Validator\ValidatorException
+     * @throws \SyException\Validator\ValidatorException
      */
-    public function route($request) {
+    public function route($request)
+    {
         $uriArr = explode('/', $request->getRequestUri());
         $moduleName = strlen($uriArr[1]) > 0 ? ucfirst($uriArr[1]) : SY_DEFAULT_MODULE;
-        if(!isset($this->acceptModules[$moduleName])){
+        if (!isset($this->acceptModules[$moduleName])) {
             throw new ValidatorException('模块不支持', ErrorCode::COMMON_ROUTE_MODULE_NOT_ACCEPT);
         }
 
@@ -52,11 +56,14 @@ class SimpleRoute extends Request_Abstract implements Route_Interface {
         $request->setModuleName($moduleName);
         $request->setControllerName($controllerName);
         $request->setActionName($actionName);
+        $_SERVER['SYKEY-MC'] = strtolower($moduleName . $controllerName);
+        $_SERVER['SYKEY-CA'] = strtolower($controllerName . $actionName);
 
         return true;
     }
 
-    public function assemble(array $info, array $query = NULL) {
+    public function assemble(array $info, array $query = null)
+    {
         return true;
     }
 }

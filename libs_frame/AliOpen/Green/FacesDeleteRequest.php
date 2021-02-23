@@ -3,21 +3,38 @@ namespace AliOpen\Green;
 
 use AliOpen\Core\RoaAcsRequest;
 
-class FacesDeleteRequest extends RoaAcsRequest {
-    private $clientInfo;
+/**
+ * Request of DeleteFaces
+ * @method string getClientInfo()
+ */
+class FacesDeleteRequest extends RoaAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $uriPattern = '/green/sface/face/delete';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Green", "2018-05-09", "DeleteFaces", "green", "openAPI");
-        $this->setUriPattern("/green/sface/face/delete");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Green', '2018-05-09', 'DeleteFaces', 'green');
     }
 
-    public function getClientInfo(){
-        return $this->clientInfo;
-    }
+    /**
+     * @param string $clientInfo
+     * @return $this
+     */
+    public function setClientInfo($clientInfo)
+    {
+        $this->requestParameters['ClientInfo'] = $clientInfo;
+        $this->queryParameters['ClientInfo'] = $clientInfo;
 
-    public function setClientInfo($clientInfo){
-        $this->clientInfo = $clientInfo;
-        $this->queryParameters["ClientInfo"] = $clientInfo;
+        return $this;
     }
 }

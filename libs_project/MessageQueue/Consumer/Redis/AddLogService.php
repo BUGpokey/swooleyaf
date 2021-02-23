@@ -7,21 +7,25 @@
  */
 namespace MessageQueue\Consumer\Redis;
 
-use Constant\Project;
-use Log\Log;
+use SyConstant\Project;
+use SyLog\Log;
 use SyMessageQueue\ConsumerBase;
-use Tool\Tool;
+use SyTool\Tool;
 
-class AddLogService extends ConsumerBase {
-    public function __construct() {
+class AddLogService extends ConsumerBase
+{
+    public function __construct()
+    {
         parent::__construct();
         $this->setMqTypeAndTopic(Project::MESSAGE_QUEUE_TYPE_REDIS, Project::MESSAGE_QUEUE_TOPIC_ADD_LOG);
     }
 
-    private function __clone() {
+    private function __clone()
+    {
     }
 
-    public function handleMessage(array $data) {
+    public function handleMessage(array $data)
+    {
         Log::info('mqdata:' . Tool::jsonEncode($data, JSON_UNESCAPED_UNICODE));
     }
 }

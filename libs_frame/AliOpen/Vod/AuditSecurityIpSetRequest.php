@@ -3,40 +3,60 @@ namespace AliOpen\Vod;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class AuditSecurityIpSetRequest extends RpcAcsRequest {
-    private $operateMode;
-    private $securityGroupName;
-    private $ips;
+/**
+ * Request of SetAuditSecurityIp
+ * @method string getSecurityGroupName()
+ * @method string getOperateMode()
+ * @method string getIps()
+ */
+class AuditSecurityIpSetRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("vod", "2017-03-21", "SetAuditSecurityIp", "vod", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('vod', '2017-03-21', 'SetAuditSecurityIp', 'vod');
     }
 
-    public function getOperateMode(){
-        return $this->operateMode;
+    /**
+     * @param string $securityGroupName
+     * @return $this
+     */
+    public function setSecurityGroupName($securityGroupName)
+    {
+        $this->requestParameters['SecurityGroupName'] = $securityGroupName;
+        $this->queryParameters['SecurityGroupName'] = $securityGroupName;
+
+        return $this;
     }
 
-    public function setOperateMode($operateMode){
-        $this->operateMode = $operateMode;
-        $this->queryParameters["OperateMode"] = $operateMode;
+    /**
+     * @param string $operateMode
+     * @return $this
+     */
+    public function setOperateMode($operateMode)
+    {
+        $this->requestParameters['OperateMode'] = $operateMode;
+        $this->queryParameters['OperateMode'] = $operateMode;
+
+        return $this;
     }
 
-    public function getSecurityGroupName(){
-        return $this->securityGroupName;
-    }
+    /**
+     * @param string $ips
+     * @return $this
+     */
+    public function setIps($ips)
+    {
+        $this->requestParameters['Ips'] = $ips;
+        $this->queryParameters['Ips'] = $ips;
 
-    public function setSecurityGroupName($securityGroupName){
-        $this->securityGroupName = $securityGroupName;
-        $this->queryParameters["SecurityGroupName"] = $securityGroupName;
-    }
-
-    public function getIps(){
-        return $this->ips;
-    }
-
-    public function setIps($ips){
-        $this->ips = $ips;
-        $this->queryParameters["Ips"] = $ips;
+        return $this;
     }
 }

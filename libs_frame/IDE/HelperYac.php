@@ -1,10 +1,14 @@
 <?php
 namespace {
-    define('YAC_VERSION', '2.0.1');
+    define('YAC_VERSION', '2.2.0');
     define('YAC_MAX_KEY_LEN', 48);
     define('YAC_MAX_VALUE_RAW_LEN', 67108863);
     define('YAC_MAX_RAW_COMPRESSED_LEN', 1048576);
-    define('YAC_SERIALIZER', 'PHP');
+    define('YAC_SERIALIZER_PHP', 0);
+    define('YAC_SERIALIZER_JSON', 1);
+    define('YAC_SERIALIZER_MSGPACK', 2);
+    define('YAC_SERIALIZER_IGBINARY', 3);
+    define('YAC_SERIALIZER', 0);
 }
 
 namespace  {
@@ -20,10 +24,6 @@ namespace  {
 
         public function __set($key, $value){}
 
-        /**
-         * @param $keys
-         * @return mixed
-         */
         public function get($keys){}
 
         public function __get($key){}

@@ -3,100 +3,138 @@ namespace AliOpen\Mts;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class JobsSubmitRequest extends RpcAcsRequest {
-    private $outputs;
-    private $input;
-    private $outputBucket;
-    private $resourceOwnerId;
-    private $resourceOwnerAccount;
-    private $ownerAccount;
-    private $outputLocation;
-    private $ownerId;
-    private $pipelineId;
+/**
+ * Request of SubmitJobs
+ * @method string getOutputs()
+ * @method string getInput()
+ * @method string getOutputBucket()
+ * @method string getResourceOwnerId()
+ * @method string getResourceOwnerAccount()
+ * @method string getOwnerAccount()
+ * @method string getOutputLocation()
+ * @method string getOwnerId()
+ * @method string getPipelineId()
+ */
+class JobsSubmitRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Mts", "2014-06-18", "SubmitJobs", "mts", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Mts', '2014-06-18', 'SubmitJobs', 'mts');
     }
 
-    public function getOutputs(){
-        return $this->outputs;
+    /**
+     * @param string $outputs
+     * @return $this
+     */
+    public function setOutputs($outputs)
+    {
+        $this->requestParameters['Outputs'] = $outputs;
+        $this->queryParameters['Outputs'] = $outputs;
+
+        return $this;
     }
 
-    public function setOutputs($outputs){
-        $this->outputs = $outputs;
-        $this->queryParameters["Outputs"] = $outputs;
+    /**
+     * @param string $input
+     * @return $this
+     */
+    public function setInput($input)
+    {
+        $this->requestParameters['Input'] = $input;
+        $this->queryParameters['Input'] = $input;
+
+        return $this;
     }
 
-    public function getInput(){
-        return $this->input;
+    /**
+     * @param string $outputBucket
+     * @return $this
+     */
+    public function setOutputBucket($outputBucket)
+    {
+        $this->requestParameters['OutputBucket'] = $outputBucket;
+        $this->queryParameters['OutputBucket'] = $outputBucket;
+
+        return $this;
     }
 
-    public function setInput($input){
-        $this->input = $input;
-        $this->queryParameters["Input"] = $input;
+    /**
+     * @param string $resourceOwnerId
+     * @return $this
+     */
+    public function setResourceOwnerId($resourceOwnerId)
+    {
+        $this->requestParameters['ResourceOwnerId'] = $resourceOwnerId;
+        $this->queryParameters['ResourceOwnerId'] = $resourceOwnerId;
+
+        return $this;
     }
 
-    public function getOutputBucket(){
-        return $this->outputBucket;
+    /**
+     * @param string $resourceOwnerAccount
+     * @return $this
+     */
+    public function setResourceOwnerAccount($resourceOwnerAccount)
+    {
+        $this->requestParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+        $this->queryParameters['ResourceOwnerAccount'] = $resourceOwnerAccount;
+
+        return $this;
     }
 
-    public function setOutputBucket($outputBucket){
-        $this->outputBucket = $outputBucket;
-        $this->queryParameters["OutputBucket"] = $outputBucket;
+    /**
+     * @param string $ownerAccount
+     * @return $this
+     */
+    public function setOwnerAccount($ownerAccount)
+    {
+        $this->requestParameters['OwnerAccount'] = $ownerAccount;
+        $this->queryParameters['OwnerAccount'] = $ownerAccount;
+
+        return $this;
     }
 
-    public function getResourceOwnerId(){
-        return $this->resourceOwnerId;
+    /**
+     * @param string $outputLocation
+     * @return $this
+     */
+    public function setOutputLocation($outputLocation)
+    {
+        $this->requestParameters['OutputLocation'] = $outputLocation;
+        $this->queryParameters['OutputLocation'] = $outputLocation;
+
+        return $this;
     }
 
-    public function setResourceOwnerId($resourceOwnerId){
-        $this->resourceOwnerId = $resourceOwnerId;
-        $this->queryParameters["ResourceOwnerId"] = $resourceOwnerId;
+    /**
+     * @param string $ownerId
+     * @return $this
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->requestParameters['OwnerId'] = $ownerId;
+        $this->queryParameters['OwnerId'] = $ownerId;
+
+        return $this;
     }
 
-    public function getResourceOwnerAccount(){
-        return $this->resourceOwnerAccount;
-    }
+    /**
+     * @param string $pipelineId
+     * @return $this
+     */
+    public function setPipelineId($pipelineId)
+    {
+        $this->requestParameters['PipelineId'] = $pipelineId;
+        $this->queryParameters['PipelineId'] = $pipelineId;
 
-    public function setResourceOwnerAccount($resourceOwnerAccount){
-        $this->resourceOwnerAccount = $resourceOwnerAccount;
-        $this->queryParameters["ResourceOwnerAccount"] = $resourceOwnerAccount;
-    }
-
-    public function getOwnerAccount(){
-        return $this->ownerAccount;
-    }
-
-    public function setOwnerAccount($ownerAccount){
-        $this->ownerAccount = $ownerAccount;
-        $this->queryParameters["OwnerAccount"] = $ownerAccount;
-    }
-
-    public function getOutputLocation(){
-        return $this->outputLocation;
-    }
-
-    public function setOutputLocation($outputLocation){
-        $this->outputLocation = $outputLocation;
-        $this->queryParameters["OutputLocation"] = $outputLocation;
-    }
-
-    public function getOwnerId(){
-        return $this->ownerId;
-    }
-
-    public function setOwnerId($ownerId){
-        $this->ownerId = $ownerId;
-        $this->queryParameters["OwnerId"] = $ownerId;
-    }
-
-    public function getPipelineId(){
-        return $this->pipelineId;
-    }
-
-    public function setPipelineId($pipelineId){
-        $this->pipelineId = $pipelineId;
-        $this->queryParameters["PipelineId"] = $pipelineId;
+        return $this;
     }
 }

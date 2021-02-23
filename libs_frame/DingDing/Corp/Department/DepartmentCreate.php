@@ -7,17 +7,18 @@
  */
 namespace DingDing\Corp\Department;
 
-use Constant\ErrorCode;
+use SyConstant\ErrorCode;
 use DingDing\TalkBaseCorp;
 use DingDing\TalkTraitCorp;
-use Exception\DingDing\TalkException;
-use Tool\Tool;
+use SyException\DingDing\TalkException;
+use SyTool\Tool;
 
 /**
  * 创建部门
  * @package DingDing\Corp\Department
  */
-class DepartmentCreate extends TalkBaseCorp {
+class DepartmentCreate extends TalkBaseCorp
+{
     use TalkTraitCorp;
 
     /**
@@ -81,7 +82,8 @@ class DepartmentCreate extends TalkBaseCorp {
      */
     private $sourceIdentifier = '';
 
-    public function __construct(string $corpId,string $agentTag){
+    public function __construct(string $corpId, string $agentTag)
+    {
         parent::__construct();
         $this->_corpId = $corpId;
         $this->_agentTag = $agentTag;
@@ -92,15 +94,17 @@ class DepartmentCreate extends TalkBaseCorp {
         $this->reqData['outerDeptOnlySelf'] = false;
     }
 
-    private function __clone(){
+    private function __clone()
+    {
     }
 
     /**
      * @param string $name
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setName(string $name){
-        if(strlen($name) > 0){
+    public function setName(string $name)
+    {
+        if (strlen($name) > 0) {
             $this->reqData['name'] = mb_substr($name, 0, 32);
         } else {
             throw new TalkException('名称不合法', ErrorCode::DING_TALK_PARAM_ERROR);
@@ -109,10 +113,11 @@ class DepartmentCreate extends TalkBaseCorp {
 
     /**
      * @param int $parentId
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setParentId(int $parentId){
-        if($parentId > 0){
+    public function setParentId(int $parentId)
+    {
+        if ($parentId > 0) {
             $this->reqData['parentid'] = (string)$parentId;
         } else {
             throw new TalkException('父部门id不合法', ErrorCode::DING_TALK_PARAM_ERROR);
@@ -121,10 +126,11 @@ class DepartmentCreate extends TalkBaseCorp {
 
     /**
      * @param int $order
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setOrder(int $order){
-        if($order >= 0){
+    public function setOrder(int $order)
+    {
+        if ($order >= 0) {
             $this->reqData['order'] = (string)$order;
         } else {
             throw new TalkException('排序值不合法', ErrorCode::DING_TALK_PARAM_ERROR);
@@ -134,30 +140,33 @@ class DepartmentCreate extends TalkBaseCorp {
     /**
      * @param bool $createDeptGroup
      */
-    public function setCreateDeptGroup(bool $createDeptGroup){
+    public function setCreateDeptGroup(bool $createDeptGroup)
+    {
         $this->reqData['createDeptGroup'] = $createDeptGroup;
     }
 
     /**
      * @param bool $deptHiding
      */
-    public function setDeptHiding(bool $deptHiding){
+    public function setDeptHiding(bool $deptHiding)
+    {
         $this->reqData['deptHiding'] = $deptHiding;
     }
 
     /**
      * @param array $deptPermits
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setDeptPermits(array $deptPermits){
+    public function setDeptPermits(array $deptPermits)
+    {
         $departmentList = [];
         foreach ($deptPermits as $eDepartmentId) {
-            if(is_int($eDepartmentId) && ($eDepartmentId > 0)){
+            if (is_int($eDepartmentId) && ($eDepartmentId > 0)) {
                 $departmentList[$eDepartmentId] = 1;
             }
         }
 
-        if(count($departmentList) > 200){
+        if (count($departmentList) > 200) {
             throw new TalkException('部门列表不能超过200个', ErrorCode::DING_TALK_PARAM_ERROR);
         }
         $this->reqData['deptPermits'] = implode('|', array_keys($departmentList));
@@ -165,17 +174,18 @@ class DepartmentCreate extends TalkBaseCorp {
 
     /**
      * @param array $userPermits
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setUserPermits(array $userPermits){
+    public function setUserPermits(array $userPermits)
+    {
         $userList = [];
         foreach ($userPermits as $eUserId) {
-            if(ctype_alnum($eUserId)){
+            if (ctype_alnum($eUserId)) {
                 $userList[$eUserId] = 1;
             }
         }
 
-        if(count($userList) > 200){
+        if (count($userList) > 200) {
             throw new TalkException('人员列表不能超过200个', ErrorCode::DING_TALK_PARAM_ERROR);
         }
         $this->reqData['userPermits'] = implode('|', array_keys($userList));
@@ -184,23 +194,25 @@ class DepartmentCreate extends TalkBaseCorp {
     /**
      * @param bool $outerDept
      */
-    public function setOuterDept(bool $outerDept){
+    public function setOuterDept(bool $outerDept)
+    {
         $this->reqData['outerDept'] = $outerDept;
     }
 
     /**
      * @param array $outerPermitDepts
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setOuterPermitDepts(array $outerPermitDepts){
+    public function setOuterPermitDepts(array $outerPermitDepts)
+    {
         $departmentList = [];
         foreach ($outerPermitDepts as $eDepartmentId) {
-            if(is_int($eDepartmentId) && ($eDepartmentId > 0)){
+            if (is_int($eDepartmentId) && ($eDepartmentId > 0)) {
                 $departmentList[$eDepartmentId] = 1;
             }
         }
 
-        if(count($departmentList) > 200){
+        if (count($departmentList) > 200) {
             throw new TalkException('额外部门列表不能超过200个', ErrorCode::DING_TALK_PARAM_ERROR);
         }
         $this->reqData['outerPermitDepts'] = implode('|', array_keys($departmentList));
@@ -208,17 +220,18 @@ class DepartmentCreate extends TalkBaseCorp {
 
     /**
      * @param array $outerPermitUsers
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setOuterPermitUsers(array $outerPermitUsers){
+    public function setOuterPermitUsers(array $outerPermitUsers)
+    {
         $userList = [];
         foreach ($outerPermitUsers as $eUserId) {
-            if(ctype_alnum($eUserId)){
+            if (ctype_alnum($eUserId)) {
                 $userList[$eUserId] = 1;
             }
         }
 
-        if(count($userList) > 200){
+        if (count($userList) > 200) {
             throw new TalkException('额外人员列表不能超过200个', ErrorCode::DING_TALK_PARAM_ERROR);
         }
         $this->reqData['outerPermitUsers'] = implode('|', array_keys($userList));
@@ -227,30 +240,33 @@ class DepartmentCreate extends TalkBaseCorp {
     /**
      * @param bool $outerDeptOnlySelf
      */
-    public function setOuterDeptOnlySelf(bool $outerDeptOnlySelf){
+    public function setOuterDeptOnlySelf(bool $outerDeptOnlySelf)
+    {
         $this->reqData['outerDeptOnlySelf'] = $outerDeptOnlySelf;
     }
 
     /**
      * @param string $sourceIdentifier
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setSourceIdentifier(string $sourceIdentifier){
-        if(ctype_alnum($sourceIdentifier)){
+    public function setSourceIdentifier(string $sourceIdentifier)
+    {
+        if (ctype_alnum($sourceIdentifier)) {
             $this->reqData['sourceIdentifier'] = $sourceIdentifier;
         } else {
             throw new TalkException('部门标识不合法', ErrorCode::DING_TALK_PARAM_ERROR);
         }
     }
 
-    public function getDetail() : array {
-        if(!isset($this->reqData['name'])){
+    public function getDetail() : array
+    {
+        if (!isset($this->reqData['name'])) {
             throw new TalkException('名称不能为空', ErrorCode::DING_TALK_PARAM_ERROR);
         }
-        if(!isset($this->reqData['parentid'])){
+        if (!isset($this->reqData['parentid'])) {
             throw new TalkException('父部门id不能为空', ErrorCode::DING_TALK_PARAM_ERROR);
         }
-        if(!isset($this->reqData['sourceIdentifier'])){
+        if (!isset($this->reqData['sourceIdentifier'])) {
             throw new TalkException('部门标识不能为空', ErrorCode::DING_TALK_PARAM_ERROR);
         }
 

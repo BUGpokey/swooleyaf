@@ -6,15 +6,16 @@
  */
 namespace SyMessagePush\XinGe;
 
-use Constant\ErrorCode;
-use Exception\MessagePush\XinGePushException;
+use SyConstant\ErrorCode;
+use SyException\MessagePush\XinGePushException;
 use SyMessagePush\PushBaseXinGe;
 
 /**
  * 标签操作
  * @package SyMessagePush\XinGe
  */
-class DeviceTag extends PushBaseXinGe {
+class DeviceTag extends PushBaseXinGe
+{
     /**
      * 操作类型
      * @var int
@@ -56,21 +57,24 @@ class DeviceTag extends PushBaseXinGe {
      */
     private $op_id = '';
 
-    public function __construct(string $platform){
+    public function __construct(string $platform)
+    {
         parent::__construct($platform);
         $this->apiPath = 'device';
         $this->apiMethod = 'tag';
     }
 
-    private function __clone(){
+    private function __clone()
+    {
     }
 
     /**
      * @param int $operatorType
-     * @throws \Exception\MessagePush\XinGePushException
+     * @throws \SyException\MessagePush\XinGePushException
      */
-    public function setOperatorType(int $operatorType){
-        if(($operatorType > 0) && ($operatorType <= 10)){
+    public function setOperatorType(int $operatorType)
+    {
+        if (($operatorType > 0) && ($operatorType <= 10)) {
             $this->reqData['operator_type'] = $operatorType;
         } else {
             throw new XinGePushException('操作类型不合法', ErrorCode::MESSAGE_PUSH_PARAM_ERROR);
@@ -79,10 +83,11 @@ class DeviceTag extends PushBaseXinGe {
 
     /**
      * @param string $platform
-     * @throws \Exception\MessagePush\XinGePushException
+     * @throws \SyException\MessagePush\XinGePushException
      */
-    public function setPlatform(string $platform){
-        if(in_array($platform, [self::PLATFORM_TYPE_IOS, self::PLATFORM_TYPE_ANDROID])){
+    public function setPlatform(string $platform)
+    {
+        if (in_array($platform, [self::PLATFORM_TYPE_IOS, self::PLATFORM_TYPE_ANDROID], true)) {
             $this->reqData['platform'] = $platform;
         } else {
             throw new XinGePushException('平台类型不合法', ErrorCode::MESSAGE_PUSH_PARAM_ERROR);
@@ -91,10 +96,11 @@ class DeviceTag extends PushBaseXinGe {
 
     /**
      * @param array $tokenList
-     * @throws \Exception\MessagePush\XinGePushException
+     * @throws \SyException\MessagePush\XinGePushException
      */
-    public function setTokenList(array $tokenList){
-        if(empty($tokenList)){
+    public function setTokenList(array $tokenList)
+    {
+        if (empty($tokenList)) {
             throw new XinGePushException('设备列表不合法', ErrorCode::MESSAGE_PUSH_PARAM_ERROR);
         }
 
@@ -103,10 +109,11 @@ class DeviceTag extends PushBaseXinGe {
 
     /**
      * @param array $tagList
-     * @throws \Exception\MessagePush\XinGePushException
+     * @throws \SyException\MessagePush\XinGePushException
      */
-    public function setTagList(array $tagList){
-        if(empty($tagList)){
+    public function setTagList(array $tagList)
+    {
+        if (empty($tagList)) {
             throw new XinGePushException('标签列表不合法', ErrorCode::MESSAGE_PUSH_PARAM_ERROR);
         }
 
@@ -115,10 +122,11 @@ class DeviceTag extends PushBaseXinGe {
 
     /**
      * @param array $tagTokenList
-     * @throws \Exception\MessagePush\XinGePushException
+     * @throws \SyException\MessagePush\XinGePushException
      */
-    public function setTagTokenList(array $tagTokenList){
-        if(empty($tagTokenList)){
+    public function setTagTokenList(array $tagTokenList)
+    {
+        if (empty($tagTokenList)) {
             throw new XinGePushException('标签设备对应列表不合法', ErrorCode::MESSAGE_PUSH_PARAM_ERROR);
         }
 
@@ -127,10 +135,11 @@ class DeviceTag extends PushBaseXinGe {
 
     /**
      * @param int $seq
-     * @throws \Exception\MessagePush\XinGePushException
+     * @throws \SyException\MessagePush\XinGePushException
      */
-    public function setSeq(int $seq){
-        if($seq > 0){
+    public function setSeq(int $seq)
+    {
+        if ($seq > 0) {
             $this->reqData['seq'] = $seq;
         } else {
             throw new XinGePushException('请求ID不合法', ErrorCode::MESSAGE_PUSH_PARAM_ERROR);
@@ -139,10 +148,11 @@ class DeviceTag extends PushBaseXinGe {
 
     /**
      * @param string $opType
-     * @throws \Exception\MessagePush\XinGePushException
+     * @throws \SyException\MessagePush\XinGePushException
      */
-    public function setOpType(string $opType){
-        if(in_array($opType, ['qq', 'rtx', 'email', 'other'])){
+    public function setOpType(string $opType)
+    {
+        if (in_array($opType, ['qq', 'rtx', 'email', 'other'], true)) {
             $this->reqData['op_type'] = $opType;
         } else {
             throw new XinGePushException('操作人员类型不合法', ErrorCode::MESSAGE_PUSH_PARAM_ERROR);
@@ -151,24 +161,26 @@ class DeviceTag extends PushBaseXinGe {
 
     /**
      * @param string $opId
-     * @throws \Exception\MessagePush\XinGePushException
+     * @throws \SyException\MessagePush\XinGePushException
      */
-    public function setOpId(string $opId){
-        if(strlen($opId) > 0){
+    public function setOpId(string $opId)
+    {
+        if (strlen($opId) > 0) {
             $this->reqData['op_id'] = $opId;
         } else {
             throw new XinGePushException('接口操作人员id不合法', ErrorCode::MESSAGE_PUSH_PARAM_ERROR);
         }
     }
 
-    public function getDetail() : array {
-        if(!isset($this->reqData['operator_type'])){
+    public function getDetail() : array
+    {
+        if (!isset($this->reqData['operator_type'])) {
             throw new XinGePushException('操作类型不能为空', ErrorCode::MESSAGE_PUSH_PARAM_ERROR);
         }
-        if(!isset($this->reqData['platform'])){
+        if (!isset($this->reqData['platform'])) {
             throw new XinGePushException('平台类型不能为空', ErrorCode::MESSAGE_PUSH_PARAM_ERROR);
         }
-        if(!isset($this->reqData['seq'])){
+        if (!isset($this->reqData['seq'])) {
             throw new XinGePushException('请求ID不能为空', ErrorCode::MESSAGE_PUSH_PARAM_ERROR);
         }
 

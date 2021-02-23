@@ -1,9 +1,31 @@
 <?php
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 namespace AliOpen\Core\Http;
 
 use AliOpen\Core\Exception\ClientException;
 
-class HttpHelper {
+/**
+ * Class AliOpen\Core\Http\HttpHelper
+ */
+class HttpHelper
+{
     /**
      * @var int
      */
@@ -19,9 +41,10 @@ class HttpHelper {
      * @param null $postFields
      * @param null $headers
      * @return \AliOpen\Core\Http\HttpResponse
-     * @throws \AliOpen\Core\Exception\ClientException
+     * @throws ClientException
      */
-    public static function curl($url,$httpMethod = 'GET',$postFields = null,$headers = null){
+    public static function curl($url, $httpMethod = 'GET', $postFields = null, $headers = null)
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $httpMethod);
         if (ALIOPEN_ENABLE_HTTP_PROXY) {
@@ -62,13 +85,14 @@ class HttpHelper {
     }
 
     /**
-     * @param array $postFields
+     * @param $postFildes
      * @return bool|string
      */
-    public static function getPostHttpBody($postFields){
+    public static function getPostHttpBody($postFildes)
+    {
         $content = '';
-        foreach ($postFields as $apiParamKey => $apiParamValue) {
-            $content .= $apiParamKey . '=' . urlencode($apiParamValue) . '&';
+        foreach ($postFildes as $apiParamKey => $apiParamValue) {
+            $content .= "$apiParamKey=" . urlencode($apiParamValue) . '&';
         }
 
         return substr($content, 0, - 1);
@@ -78,7 +102,8 @@ class HttpHelper {
      * @param $headers
      * @return array
      */
-    public static function getHttpHearders($headers){
+    public static function getHttpHearders($headers)
+    {
         $httpHeader = [];
         foreach ($headers as $key => $value) {
             $httpHeader[] = $key . ':' . $value;

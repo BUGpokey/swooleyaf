@@ -7,12 +7,14 @@
  */
 namespace Interfaces;
 
-use Constant\Project;
+use SyConstant\Project;
 use Interfaces\Impl\Pay\OrderGoods;
-use Tool\BaseContainer;
+use SyTool\BaseContainer;
 
-class PayContainer extends BaseContainer {
-    public function __construct() {
+class PayContainer extends BaseContainer
+{
+    public function __construct()
+    {
         $this->registryMap = [
             Project::ORDER_PAY_TYPE_GOODS,
         ];

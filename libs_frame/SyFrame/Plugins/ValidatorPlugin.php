@@ -7,49 +7,38 @@
  */
 namespace SyFrame\Plugins;
 
-use Constant\ErrorCode;
-use Constant\Server;
-use Exception\Validator\ValidatorException;
-use Reflection\BaseReflect;
 use Request\SyRequest;
+use SyConstant\ErrorCode;
+use SyConstant\SyInner;
+use SyException\Validator\ValidatorException;
+use SyReflection\BaseReflect;
 use Validator\Validator;
 use Yaf\Plugin_Abstract;
 use Yaf\Registry;
 use Yaf\Request_Abstract;
 use Yaf\Response_Abstract;
 
-class ValidatorPlugin extends Plugin_Abstract {
+class ValidatorPlugin extends Plugin_Abstract
+{
     private $validatorMap = [];
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->validatorMap = [];
     }
 
-    private function __clone() {
-    }
-
-    private function getValidatorList(string $controllerName,string $actionName) : array {
-        $key = strtolower($controllerName . $actionName);
-        $validatorTag = $this->validatorMap[$key] ?? null;
-        if (is_string($validatorTag)) {
-            return Registry::get($validatorTag);
-        }
-
-        $validatorList = BaseReflect::getValidatorAnnotations($controllerName, $actionName);
-        $validatorTag = Server::REGISTRY_NAME_VALIDATOR_PREFIX . hash('crc32b', $key);
-        $this->validatorMap[$key] = $validatorTag;
-        Registry::set($validatorTag, $validatorList);
-
-        return $validatorList;
+    private function __clone()
+    {
     }
 
     /**
-     * @param \Yaf\Request_Abstract $request
+     * @param \Yaf\Request_Abstract  $request
      * @param \Yaf\Response_Abstract $response
-     * @return void
-     * @throws \Exception\Validator\ValidatorException
+     *
+     * @throws \SyException\Validator\ValidatorException
      */
-    public function preDispatch(Request_Abstract $request,Response_Abstract $response) {
+    public function preDispatch(Request_Abstract $request, Response_Abstract $response)
+    {
         $controllerName = $request->getControllerName() . 'Controller';
         $actionName = $request->getActionName() . 'Action';
         $validatorList = $this->getValidatorList($controllerName, $actionName);
@@ -60,5 +49,29 @@ class ValidatorPlugin extends Plugin_Abstract {
                 throw new ValidatorException($verifyRes, ErrorCode::COMMON_PARAM_ERROR);
             }
         }
+    }
+
+    /**
+     * @param string $controllerName
+     * @param string $actionName
+     *
+     * @return array
+     *
+     * @throws \SyException\Validator\ValidatorException
+     */
+    private function getValidatorList(string $controllerName, string $actionName) : array
+    {
+        $key = $_SERVER['SYKEY-CA'];
+        $validatorTag = $this->validatorMap[$key] ?? null;
+        if (is_string($validatorTag)) {
+            return Registry::get($validatorTag);
+        }
+
+        $validatorList = BaseReflect::getControllerFilters($controllerName, $actionName);
+        $validatorTag = SyInner::REGISTRY_NAME_PREFIX_VALIDATOR . hash('crc32b', $key);
+        $this->validatorMap[$key] = $validatorTag;
+        Registry::set($validatorTag, $validatorList);
+
+        return $validatorList;
     }
 }

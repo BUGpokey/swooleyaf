@@ -7,19 +7,20 @@
  */
 namespace DingDing\Corp\Sns;
 
-use Constant\ErrorCode;
+use SyConstant\ErrorCode;
 use DingDing\TalkBaseCorp;
 use DingDing\TalkTraitCorp;
 use DingDing\TalkUtilCorp;
 use DingDing\TalkUtilProvider;
-use Exception\DingDing\TalkException;
-use Tool\Tool;
+use SyException\DingDing\TalkException;
+use SyTool\Tool;
 
 /**
  * 获取用户的持久授权码
  * @package DingDing\Corp\Sns
  */
-class PersistentCodeGet extends TalkBaseCorp {
+class PersistentCodeGet extends TalkBaseCorp
+{
     use TalkTraitCorp;
 
     /**
@@ -28,28 +29,32 @@ class PersistentCodeGet extends TalkBaseCorp {
      */
     private $tmp_auth_code = '';
 
-    public function __construct(string $corpId){
+    public function __construct(string $corpId)
+    {
         parent::__construct();
         $this->_corpId = $corpId;
     }
 
-    private function __clone(){
+    private function __clone()
+    {
     }
 
     /**
      * @param string $tmpAuthCode
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setTmpAuthCode(string $tmpAuthCode){
-        if(ctype_alnum($tmpAuthCode)){
+    public function setTmpAuthCode(string $tmpAuthCode)
+    {
+        if (ctype_alnum($tmpAuthCode)) {
             $this->reqData['tmp_auth_code'] = $tmpAuthCode;
         } else {
             throw new TalkException('临时授权码不合法', ErrorCode::DING_TALK_PARAM_ERROR);
         }
     }
 
-    public function getDetail() : array {
-        if(!isset($this->reqData['tmp_auth_code'])){
+    public function getDetail() : array
+    {
+        if (!isset($this->reqData['tmp_auth_code'])) {
             throw new TalkException('临时授权码不能为空', ErrorCode::DING_TALK_PARAM_ERROR);
         }
 

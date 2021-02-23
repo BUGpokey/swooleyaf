@@ -36,11 +36,11 @@ require_once __DIR__ . '/helper_load.php';
 //    echo $r1;
 //    echo "\n";
 //} catch (Exception $e) {
-//    \Log\Log::error($e->getMessage(), 0, $e->getTraceAsString());
+//    \SyLog\Log::error($e->getMessage(), 0, $e->getTraceAsString());
 //}
 
 //$nowTime = time();
-//$salt = \Tool\Tool::createNonceStr(32);
+//$salt = \SyTool\Tool::createNonceStr(32);
 //$user = new \Entities\Test\Users();
 //$model2 = $user->getContainer()->getModel();
 //$dbTable3 = $model2->getOrmDbTable();
@@ -48,7 +48,7 @@ require_once __DIR__ . '/helper_load.php';
 //    'name' => 'jw112233',
 //    'sex' => 1,
 //    'phone' => '13222332355',
-//    'pwd' => \Tool\Tool::encryptPassword('123456', $salt),
+//    'pwd' => \SyTool\Tool::encryptPassword('123456', $salt),
 //    'pwd_salt' => $salt,
 //    'created' => $nowTime,
 //    'updated' => $nowTime,
@@ -131,9 +131,9 @@ require_once __DIR__ . '/helper_load.php';
 //$aaa = $yac->get('myname');
 //if (is_null($aaa)) {
 //    echo  'null';
-//} else if (is_string($aaa)) {
+//} elseif (is_string($aaa)) {
 //    echo  's>tring';
-//} else if (is_bool($aaa)) {
+//} elseif (is_bool($aaa)) {
 //    echo $aaa ? 'true' : 'false';
 //}
 //echo PHP_EOL;

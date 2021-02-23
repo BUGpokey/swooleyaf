@@ -3,41 +3,64 @@ namespace AliOpen\Ram;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class PolicyCreateRequest extends RpcAcsRequest {
-    private $description;
-    private $policyName;
-    private $policyDocument;
+/**
+ * Request of CreatePolicy
+ * @method string getDescription()
+ * @method string getPolicyName()
+ * @method string getPolicyDocument()
+ */
+class PolicyCreateRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $requestScheme = 'https';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ram", "2015-05-01", "CreatePolicy");
-        $this->setProtocol("https");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ram', '2015-05-01', 'CreatePolicy', 'ram');
     }
 
-    public function getDescription(){
-        return $this->description;
+    /**
+     * @param string $description
+     * @return $this
+     */
+    public function setDescription($description)
+    {
+        $this->requestParameters['Description'] = $description;
+        $this->queryParameters['Description'] = $description;
+
+        return $this;
     }
 
-    public function setDescription($description){
-        $this->description = $description;
-        $this->queryParameters["Description"] = $description;
+    /**
+     * @param string $policyName
+     * @return $this
+     */
+    public function setPolicyName($policyName)
+    {
+        $this->requestParameters['PolicyName'] = $policyName;
+        $this->queryParameters['PolicyName'] = $policyName;
+
+        return $this;
     }
 
-    public function getPolicyName(){
-        return $this->policyName;
-    }
+    /**
+     * @param string $policyDocument
+     * @return $this
+     */
+    public function setPolicyDocument($policyDocument)
+    {
+        $this->requestParameters['PolicyDocument'] = $policyDocument;
+        $this->queryParameters['PolicyDocument'] = $policyDocument;
 
-    public function setPolicyName($policyName){
-        $this->policyName = $policyName;
-        $this->queryParameters["PolicyName"] = $policyName;
-    }
-
-    public function getPolicyDocument(){
-        return $this->policyDocument;
-    }
-
-    public function setPolicyDocument($policyDocument){
-        $this->policyDocument = $policyDocument;
-        $this->queryParameters["PolicyDocument"] = $policyDocument;
+        return $this;
     }
 }

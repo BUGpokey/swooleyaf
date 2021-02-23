@@ -3,20 +3,34 @@ namespace AliOpen\Vod;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class AuditCreateRequest extends RpcAcsRequest {
-    private $auditContent;
+/**
+ * Request of CreateAudit
+ * @method string getAuditContent()
+ */
+class AuditCreateRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("vod", "2017-03-21", "CreateAudit", "vod", "openAPI");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('vod', '2017-03-21', 'CreateAudit', 'vod');
     }
 
-    public function getAuditContent(){
-        return $this->auditContent;
-    }
+    /**
+     * @param string $auditContent
+     * @return $this
+     */
+    public function setAuditContent($auditContent)
+    {
+        $this->requestParameters['AuditContent'] = $auditContent;
+        $this->queryParameters['AuditContent'] = $auditContent;
 
-    public function setAuditContent($auditContent){
-        $this->auditContent = $auditContent;
-        $this->queryParameters["AuditContent"] = $auditContent;
+        return $this;
     }
 }

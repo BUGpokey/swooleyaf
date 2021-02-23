@@ -7,17 +7,18 @@
  */
 namespace DingDing\Corp\Chat;
 
-use Constant\ErrorCode;
+use SyConstant\ErrorCode;
 use DingDing\TalkBaseCorp;
 use DingDing\TalkTraitCorp;
-use Exception\DingDing\TalkException;
-use Tool\Tool;
+use SyException\DingDing\TalkException;
+use SyTool\Tool;
 
 /**
  * 修改会话
  * @package DingDing\Corp\Chat
  */
-class ChatUpdate extends TalkBaseCorp {
+class ChatUpdate extends TalkBaseCorp
+{
     use TalkTraitCorp;
 
     /**
@@ -76,20 +77,23 @@ class ChatUpdate extends TalkBaseCorp {
      */
     private $managementType = 0;
 
-    public function __construct(string $corpId,string $agentTag){
+    public function __construct(string $corpId, string $agentTag)
+    {
         parent::__construct();
         $this->_corpId = $corpId;
         $this->_agentTag = $agentTag;
     }
 
-    private function __clone(){
+    private function __clone()
+    {
     }
 
     /**
      * @param string $chatId
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setChatId(string $chatId){
+    public function setChatId(string $chatId)
+    {
         if (ctype_alnum($chatId)) {
             $this->reqData['chatid'] = $chatId;
         } else {
@@ -99,9 +103,10 @@ class ChatUpdate extends TalkBaseCorp {
 
     /**
      * @param string $name
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setName(string $name){
+    public function setName(string $name)
+    {
         if (strlen($name) > 0) {
             $this->reqData['name'] = mb_substr($name, 0, 10);
         } else {
@@ -111,9 +116,10 @@ class ChatUpdate extends TalkBaseCorp {
 
     /**
      * @param string $owner
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setOwner(string $owner){
+    public function setOwner(string $owner)
+    {
         if (ctype_alnum($owner)) {
             $this->reqData['owner'] = $owner;
         } else {
@@ -123,20 +129,21 @@ class ChatUpdate extends TalkBaseCorp {
 
     /**
      * @param array $userList
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setAddUserList(array $userList){
+    public function setAddUserList(array $userList)
+    {
         $users = [];
         foreach ($userList as $eUserId) {
-            if(ctype_alnum($eUserId)){
+            if (ctype_alnum($eUserId)) {
                 $users[$eUserId] = 1;
             }
         }
 
         $userNum = count($users);
-        if($userNum == 0){
+        if ($userNum == 0) {
             throw new TalkException('添加成员列表不能为空', ErrorCode::DING_TALK_PARAM_ERROR);
-        } else if($userNum > 40){
+        } elseif ($userNum > 40) {
             throw new TalkException('添加成员不能超过40个', ErrorCode::DING_TALK_PARAM_ERROR);
         }
         $this->reqData['add_useridlist'] = array_keys($users);
@@ -144,20 +151,21 @@ class ChatUpdate extends TalkBaseCorp {
 
     /**
      * @param array $userList
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setDelUserList(array $userList){
+    public function setDelUserList(array $userList)
+    {
         $users = [];
         foreach ($userList as $eUserId) {
-            if(ctype_alnum($eUserId)){
+            if (ctype_alnum($eUserId)) {
                 $users[$eUserId] = 1;
             }
         }
 
         $userNum = count($users);
-        if($userNum == 0){
+        if ($userNum == 0) {
             throw new TalkException('删除成员列表不能为空', ErrorCode::DING_TALK_PARAM_ERROR);
-        } else if($userNum > 40){
+        } elseif ($userNum > 40) {
             throw new TalkException('删除成员不能超过40个', ErrorCode::DING_TALK_PARAM_ERROR);
         }
         $this->reqData['del_useridlist'] = array_keys($users);
@@ -165,9 +173,10 @@ class ChatUpdate extends TalkBaseCorp {
 
     /**
      * @param string $icon
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setIcon(string $icon){
+    public function setIcon(string $icon)
+    {
         if (strlen($icon) > 0) {
             $this->reqData['icon'] = $icon;
         } else {
@@ -178,16 +187,18 @@ class ChatUpdate extends TalkBaseCorp {
     /**
      * @param bool $isBan
      */
-    public function setIsBan(bool $isBan){
+    public function setIsBan(bool $isBan)
+    {
         $this->reqData['isBan'] = $isBan;
     }
 
     /**
      * @param int $searchable
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setSearchable(int $searchable){
-        if(in_array($searchable, [0, 1])){
+    public function setSearchable(int $searchable)
+    {
+        if (in_array($searchable, [0, 1], true)) {
             $this->reqData['searchable'] = $searchable;
         } else {
             throw new TalkException('搜索类型不合法', ErrorCode::DING_TALK_PARAM_ERROR);
@@ -196,10 +207,11 @@ class ChatUpdate extends TalkBaseCorp {
 
     /**
      * @param int $validationType
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setValidationType(int $validationType){
-        if(in_array($validationType, [0, 1])){
+    public function setValidationType(int $validationType)
+    {
+        if (in_array($validationType, [0, 1], true)) {
             $this->reqData['validationType'] = $validationType;
         } else {
             throw new TalkException('验证类型不合法', ErrorCode::DING_TALK_PARAM_ERROR);
@@ -208,10 +220,11 @@ class ChatUpdate extends TalkBaseCorp {
 
     /**
      * @param int $mentionAllAuthority
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setMentionAllAuthority(int $mentionAllAuthority){
-        if(in_array($mentionAllAuthority, [0, 1])){
+    public function setMentionAllAuthority(int $mentionAllAuthority)
+    {
+        if (in_array($mentionAllAuthority, [0, 1], true)) {
             $this->reqData['mentionAllAuthority'] = $mentionAllAuthority;
         } else {
             throw new TalkException('通知所有人权限不合法', ErrorCode::DING_TALK_PARAM_ERROR);
@@ -220,18 +233,20 @@ class ChatUpdate extends TalkBaseCorp {
 
     /**
      * @param int $managementType
-     * @throws \Exception\DingDing\TalkException
+     * @throws \SyException\DingDing\TalkException
      */
-    public function setManagementType(int $managementType){
-        if(in_array($managementType, [0, 1])){
+    public function setManagementType(int $managementType)
+    {
+        if (in_array($managementType, [0, 1], true)) {
             $this->reqData['managementType'] = $managementType;
         } else {
             throw new TalkException('管理类型不合法', ErrorCode::DING_TALK_PARAM_ERROR);
         }
     }
 
-    public function getDetail() : array {
-        if(!isset($this->reqData['chatid'])){
+    public function getDetail() : array
+    {
+        if (!isset($this->reqData['chatid'])) {
             throw new TalkException('会话ID不能为空', ErrorCode::DING_TALK_PARAM_ERROR);
         }
 

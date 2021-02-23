@@ -3,31 +3,51 @@ namespace AliOpen\Ram;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class RoleUpdateRequest extends RpcAcsRequest {
-    private $newAssumeRolePolicyDocument;
-    private $roleName;
+/**
+ * Request of UpdateRole
+ * @method string getNewAssumeRolePolicyDocument()
+ * @method string getRoleName()
+ */
+class RoleUpdateRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $requestScheme = 'https';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ram", "2015-05-01", "UpdateRole");
-        $this->setProtocol("https");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ram', '2015-05-01', 'UpdateRole', 'ram');
     }
 
-    public function getNewAssumeRolePolicyDocument(){
-        return $this->newAssumeRolePolicyDocument;
+    /**
+     * @param string $newAssumeRolePolicyDocument
+     * @return $this
+     */
+    public function setNewAssumeRolePolicyDocument($newAssumeRolePolicyDocument)
+    {
+        $this->requestParameters['NewAssumeRolePolicyDocument'] = $newAssumeRolePolicyDocument;
+        $this->queryParameters['NewAssumeRolePolicyDocument'] = $newAssumeRolePolicyDocument;
+
+        return $this;
     }
 
-    public function setNewAssumeRolePolicyDocument($newAssumeRolePolicyDocument){
-        $this->newAssumeRolePolicyDocument = $newAssumeRolePolicyDocument;
-        $this->queryParameters["NewAssumeRolePolicyDocument"] = $newAssumeRolePolicyDocument;
-    }
+    /**
+     * @param string $roleName
+     * @return $this
+     */
+    public function setRoleName($roleName)
+    {
+        $this->requestParameters['RoleName'] = $roleName;
+        $this->queryParameters['RoleName'] = $roleName;
 
-    public function getRoleName(){
-        return $this->roleName;
-    }
-
-    public function setRoleName($roleName){
-        $this->roleName = $roleName;
-        $this->queryParameters["RoleName"] = $roleName;
+        return $this;
     }
 }

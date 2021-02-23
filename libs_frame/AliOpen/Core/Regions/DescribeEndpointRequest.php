@@ -3,14 +3,20 @@ namespace AliOpen\Core\Regions;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class DescribeEndpointRequest extends RpcAcsRequest {
+/**
+ * Class DescribeEndpointRequest
+ * @package AliOpen\Core\Regions
+ */
+class DescribeEndpointRequest extends RpcAcsRequest
+{
     /**
-     * AliOpen\Core\Regions\DescribeEndpointRequest constructor.
+     * DescribeEndpointRequest constructor.
      * @param $id
      * @param $serviceCode
      * @param $endPointType
      */
-    public function __construct($id, $serviceCode, $endPointType){
+    public function __construct($id, $serviceCode, $endPointType)
+    {
         parent::__construct(ALIOPEN_LOCATION_SERVICE_PRODUCT_NAME, ALIOPEN_LOCATION_SERVICE_VERSION, ALIOPEN_LOCATION_SERVICE_DESCRIBE_ENDPOINT_ACTION);
 
         $this->queryParameters['Id'] = $id;

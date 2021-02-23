@@ -7,16 +7,19 @@
  */
 namespace DesignPatterns\Facades;
 
-use Traits\SimpleFacadeTrait;
+use SyTrait\SimpleFacadeTrait;
 
-abstract class PayApplyFacade {
+abstract class PayApplyFacade
+{
     use SimpleFacadeTrait;
 
-    public static function handleCheckParams(array $data){
+    public static function handleCheckParams(array $data)
+    {
         return static::checkParams($data);
     }
 
-    public static function handleApply(array $data){
+    public static function handleApply(array $data)
+    {
         return static::apply($data);
     }
 

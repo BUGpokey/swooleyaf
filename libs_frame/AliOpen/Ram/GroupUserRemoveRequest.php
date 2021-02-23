@@ -3,31 +3,51 @@ namespace AliOpen\Ram;
 
 use AliOpen\Core\RpcAcsRequest;
 
-class GroupUserRemoveRequest extends RpcAcsRequest {
-    private $groupName;
-    private $userName;
+/**
+ * Request of RemoveUserFromGroup
+ * @method string getGroupName()
+ * @method string getUserName()
+ */
+class GroupUserRemoveRequest extends RpcAcsRequest
+{
+    /**
+     * @var string
+     */
+    protected $requestScheme = 'https';
+    /**
+     * @var string
+     */
+    protected $method = 'POST';
 
-    public function __construct(){
-        parent::__construct("Ram", "2015-05-01", "RemoveUserFromGroup");
-        $this->setProtocol("https");
-        $this->setMethod("POST");
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('Ram', '2015-05-01', 'RemoveUserFromGroup', 'ram');
     }
 
-    public function getGroupName(){
-        return $this->groupName;
+    /**
+     * @param string $groupName
+     * @return $this
+     */
+    public function setGroupName($groupName)
+    {
+        $this->requestParameters['GroupName'] = $groupName;
+        $this->queryParameters['GroupName'] = $groupName;
+
+        return $this;
     }
 
-    public function setGroupName($groupName){
-        $this->groupName = $groupName;
-        $this->queryParameters["GroupName"] = $groupName;
-    }
+    /**
+     * @param string $userName
+     * @return $this
+     */
+    public function setUserName($userName)
+    {
+        $this->requestParameters['UserName'] = $userName;
+        $this->queryParameters['UserName'] = $userName;
 
-    public function getUserName(){
-        return $this->userName;
-    }
-
-    public function setUserName($userName){
-        $this->userName = $userName;
-        $this->queryParameters["UserName"] = $userName;
+        return $this;
     }
 }

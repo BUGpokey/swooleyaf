@@ -7,9 +7,9 @@
  */
 namespace Wx\Corp\Crm;
 
-use Constant\ErrorCode;
-use Exception\Wx\WxException;
-use Tool\Tool;
+use SyConstant\ErrorCode;
+use SyException\Wx\WxException;
+use SyTool\Tool;
 use Wx\WxBaseCorp;
 use Wx\WxTraitCorp;
 use Wx\WxUtilBase;
@@ -18,7 +18,8 @@ use Wx\WxUtilBase;
  * 离职成员的外部联系人再分配
  * @package Wx\Corp\Crm
  */
-class ExternalContactTransfer extends WxBaseCorp {
+class ExternalContactTransfer extends WxBaseCorp
+{
     use WxTraitCorp;
 
     /**
@@ -37,21 +38,24 @@ class ExternalContactTransfer extends WxBaseCorp {
      */
     private $takeover_userid = '';
 
-    public function __construct(string $corpId,string $agentTag){
+    public function __construct(string $corpId, string $agentTag)
+    {
         parent::__construct();
         $this->serviceUrl = 'https://qyapi.weixin.qq.com/cgi-bin/crm/transfer_external_contact?access_token=';
         $this->_corpId = $corpId;
         $this->_agentTag = $agentTag;
     }
 
-    private function __clone(){
+    private function __clone()
+    {
     }
 
     /**
      * @param string $externalUserId
-     * @throws \Exception\Wx\WxException
+     * @throws \SyException\Wx\WxException
      */
-    public function setExternalUserId(string $externalUserId){
+    public function setExternalUserId(string $externalUserId)
+    {
         if (ctype_alnum($externalUserId)) {
             $this->reqData['external_userid'] = $externalUserId;
         } else {
@@ -61,9 +65,10 @@ class ExternalContactTransfer extends WxBaseCorp {
 
     /**
      * @param string $handoverUserId
-     * @throws \Exception\Wx\WxException
+     * @throws \SyException\Wx\WxException
      */
-    public function setHandoverUserId(string $handoverUserId){
+    public function setHandoverUserId(string $handoverUserId)
+    {
         if (ctype_alnum($handoverUserId)) {
             $this->reqData['handover_userid'] = $handoverUserId;
         } else {
@@ -73,9 +78,10 @@ class ExternalContactTransfer extends WxBaseCorp {
 
     /**
      * @param string $takeoverUserId
-     * @throws \Exception\Wx\WxException
+     * @throws \SyException\Wx\WxException
      */
-    public function setTakeoverUserId(string $takeoverUserId){
+    public function setTakeoverUserId(string $takeoverUserId)
+    {
         if (ctype_alnum($takeoverUserId)) {
             $this->reqData['takeover_userid'] = $takeoverUserId;
         } else {
@@ -83,14 +89,15 @@ class ExternalContactTransfer extends WxBaseCorp {
         }
     }
 
-    public function getDetail() : array {
-        if(!isset($this->reqData['external_userid'])){
+    public function getDetail() : array
+    {
+        if (!isset($this->reqData['external_userid'])) {
             throw new WxException('外部联系人用户ID不能为空', ErrorCode::WX_PARAM_ERROR);
         }
-        if(!isset($this->reqData['handover_userid'])){
+        if (!isset($this->reqData['handover_userid'])) {
             throw new WxException('离职成员用户ID不能为空', ErrorCode::WX_PARAM_ERROR);
         }
-        if(!isset($this->reqData['takeover_userid'])){
+        if (!isset($this->reqData['takeover_userid'])) {
             throw new WxException('接替成员用户ID不能为空', ErrorCode::WX_PARAM_ERROR);
         }
 
@@ -102,7 +109,7 @@ class ExternalContactTransfer extends WxBaseCorp {
         $this->curlConfigs[CURLOPT_POSTFIELDS] = Tool::jsonEncode($this->reqData, JSON_UNESCAPED_UNICODE);
         $sendRes = WxUtilBase::sendPostReq($this->curlConfigs);
         $sendData = Tool::jsonDecode($sendRes);
-        if($sendData['errcode'] == 0){
+        if ($sendData['errcode'] == 0) {
             $resArr['data'] = $sendData;
         } else {
             $resArr['code'] = ErrorCode::WX_POST_ERROR;

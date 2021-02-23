@@ -9,28 +9,31 @@ namespace DesignPatterns\Facades\PayApply;
 
 use AliPay\AliPayUtilPay;
 use AliPay\Pay\PayQrCode;
-use Constant\ErrorCode;
 use DesignPatterns\Facades\PayApplyFacade;
-use Exception\Common\CheckException;
 use Request\SyRequest;
-use Tool\Tool;
-use Traits\SimpleFacadeTrait;
+use SyConstant\ErrorCode;
+use SyException\Common\CheckException;
+use SyTool\Tool;
+use SyTrait\SimpleFacadeTrait;
 
-class AliCode extends PayApplyFacade {
+class AliCode extends PayApplyFacade
+{
     use SimpleFacadeTrait;
 
-    protected static function checkParams(array $data) : array {
+    protected static function checkParams(array $data) : array
+    {
         return [
             'a01_appid' => Tool::getConfig('project.' . SY_ENV . SY_PROJECT . '.alipay.appid.default'),
             'a01_timeout' => (string)SyRequest::getParams('a01_timeout', ''),
         ];
     }
 
-    protected static function apply(array $data) : array {
+    protected static function apply(array $data) : array
+    {
         $pay = new PayQrCode($data['a01_appid']);
         $pay->setSubject($data['content_result']['pay_name']);
         $pay->setTotalAmount($data['content_result']['pay_money']);
-        $pay->setAttach($data['content_result']['pay_attach']);
+        $pay->setBody($data['content_result']['pay_attach']);
         $pay->setTimeoutExpress($data['a01_timeout']);
         $pay->setOutTradeNo($data['content_result']['pay_sn']);
         $payRes = AliPayUtilPay::sendServiceRequest($pay);
