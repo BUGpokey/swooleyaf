@@ -5,20 +5,20 @@
  * Date: 2020/6/23 0023
  * Time: 15:07
  */
+
 namespace SyMessageHandler\Consumers\Sms;
 
-use AliOpen\Core\DefaultAcsClient;
-use AliOpen\Core\Profile\DefaultProfile;
+use AlibabaCloud\Dysmsapi\SendBatchSms;
 use DesignPatterns\Singletons\SmsConfigSingleton;
 use SyConstant\ErrorCode;
 use SyConstant\ProjectBase;
 use SyMessageHandler\Consumers\Base;
 use SyMessageHandler\IConsumer;
-use SySms\AliYun\SmsSendBatchRequest;
 use SyTool\Tool;
 
 /**
  * Class AliYunBatch
+ *
  * @package SyMessageHandler\Consumers\Sms
  */
 class AliYunBatch extends Base implements IConsumer
@@ -32,24 +32,22 @@ class AliYunBatch extends Base implements IConsumer
     {
     }
 
-    public function handleMsgData(array $msgData) : array
+    public function handleMsgData(array $msgData): array
     {
         $handleRes = [
             'code' => 0,
         ];
 
-        $config = SmsConfigSingleton::getInstance()->getAliYunConfig();
-        $iClientProfile = DefaultProfile::getProfile($config->getRegionId(), $config->getAppKey(), $config->getAppSecret());
-        $client = new DefaultAcsClient($iClientProfile);
-        $smsBatch = new SmsSendBatchRequest();
-        $smsBatch->setPhoneNumberJson(Tool::jsonEncode($msgData['receivers'], JSON_UNESCAPED_UNICODE));
-        $smsBatch->setTemplateCode($msgData['template_id']);
-        $smsBatch->setSignNameJson(Tool::jsonEncode($msgData['template_sign'], JSON_UNESCAPED_UNICODE));
+        $smsBatch = new SendBatchSms();
+        $smsBatch->client(SmsConfigSingleton::getInstance()->getAliYunKey())
+            ->withPhoneNumberJson(Tool::jsonEncode($msgData['receivers'], JSON_UNESCAPED_UNICODE))
+            ->withTemplateCode($msgData['template_id'])
+            ->withSignNameJson(Tool::jsonEncode($msgData['template_sign'], JSON_UNESCAPED_UNICODE));
         if (!empty($msgData['template_params'])) {
-            $smsBatch->setTemplateParamJson(Tool::jsonEncode($msgData['template_params'], JSON_UNESCAPED_UNICODE));
+            $smsBatch->withTemplateParamJson(Tool::jsonEncode($msgData['template_params'], JSON_UNESCAPED_UNICODE));
         }
-        $sendRes = $client->getAcsResponse($smsBatch);
-        if ($sendRes['Code'] == 'OK') {
+        $sendRes = $smsBatch->request()->toArray();
+        if ('OK' == $sendRes['Code']) {
             $handleRes['data'] = $sendRes;
         } else {
             $handleRes['code'] = ErrorCode::SMS_REQ_ALIYUN_ERROR;

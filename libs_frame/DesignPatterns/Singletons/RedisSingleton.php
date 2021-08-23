@@ -5,6 +5,7 @@
  * Date: 2017/3/5 0005
  * Time: 12:32
  */
+
 namespace DesignPatterns\Singletons;
 
 use SyConstant\ErrorCode;
@@ -19,18 +20,20 @@ class RedisSingleton
 
     /**
      * 数据库索引
+     *
      * @var int
      */
     private $dbIndex = 0;
     /**
      * 客户端连接名称
+     *
      * @var string
      */
     private $clientName = '';
     /**
      * @var \Redis
      */
-    private $conn = null;
+    private $conn;
     /**
      * @var int
      */
@@ -43,7 +46,7 @@ class RedisSingleton
 
     public function __destruct()
     {
-        if (!is_null($this->conn)) {
+        if (null !== $this->conn) {
             $this->conn->close();
         }
         self::$instance = null;
@@ -52,9 +55,9 @@ class RedisSingleton
     /**
      * @return \DesignPatterns\Singletons\RedisSingleton
      */
-    public static function getInstance()
+    public static function getInstance(): self
     {
-        if (is_null(self::$instance)) {
+        if (null === self::$instance) {
             self::$instance = new self();
         }
 
@@ -64,14 +67,16 @@ class RedisSingleton
     /**
      * @return \Redis
      */
-    public function getConn()
+    public function getConn(): ?\Redis
     {
         return $this->conn;
     }
 
     /**
      * 切换数据库
+     *
      * @param int $dbIndex 数据库索引
+     *
      * @throws \SyException\Redis\RedisException
      */
     public function changeDb(int $dbIndex)
@@ -92,11 +97,12 @@ class RedisSingleton
 
     /**
      * 获取当前数据库索引
+     *
      * @return int
      */
     public function getCurrentDb()
     {
-        if (strlen($this->clientName) > 0) {
+        if (\strlen($this->clientName) > 0) {
             $clients = $this->conn->client('list');
             foreach ($clients as $eClient) {
                 if ($eClient['name'] == $this->clientName) {
@@ -126,12 +132,12 @@ class RedisSingleton
      */
     public function checkConn()
     {
-        if (is_null($this->conn)) {
+        if (null === $this->conn) {
             $this->init();
         } else {
             try {
                 $res = $this->conn->ping('+PONG');
-                if ($res !== '+PONG') {
+                if ('+PONG' !== $res) {
                     Log::error('redis check fail,check result is ' . $res);
                     $this->init();
                 }
@@ -145,12 +151,50 @@ class RedisSingleton
     public function reConnect()
     {
         $nowTime = time();
-        if (is_null($this->conn)) {
+        if (null === $this->conn) {
             $this->init();
         } elseif ($nowTime - $this->connTime >= 15) {
             $this->conn->close();
             $this->init();
         }
+    }
+
+    /**
+     * 大批量删除key
+     *
+     * @param string $pattern 键名表达式
+     * @param int    $count   每次删除的数量,默认位100
+     *
+     * @return int 删除key的总数
+     */
+    public function delByScan(string $pattern, int $count = 100): int
+    {
+        if ($count <= 0) {
+            return 0;
+        }
+
+        $truePattern = trim($pattern);
+        if (0 == \strlen($truePattern)) {
+            return 0;
+        }
+
+        $it = null;
+        $delNum = 0;
+        do {
+            $keyList = $this->conn->scan($it, $truePattern, $count);
+            if (!\is_array($keyList)) {
+                continue;
+            }
+            if (0 == \count($keyList)) {
+                continue;
+            }
+            foreach ($keyList as $eKey) {
+                $this->conn->del($eKey);
+                ++$delNum;
+            }
+        } while ($it > 0);
+
+        return $delNum;
     }
 
     /**
@@ -163,6 +207,7 @@ class RedisSingleton
 
         $host = Tool::getArrayVal($configs, 'host');
         $port = Tool::getArrayVal($configs, 'port');
+        $user = Tool::getArrayVal($configs, 'user', '');
         $pwd = Tool::getArrayVal($configs, 'password', '');
         $dbIndex = (int)Tool::getArrayVal($configs, 'database_index', 0);
 
@@ -171,7 +216,12 @@ class RedisSingleton
             if (!$redis->connect($host, $port)) {
                 throw new RedisException('Redis连接出错', ErrorCode::REDIS_CONNECTION_ERROR);
             }
-            if ((strlen($pwd) > 0) && (!$redis->auth($pwd))) {
+            if (version_compare(SY_VERSION_REDIS, '6.0.0', '<')) {
+                $authRes = $redis->auth($pwd);
+            } else {
+                $authRes = $redis->auth(['user' => $user, 'pass' => $pwd]);
+            }
+            if (!$authRes) {
                 throw new RedisException('Redis鉴权失败', ErrorCode::REDIS_AUTH_ERROR);
             }
             if (!$redis->select($dbIndex)) {

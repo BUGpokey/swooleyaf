@@ -1,4 +1,5 @@
 <?php
+
 namespace Entities\SyBase;
 
 use DB\Entities\MysqlEntity;
@@ -6,7 +7,6 @@ use DB\Entities\MysqlEntity;
 class LogModuleEntity extends MysqlEntity
 {
     /**
-     *
      * @var int
      */
     public $id;
@@ -42,12 +42,13 @@ class LogModuleEntity extends MysqlEntity
     /**
      * 创建毫秒级时间戳
      *
-     * @var double
+     * @var float
      */
     public $created = 0.00;
-    public function __construct(string $dbName = '')
+
+    public function __construct(string $dbTag = '')
     {
-        $this->_dbName = isset($dbName[0]) ? $dbName : 'sy_base';
-        parent::__construct($this->_dbName, 'log_module', 'id');
+        $trueTag = isset($dbTag[0]) ? $dbTag : 'main';
+        parent::__construct($trueTag, 'log_module', 'id');
     }
 }

@@ -5,29 +5,33 @@
  * Date: 2019/6/18 0018
  * Time: 16:42
  */
+
 namespace DesignPatterns\Singletons;
 
 use SyIot\ConfigAliYun;
 use SyIot\ConfigBaiDu;
 use SyIot\ConfigTencent;
 use SyTool\Tool;
+use SyTrait\Configs\AliCloudConfigTrait;
 use SyTrait\SingletonTrait;
 
 class IotConfigSingleton
 {
     use SingletonTrait;
+    use AliCloudConfigTrait;
+
     /**
-     * @var \SyIot\ConfigAliYun
+     * @var string
      */
-    private $aliYunConfig = null;
+    private $aliYunKey = '';
     /**
      * @var \SyIot\ConfigBaiDu
      */
-    private $baiDuConfig = null;
+    private $baiDuConfig;
     /**
      * @var \SyIot\ConfigTencent
      */
-    private $tencentConfig = null;
+    private $tencentConfig;
 
     private function __construct()
     {
@@ -36,9 +40,9 @@ class IotConfigSingleton
     /**
      * @return \DesignPatterns\Singletons\IotConfigSingleton
      */
-    public static function getInstance()
+    public static function getInstance(): self
     {
-        if (is_null(self::$instance)) {
+        if (null === self::$instance) {
             self::$instance = new self();
         }
 
@@ -46,28 +50,40 @@ class IotConfigSingleton
     }
 
     /**
-     * @return \SyIot\ConfigAliYun
+     * @return string 配置key
+     *
+     * @throws \SyException\Cloud\AliException
+     * @throws \AlibabaCloud\Client\Exception\ClientException
      */
-    public function getAliYunConfig()
+    public function getAliYunKey(): string
     {
-        if (is_null($this->aliYunConfig)) {
+        if ('' == $this->aliYunKey) {
             $configs = Tool::getConfig('iot.' . SY_ENV . SY_PROJECT);
-            $aliYunConfig = new ConfigAliYun();
-            $aliYunConfig->setRegionId((string)Tool::getArrayVal($configs, 'aliyun.region.id', '', true));
-            $aliYunConfig->setAccessKey((string)Tool::getArrayVal($configs, 'aliyun.access.key', '', true));
-            $aliYunConfig->setAccessSecret((string)Tool::getArrayVal($configs, 'aliyun.access.secret', '', true));
-            $this->aliYunConfig = $aliYunConfig;
+            $config = new ConfigAliYun();
+            $config->setRegionId((string)Tool::getArrayVal($configs, 'aliyun.region.id', '', true));
+            $config->setAccessKey((string)Tool::getArrayVal($configs, 'aliyun.access.key', '', true));
+            $config->setAccessSecret((string)Tool::getArrayVal($configs, 'aliyun.access.secret', '', true));
+            $this->setAliClient($config);
+            $this->aliYunKey = $config->getAccessKey();
         }
 
-        return $this->aliYunConfig;
+        return $this->aliYunKey;
+    }
+
+    public function removeAliYunKey()
+    {
+        if (\strlen($this->aliYunKey) > 0) {
+            $this->removeAliClient($this->aliYunKey);
+            $this->aliYunKey = '';
+        }
     }
 
     /**
-     * @return \SyIot\ConfigBaiDu
+     * @throws \SyException\Iot\BaiDuIotException
      */
-    public function getBaiDuConfig()
+    public function getBaiDuConfig(): ConfigBaiDu
     {
-        if (is_null($this->baiDuConfig)) {
+        if (null === $this->baiDuConfig) {
             $configs = Tool::getConfig('iot.' . SY_ENV . SY_PROJECT);
             $baiDuConfig = new ConfigBaiDu();
             $baiDuConfig->setAccessKey((string)Tool::getArrayVal($configs, 'baidu.access.key', '', true));
@@ -79,11 +95,11 @@ class IotConfigSingleton
     }
 
     /**
-     * @return \SyIot\ConfigTencent
+     * @throws \SyException\Cloud\TencentException
      */
-    public function getTencentConfig()
+    public function getTencentConfig(): ConfigTencent
     {
-        if (is_null($this->tencentConfig)) {
+        if (null === $this->tencentConfig) {
             $configs = Tool::getConfig('iot.' . SY_ENV . SY_PROJECT);
             $tencentConfig = new ConfigTencent();
             $tencentConfig->setRegionId((string)Tool::getArrayVal($configs, 'tencent.region.id', '', true));

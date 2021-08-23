@@ -1,5 +1,5 @@
 # 介绍
-- AliOpen: 阿里开放平台接口
+- AlibabaCloud: 阿里开放平台接口
 - AliPay: 支付宝接口
 - CodeSniffer: 代码规范检查
 - DB: 数据库类库
@@ -26,6 +26,8 @@
 - SyConstant: 常量
 - SyCredit: 积分相关
 - SyCurrency: 货币处理
+- SyDouYin: 抖音相关
+- SyDriver: 驱动库相关
 - SyError: 框架错误处理
 - SyEventTask: 框架定时任务事件
 - SyException: 框架自定义异常

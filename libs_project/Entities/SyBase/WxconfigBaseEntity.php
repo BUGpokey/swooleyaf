@@ -1,4 +1,5 @@
 <?php
+
 namespace Entities\SyBase;
 
 use DB\Entities\MysqlEntity;
@@ -6,7 +7,6 @@ use DB\Entities\MysqlEntity;
 class WxconfigBaseEntity extends MysqlEntity
 {
     /**
-     *
      * @var int
      */
     public $id;
@@ -116,9 +116,9 @@ class WxconfigBaseEntity extends MysqlEntity
      */
     public $updated = 0;
 
-    public function __construct(string $dbName = '')
+    public function __construct(string $dbTag = '')
     {
-        $this->_dbName = isset($dbName[0]) ? $dbName : 'sy_base';
-        parent::__construct($this->_dbName, 'wxconfig_base', 'id');
+        $trueTag = isset($dbTag[0]) ? $dbTag : 'main';
+        parent::__construct($trueTag, 'wxconfig_base', 'id');
     }
 }

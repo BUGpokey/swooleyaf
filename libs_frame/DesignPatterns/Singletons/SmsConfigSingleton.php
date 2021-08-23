@@ -5,33 +5,39 @@
  * Date: 2018/6/29 0029
  * Time: 17:16
  */
+
 namespace DesignPatterns\Singletons;
 
 use SySms\ConfigAliYun;
 use SySms\ConfigDaYu;
 use SySms\ConfigYun253;
 use SyTool\Tool;
+use SyTrait\Configs\AliCloudConfigTrait;
 use SyTrait\SingletonTrait;
 
 class SmsConfigSingleton
 {
     use SingletonTrait;
+    use AliCloudConfigTrait;
 
     /**
-     * 阿里云配置
-     * @var \SySms\ConfigAliYun
+     * 阿里云配置Key
+     *
+     * @var string
      */
-    private $aliYunConfig = null;
+    private $aliYunKey = '';
     /**
      * 大鱼配置
+     *
      * @var \SySms\ConfigDaYu
      */
-    private $daYuConfig = null;
+    private $daYuConfig;
     /**
      * 253云配置
+     *
      * @var \SySms\ConfigYun253
      */
-    private $yun253Config = null;
+    private $yun253Config;
 
     private function __construct()
     {
@@ -40,9 +46,9 @@ class SmsConfigSingleton
     /**
      * @return \DesignPatterns\Singletons\SmsConfigSingleton
      */
-    public static function getInstance()
+    public static function getInstance(): self
     {
-        if (is_null(self::$instance)) {
+        if (null === self::$instance) {
             self::$instance = new self();
         }
 
@@ -50,28 +56,40 @@ class SmsConfigSingleton
     }
 
     /**
-     * @return \SySms\ConfigAliYun
+     * @return string 配置key
+     *
+     * @throws \SyException\Cloud\AliException
+     * @throws \AlibabaCloud\Client\Exception\ClientException
      */
-    public function getAliYunConfig()
+    public function getAliYunKey(): string
     {
-        if (is_null($this->aliYunConfig)) {
+        if ('' == $this->aliYunKey) {
             $configs = Tool::getConfig('sms.' . SY_ENV . SY_PROJECT);
-            $aliYunConfig = new ConfigAliYun();
-            $aliYunConfig->setRegionId((string)Tool::getArrayVal($configs, 'aliyun.region.id', '', true));
-            $aliYunConfig->setAppKey((string)Tool::getArrayVal($configs, 'aliyun.app.key', '', true));
-            $aliYunConfig->setAppSecret((string)Tool::getArrayVal($configs, 'aliyun.app.secret', '', true));
-            $this->aliYunConfig = $aliYunConfig;
+            $config = new ConfigAliYun();
+            $config->setRegionId((string)Tool::getArrayVal($configs, 'aliyun.region.id', '', true));
+            $config->setAccessKey((string)Tool::getArrayVal($configs, 'aliyun.app.key', '', true));
+            $config->setAccessSecret((string)Tool::getArrayVal($configs, 'aliyun.app.secret', '', true));
+            $this->setAliClient($config);
+            $this->aliYunKey = $config->getAccessKey();
         }
 
-        return $this->aliYunConfig;
+        return $this->aliYunKey;
+    }
+
+    public function removeAliYunKey()
+    {
+        if (\strlen($this->aliYunKey) > 0) {
+            $this->removeAliClient($this->aliYunKey);
+            $this->aliYunKey = '';
+        }
     }
 
     /**
-     * @return \SySms\ConfigDaYu
+     * @throws \SyException\Sms\DaYuException
      */
-    public function getDaYuConfig()
+    public function getDaYuConfig(): ConfigDaYu
     {
-        if (is_null($this->daYuConfig)) {
+        if (null === $this->daYuConfig) {
             $configs = Tool::getConfig('sms.' . SY_ENV . SY_PROJECT);
             $daYuConfig = new ConfigDaYu();
             $daYuConfig->setAppKey((string)Tool::getArrayVal($configs, 'dayu.app.key', '', true));
@@ -83,11 +101,11 @@ class SmsConfigSingleton
     }
 
     /**
-     * @return \SySms\ConfigYun253
+     * @throws \SyException\Sms\Yun253Exception
      */
-    public function getYun253Config()
+    public function getYun253Config(): ConfigYun253
     {
-        if (is_null($this->yun253Config)) {
+        if (null === $this->yun253Config) {
             $configs = Tool::getConfig('sms.' . SY_ENV . SY_PROJECT);
             $yun253Config = new ConfigYun253();
             $yun253Config->setAppKey((string)Tool::getArrayVal($configs, 'yun253.app.key', '', true));

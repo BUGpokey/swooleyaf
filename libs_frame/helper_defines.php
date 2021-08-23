@@ -8,7 +8,7 @@
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 date_default_timezone_set('PRC');
-define('SY_VERSION', '7.2.0');
+const SY_VERSION = '7.2.0';
 $syLogPath = ini_get('seaslog.default_basepath');
 if ('/' == substr($syLogPath, -1)) {
     define('SY_LOG_PATH', $syLogPath . 'sy' . SY_PROJECT);
@@ -48,7 +48,7 @@ if (SY_EXPIRE_SESSION_JWT < 3600) {
     exit('jwt会话有效时间必须不小于3600秒' . PHP_EOL);
 }
 //jwt会话刷新标识有效时间,单位为秒
-define('SY_EXPIRE_SESSION_JWT_RID', (SY_EXPIRE_SESSION_JWT + 180));
+const SY_EXPIRE_SESSION_JWT_RID = SY_EXPIRE_SESSION_JWT + 180;
 
 //淘宝环境链接
 if (!defined('SY_TAOBAO_ENV')) {
@@ -94,4 +94,9 @@ if (!defined('SY_HTTP_RSP_CODE_ERROR')) {
 //贝宝支付环境类型 product:正式环境 sandbox:沙箱环境
 if (!defined('SY_PAY_PAYPAL_ENV')) {
     define('SY_PAY_PAYPAL_ENV', 'product');
+}
+
+//redis服务版本号
+if (!defined('SY_VERSION_REDIS')) {
+    define('SY_VERSION_REDIS', '6.2.0');
 }

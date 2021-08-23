@@ -5,16 +5,15 @@
  * Date: 2020/6/23 0023
  * Time: 15:07
  */
+
 namespace SyMessageHandler\Consumers\Voice;
 
-use AliOpen\Core\DefaultAcsClient;
-use AliOpen\Core\Profile\DefaultProfile;
+use AlibabaCloud\Dyvmsapi\SingleCallByVoice;
 use DesignPatterns\Singletons\VmsConfigSingleton;
 use SyConstant\ErrorCode;
 use SyConstant\ProjectBase;
 use SyMessageHandler\Consumers\Base;
 use SyMessageHandler\IConsumer;
-use SyVms\AliYun\CallByVoiceSingleRequest;
 
 /**
  * Class AliYunFile
@@ -32,25 +31,23 @@ class AliYunFile extends Base implements IConsumer
     {
     }
 
-    public function handleMsgData(array $msgData) : array
+    public function handleMsgData(array $msgData): array
     {
         $handleRes = [
             'code' => 0,
         ];
 
-        $config = VmsConfigSingleton::getInstance()->getAliYunConfig();
-        $iClientProfile = DefaultProfile::getProfile($config->getRegionId(), $config->getAccessKey(), $config->getAccessSecret());
-        $client = new DefaultAcsClient($iClientProfile);
-        $callVoice = new CallByVoiceSingleRequest();
-        $callVoice->setCalledNumber($msgData['receivers'][0]);
-        $callVoice->setCalledShowNumber($msgData['ext_data']['show_number']);
-        $callVoice->setVoiceCode($msgData['ext_data']['voice_id']);
-        $callVoice->setPlayTimes($msgData['ext_data']['play_times']);
-        $callVoice->setVolume($msgData['ext_data']['volume']);
-        $callVoice->setSpeed($msgData['ext_data']['speed']);
-        $callVoice->setOutId($msgData['ext_data']['out_id']);
-        $sendRes = $client->getAcsResponse($callVoice);
-        if ($sendRes['Code'] == 'OK') {
+        $callVoice = new SingleCallByVoice();
+        $callVoice->client(VmsConfigSingleton::getInstance()->getAliYunKey())
+            ->withCalledNumber($msgData['receivers'][0])
+            ->withCalledShowNumber($msgData['ext_data']['show_number'])
+            ->withVoiceCode($msgData['ext_data']['voice_id'])
+            ->withPlayTimes($msgData['ext_data']['play_times'])
+            ->withVolume($msgData['ext_data']['volume'])
+            ->withSpeed($msgData['ext_data']['speed'])
+            ->withOutId($msgData['ext_data']['out_id']);
+        $sendRes = $callVoice->request()->toArray();
+        if ('OK' == $sendRes['Code']) {
             $handleRes['data'] = $sendRes;
         } else {
             $handleRes['code'] = ErrorCode::VMS_REQ_ALIYUN_ERROR;

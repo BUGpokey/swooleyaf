@@ -5,9 +5,11 @@
  * Date: 2018/6/29 0029
  * Time: 17:16
  */
+
 namespace DesignPatterns\Singletons;
 
 use SyTool\Tool;
+use SyTrait\Configs\AliCloudConfigTrait;
 use SyTrait\SingletonTrait;
 use SyVms\ConfigAliYun;
 use SyVms\ConfigChiVox;
@@ -17,13 +19,14 @@ use SyVms\ConfigXunFei;
 class VmsConfigSingleton
 {
     use SingletonTrait;
+    use AliCloudConfigTrait;
 
     /**
-     * 阿里云配置
+     * 阿里云配置Key
      *
-     * @var \SyVms\ConfigAliYun
+     * @var string
      */
-    private $aliYunConfig;
+    private $aliYunKey = '';
     /**
      * 腾讯云配置
      *
@@ -50,9 +53,9 @@ class VmsConfigSingleton
     /**
      * @return \DesignPatterns\Singletons\VmsConfigSingleton
      */
-    public static function getInstance()
+    public static function getInstance(): self
     {
-        if (is_null(self::$instance)) {
+        if (null === self::$instance) {
             self::$instance = new self();
         }
 
@@ -60,32 +63,40 @@ class VmsConfigSingleton
     }
 
     /**
-     * @return \SyVms\ConfigAliYun
+     * @return string 配置key
      *
      * @throws \SyException\Cloud\AliException
+     * @throws \AlibabaCloud\Client\Exception\ClientException
      */
-    public function getAliYunConfig()
+    public function getAliYunKey(): string
     {
-        if (is_null($this->aliYunConfig)) {
+        if ('' == $this->aliYunKey) {
             $configs = Tool::getConfig('vms.' . SY_ENV . SY_PROJECT);
-            $aliYunConfig = new ConfigAliYun();
-            $aliYunConfig->setRegionId((string)Tool::getArrayVal($configs, 'aliyun.region.id', '', true));
-            $aliYunConfig->setAccessKey((string)Tool::getArrayVal($configs, 'aliyun.access.key', '', true));
-            $aliYunConfig->setAccessSecret((string)Tool::getArrayVal($configs, 'aliyun.access.secret', '', true));
-            $this->aliYunConfig = $aliYunConfig;
+            $config = new ConfigAliYun();
+            $config->setRegionId((string)Tool::getArrayVal($configs, 'aliyun.region.id', '', true));
+            $config->setAccessKey((string)Tool::getArrayVal($configs, 'aliyun.access.key', '', true));
+            $config->setAccessSecret((string)Tool::getArrayVal($configs, 'aliyun.access.secret', '', true));
+            $this->setAliClient($config);
+            $this->aliYunKey = $config->getAccessKey();
         }
 
-        return $this->aliYunConfig;
+        return $this->aliYunKey;
+    }
+
+    public function removeAliYunKey()
+    {
+        if (\strlen($this->aliYunKey) > 0) {
+            $this->removeAliClient($this->aliYunKey);
+            $this->aliYunKey = '';
+        }
     }
 
     /**
-     * @return \SyVms\ConfigQCloud
-     *
      * @throws \SyException\Vms\QCloudException
      */
-    public function getQCloudConfig()
+    public function getQCloudConfig(): ConfigQCloud
     {
-        if (is_null($this->qCloudConfig)) {
+        if (null === $this->qCloudConfig) {
             $configs = Tool::getConfig('vms.' . SY_ENV . SY_PROJECT);
             $qCloudConfig = new ConfigQCloud();
             $qCloudConfig->setAppId((string)Tool::getArrayVal($configs, 'qcloud.app.id', '', true));
@@ -97,13 +108,11 @@ class VmsConfigSingleton
     }
 
     /**
-     * @return \SyVms\ConfigXunFei
-     *
      * @throws \SyException\Vms\XunFeiException
      */
-    public function getXunFeiConfig()
+    public function getXunFeiConfig(): ConfigXunFei
     {
-        if (is_null($this->xunFeiConfig)) {
+        if (null === $this->xunFeiConfig) {
             $configs = Tool::getConfig('vms.' . SY_ENV . SY_PROJECT);
             $xunFeiConfig = new ConfigXunFei();
             $xunFeiConfig->setAppId((string)Tool::getArrayVal($configs, 'xunfei.app.id', '', true));
@@ -116,13 +125,11 @@ class VmsConfigSingleton
     }
 
     /**
-     * @return \SyVms\ConfigChiVox
-     *
      * @throws \SyException\Vms\ChiVoxException
      */
-    public function getChiVoxConfig()
+    public function getChiVoxConfig(): ConfigChiVox
     {
-        if (is_null($this->xunFeiConfig)) {
+        if (null === $this->xunFeiConfig) {
             $configs = Tool::getConfig('vms.' . SY_ENV . SY_PROJECT);
             $chiVoxConfig = new ConfigChiVox();
             $chiVoxConfig->setAppKey((string)Tool::getArrayVal($configs, 'chivox.app.key', '', true));

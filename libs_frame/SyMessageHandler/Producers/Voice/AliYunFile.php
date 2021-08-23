@@ -5,6 +5,7 @@
  * Date: 2020/6/23 0023
  * Time: 15:07
  */
+
 namespace SyMessageHandler\Producers\Voice;
 
 use DesignPatterns\Singletons\VmsConfigSingleton;
@@ -22,7 +23,7 @@ class AliYunFile extends BaseVoiceAliYun implements IProducer
     public function __construct()
     {
         parent::__construct(ProjectBase::MESSAGE_HANDLER_TYPE_VOICE_ALIYUN_FILE);
-        $this->msgData['app_id'] = VmsConfigSingleton::getInstance()->getAliYunConfig()->getAccessKey();
+        $this->msgData['app_id'] = VmsConfigSingleton::getInstance()->getAliYunKey();
         $this->checkMap = [
             1 => 'checkSendTime',
             2 => 'checkCalledNumber',
@@ -39,12 +40,13 @@ class AliYunFile extends BaseVoiceAliYun implements IProducer
     {
     }
 
-    private function checkVoiceId(array $data) : string
+    private function checkVoiceId(array $data): string
     {
         $voiceId = $data['voice_id'] ?? '';
-        if (!is_string($voiceId)) {
+        if (!\is_string($voiceId)) {
             return '语音ID不合法';
-        } elseif (strlen($voiceId) == 0) {
+        }
+        if (0 == \strlen($voiceId)) {
             return '语音ID不能为空';
         }
 

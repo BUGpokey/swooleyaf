@@ -5,6 +5,7 @@
  * Date: 2020/9/2 0002
  * Time: 9:28
  */
+
 namespace SyLive;
 
 use SyCloud\Ali\ConfigTrait;
@@ -19,10 +20,6 @@ class ConfigAliYun
     use ConfigTrait;
 
     public function __construct()
-    {
-    }
-
-    private function __clone()
     {
     }
 }

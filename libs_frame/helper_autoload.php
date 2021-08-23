@@ -11,11 +11,13 @@ final class SyFrameLoader
     private $preHandleMap = [];
     /**
      * swift mailer未初始化标识 true：未初始化 false：已初始化
+     *
      * @var bool
      */
     private $swiftMailerStatus = true;
     /**
      * smarty未初始化标识 true：未初始化 false：已初始化
+     *
      * @var bool
      */
     private $smartyStatus = true;
@@ -25,24 +27,34 @@ final class SyFrameLoader
     private $smartyRootClasses = [];
     /**
      * fpdf未初始化标识 true：未初始化 false：已初始化
+     *
      * @var bool
      */
     private $fpdfStatus = true;
     /**
      * excel未初始化标识 true：未初始化 false：已初始化
+     *
      * @var bool
      */
     private $excelStatus = true;
     /**
-     * aliOpenCore未初始化标识 true：未初始化 false：已初始化
-     * @var bool
-     */
-    private $aliOpenCoreStatus = true;
-    /**
      * pinyin未初始化标识 true：未初始化 false：已初始化
+     *
      * @var bool
      */
     private $pinYinStatus = true;
+    /**
+     * GuzzleHttp未初始化标识 true：未初始化 false：已初始化
+     *
+     * @var bool
+     */
+    private $guzzleHttpStatus = true;
+    /**
+     * AlibabaCloud未初始化标识 true：未初始化 false：已初始化
+     *
+     * @var bool
+     */
+    private $alibabaCloudStatus = true;
 
     private function __construct()
     {
@@ -54,8 +66,10 @@ final class SyFrameLoader
             'Smarty' => 'preHandleSmarty',
             'SmartyBC' => 'preHandleSmarty',
             'PHPExcel' => 'preHandlePhpExcel',
-            'AliOpen' => 'preHandleAliOpen',
             'PinYin' => 'preHandlePinYin',
+            'ClickHouseDB' => 'preHandleClickHouse',
+            'GuzzleHttp' => 'preHandleGuzzleHttp',
+            'AlibabaCloud' => 'preHandleAlibabaCloud',
         ];
 
         $this->smartyRootClasses = [
@@ -73,7 +87,7 @@ final class SyFrameLoader
      */
     public static function getInstance()
     {
-        if (is_null(self::$instance)) {
+        if (null === self::$instance) {
             self::$instance = new self();
         }
 
@@ -82,28 +96,29 @@ final class SyFrameLoader
 
     /**
      * 加载文件
+     *
      * @param string $className 类名
-     * @return bool
      */
-    public function loadFile(string $className) : bool
+    public function loadFile(string $className): bool
     {
         $nameArr = explode('/', $className);
         $funcName = $this->preHandleMap[$nameArr[0]] ?? null;
-        if (is_null($funcName)) {
+        if (null === $funcName) {
             $nameArr = explode('_', $className);
             $funcName = $this->preHandleMap[$nameArr[0]] ?? null;
         }
 
-        $file = is_null($funcName) ? SY_FRAME_LIBS_ROOT . $className . '.php' : $this->$funcName($className);
+        $file = null === $funcName ? SY_FRAME_LIBS_ROOT . $className . '.php' : $this->{$funcName}($className);
         if (is_file($file) && is_readable($file)) {
             require_once $file;
+
             return true;
         }
 
         return false;
     }
 
-    private function preHandleFPdf(string $className) : string
+    private function preHandleFPdf(string $className): string
     {
         if ($this->fpdfStatus) {
             define('FPDF_VERSION', '1.81');
@@ -113,12 +128,12 @@ final class SyFrameLoader
         return SY_FRAME_LIBS_ROOT . $className . '.php';
     }
 
-    private function preHandleTwig(string $className) : string
+    private function preHandleTwig(string $className): string
     {
         return SY_FRAME_LIBS_ROOT . 'SyTemplate/' . $className . '.php';
     }
 
-    private function preHandleSwift(string $className) : string
+    private function preHandleSwift(string $className): string
     {
         if ($this->swiftMailerStatus) { //加载swift mailer依赖文件
             $this->swiftMailerStatus = false;
@@ -132,12 +147,12 @@ final class SyFrameLoader
         return SY_FRAME_LIBS_ROOT . 'Mailer/' . str_replace('_', '/', $className) . '.php';
     }
 
-    private function preHandleResque(string $className) : string
+    private function preHandleResque(string $className): string
     {
         return SY_FRAME_LIBS_ROOT . 'Queue/' . str_replace('_', '/', $className) . '.php';
     }
 
-    private function preHandleSmarty(string $className) : string
+    private function preHandleSmarty(string $className): string
     {
         if ($this->smartyStatus) {
             $smartyLibDir = SY_FRAME_LIBS_ROOT . 'SyTemplate/Smarty/libs/';
@@ -151,12 +166,12 @@ final class SyFrameLoader
         $lowerClassName = strtolower($className);
         if (isset($this->smartyRootClasses[$lowerClassName])) {
             return SMARTY_DIR . $this->smartyRootClasses[$lowerClassName];
-        } else {
-            return SMARTY_SYSPLUGINS_DIR . $lowerClassName . '.php';
         }
+
+        return SMARTY_SYSPLUGINS_DIR . $lowerClassName . '.php';
     }
 
-    private function preHandlePhpExcel(string $className) : string
+    private function preHandlePhpExcel(string $className): string
     {
         if ($this->excelStatus) {
             define('PHPEXCEL_ROOT', SY_FRAME_LIBS_ROOT . 'PhpOffice/');
@@ -189,35 +204,7 @@ final class SyFrameLoader
         return SY_FRAME_LIBS_ROOT . 'PhpOffice/' . str_replace('_', '/', $className) . '.php';
     }
 
-    private function preHandleAliOpen(string $className) : string
-    {
-        if ($this->aliOpenCoreStatus) {
-            define('ALIOPEN_STS_PRODUCT_NAME', 'Sts');
-            define('ALIOPEN_STS_DOMAIN', 'sts.aliyuncs.com');
-            define('ALIOPEN_STS_VERSION', '2015-04-01');
-            define('ALIOPEN_STS_ACTION', 'AssumeRole');
-            define('ALIOPEN_STS_REGION', 'cn-hangzhou');
-            define('ALIOPEN_ROLE_ARN_EXPIRE_TIME', 3600);
-            define('ALIOPEN_ECS_ROLE_EXPIRE_TIME', 3600);
-            define('ALIOPEN_AUTH_TYPE_RAM_AK', 'RAM_AK');
-            define('ALIOPEN_AUTH_TYPE_RAM_ROLE_ARN', 'RAM_ROLE_ARN');
-            define('ALIOPEN_AUTH_TYPE_ECS_RAM_ROLE', 'ECS_RAM_ROLE');
-            define('ALIOPEN_AUTH_TYPE_BEARER_TOKEN', 'BEARER_TOKEN');
-            define('ALIOPEN_LOCATION_SERVICE_PRODUCT_NAME', 'Location');
-            define('ALIOPEN_LOCATION_SERVICE_DOMAIN', 'location.aliyuncs.com');
-            define('ALIOPEN_LOCATION_SERVICE_VERSION', '2015-06-12');
-            define('ALIOPEN_LOCATION_SERVICE_DESCRIBE_ENDPOINT_ACTION', 'DescribeEndpoints');
-            define('ALIOPEN_LOCATION_SERVICE_REGION', 'cn-hangzhou');
-            define('ALIOPEN_CACHE_EXPIRE_TIME', 3600);
-            $this->aliOpenCoreStatus = false;
-
-            require_once SY_FRAME_LIBS_ROOT . 'AliOpen/Core/Regions/init_endpoint.php';
-        }
-
-        return SY_FRAME_LIBS_ROOT . $className . '.php';
-    }
-
-    private function preHandlePinYin(string $className) : string
+    private function preHandlePinYin(string $className): string
     {
         if ($this->pinYinStatus) {
             define('PINYIN_DEFAULT', 4096);
@@ -233,6 +220,32 @@ final class SyFrameLoader
         }
 
         return SY_FRAME_LIBS_ROOT . 'SyTranslation/' . $className . '.php';
+    }
+
+    private function preHandleClickHouse(string $className): string
+    {
+        return SY_FRAME_LIBS_ROOT . 'SyDriver/' . $className . '.php';
+    }
+
+    private function preHandleGuzzleHttp(string $className): string
+    {
+        if ($this->guzzleHttpStatus) {
+            require_once SY_FRAME_LIBS_ROOT . 'GuzzleHttp/functions.php';
+            require_once SY_FRAME_LIBS_ROOT . 'GuzzleHttp/Promise/functions.php';
+            $this->guzzleHttpStatus = false;
+        }
+
+        return SY_FRAME_LIBS_ROOT . $className . '.php';
+    }
+
+    private function preHandleAlibabaCloud(string $className): string
+    {
+        if ($this->alibabaCloudStatus) {
+            require_once SY_FRAME_LIBS_ROOT . 'AlibabaCloud/Client/Functions.php';
+            $this->alibabaCloudStatus = false;
+        }
+
+        return SY_FRAME_LIBS_ROOT . $className . '.php';
     }
 }
 
@@ -252,7 +265,7 @@ final class SyProjectLoader
      */
     public static function getInstance()
     {
-        if (is_null(self::$instance)) {
+        if (null === self::$instance) {
             self::$instance = new self();
         }
 
@@ -261,14 +274,15 @@ final class SyProjectLoader
 
     /**
      * 加载文件
+     *
      * @param string $className 类名
-     * @return bool
      */
-    public function loadFile(string $className) : bool
+    public function loadFile(string $className): bool
     {
         $file = SY_PROJECT_LIBS_ROOT . $className . '.php';
         if (is_file($file) && is_readable($file)) {
             require_once $file;
+
             return true;
         }
 
@@ -278,7 +292,9 @@ final class SyProjectLoader
 
 /**
  * 基础公共类自动加载
+ *
  * @param string $className 类全名
+ *
  * @return bool
  */
 function syFrameAutoload(string $className)
@@ -290,12 +306,15 @@ function syFrameAutoload(string $className)
         '/',
         '',
     ], $className);
+
     return SyFrameLoader::getInstance()->loadFile($trueName);
 }
 
 /**
  * 项目公共类自动加载
+ *
  * @param string $className 类全名
+ *
  * @return bool
  */
 function syProjectAutoload(string $className)
@@ -307,6 +326,7 @@ function syProjectAutoload(string $className)
         '/',
         '',
     ], $className);
+
     return SyProjectLoader::getInstance()->loadFile($trueName);
 }
 
@@ -314,3 +334,72 @@ spl_autoload_register('syFrameAutoload');
 spl_autoload_register('syProjectAutoload');
 
 require_once __DIR__ . '/helper_defines.php';
+
+if (!function_exists('trigger_deprecation')) {
+    /**
+     * Triggers a silenced deprecation notice.
+     *
+     * @param string $package The name of the Composer package that is triggering the deprecation
+     * @param string $version The version of the package that introduced the deprecation
+     * @param string $message The message of the deprecation
+     * @param mixed  ...$args Values to insert in the message using printf() formatting
+     *
+     * @author Nicolas Grekas <p@tchwork.com>
+     */
+    function trigger_deprecation(string $package, string $version, string $message, ...$args): void
+    {
+        $msg = '';
+        if ($package || $version) {
+            $msg = 'Since ' . $package . ' ' . $version . ': ';
+        }
+        if ($args) {
+            $msg .= vsprintf($message, $args);
+        } else {
+            $msg .= $message;
+        }
+        @trigger_error($msg, E_USER_DEPRECATED);
+    }
+}
+
+if (!function_exists('getallheaders')) {
+    /**
+     * Get all HTTP header key/values as an associative array for the current request.
+     *
+     * @return array[string] The HTTP header key/value pairs
+     */
+    function getallheaders(): array
+    {
+        $headers = [];
+
+        $copy_server = [
+            'CONTENT_TYPE' => 'Content-Type',
+            'CONTENT_LENGTH' => 'Content-Length',
+            'CONTENT_MD5' => 'Content-Md5',
+        ];
+
+        foreach ($_SERVER as $key => $value) {
+            if ('HTTP_' === substr($key, 0, 5)) {
+                $key = substr($key, 5);
+                if (!isset($copy_server[$key]) || !isset($_SERVER[$key])) {
+                    $key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
+                    $headers[$key] = $value;
+                }
+            } elseif (isset($copy_server[$key])) {
+                $headers[$copy_server[$key]] = $value;
+            }
+        }
+
+        if (!isset($headers['Authorization'])) {
+            if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+                $headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+            } elseif (isset($_SERVER['PHP_AUTH_USER'])) {
+                $basic_pass = $_SERVER['PHP_AUTH_PW'] ?? '';
+                $headers['Authorization'] = 'Basic ' . base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $basic_pass);
+            } elseif (isset($_SERVER['PHP_AUTH_DIGEST'])) {
+                $headers['Authorization'] = $_SERVER['PHP_AUTH_DIGEST'];
+            }
+        }
+
+        return $headers;
+    }
+}

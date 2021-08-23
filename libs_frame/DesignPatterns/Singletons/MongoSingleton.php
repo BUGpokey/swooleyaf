@@ -5,13 +5,14 @@
  * Date: 2017/5/27 0027
  * Time: 12:13
  */
+
 namespace DesignPatterns\Singletons;
 
+use MongoDB\Driver\Command;
+use MongoDB\Driver\Manager;
 use SyConstant\ErrorCode;
 use SyException\Mongo\MongoException;
 use SyLog\Log;
-use MongoDB\Driver\Command;
-use MongoDB\Driver\Manager;
 use SyTool\Tool;
 use SyTrait\SingletonTrait;
 
@@ -21,23 +22,24 @@ class MongoSingleton
 
     /**
      * 数据库名称
+     *
      * @var string
      */
     private $dbName = '';
     /**
      * @var \MongoDB\Driver\Manager
      */
-    private $conn = null;
+    private $conn;
 
     private function __construct()
     {
-        $configs = Tool::getConfig('mongo.' . SY_ENV . SY_PROJECT);
+        $configs = Tool::getConfig('db.' . SY_ENV . SY_PROJECT . '.mongo');
         $hostStr = '';
         foreach ($configs['hosts'] as $key => $host) {
             $port = isset($configs['ports'][$key]) ? $configs['ports'][$key] : 27017;
             $hostStr .= ',' . $host . ':' . $port;
         }
-        if (strlen($hostStr) == 0) {
+        if (0 == \strlen($hostStr)) {
             throw new MongoException('连接域名不正确', ErrorCode::MONGO_CONNECTION_ERROR);
         }
 
@@ -63,31 +65,31 @@ class MongoSingleton
     /**
      * @return \DesignPatterns\Singletons\MongoSingleton
      */
-    public static function getInstance()
+    public static function getInstance(): self
     {
-        if (is_null(self::$instance)) {
+        if (null === self::$instance) {
             self::$instance = new self();
         }
 
         return self::$instance;
     }
 
-    /**
-     * @return Manager
-     */
-    public function getConn()
+    public function getConn(): ?Manager
     {
         return $this->conn;
     }
 
     /**
      * 切换数据库
+     *
      * @param string $dbName 数据库名称
+     *
+     * @throws \MongoDB\Driver\Exception\Exception
      * @throws \SyException\Mongo\MongoException
      */
     public function changeDb(string $dbName)
     {
-        if ((strlen($dbName) > 0) && ($dbName != $this->dbName)) {
+        if ((\strlen($dbName) > 0) && ($dbName != $this->dbName)) {
             $command = new Command([
                 'ping' => 1,
             ]);
