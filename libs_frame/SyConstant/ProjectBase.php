@@ -341,6 +341,10 @@ class ProjectBase
      */
     const VALIDATOR_TAG_REQUEST_RATE = 'requestrate';
     /**
+     * 校验器-标识-接口限制
+     */
+    const VALIDATOR_TAG_API_LIMIT = 'apilimit';
+    /**
      * 校验器-标识-取值枚举
      */
     const VALIDATOR_TAG_IN = 'in';
@@ -384,6 +388,7 @@ class ProjectBase
     const VALIDATOR_TYPE_STRING_FRAME_TOKEN = self::VALIDATOR_DATA_TYPE_STRING . self::VALIDATOR_TAG_FRAME_TOKEN;
     const VALIDATOR_TYPE_STRING_JWT = self::VALIDATOR_DATA_TYPE_STRING . self::VALIDATOR_TAG_JWT;
     const VALIDATOR_TYPE_STRING_REQUEST_RATE = self::VALIDATOR_DATA_TYPE_STRING . self::VALIDATOR_TAG_REQUEST_RATE;
+    const VALIDATOR_TYPE_STRING_API_LIMIT = self::VALIDATOR_DATA_TYPE_STRING . self::VALIDATOR_TAG_API_LIMIT;
     const VALIDATOR_TYPE_INT_REQUIRED = self::VALIDATOR_DATA_TYPE_INT . self::VALIDATOR_TAG_REQUIRED;
     /**
      * 校验器-类型-最小值
@@ -544,6 +549,14 @@ class ProjectBase
      * 时间-超时时间-本地支付宝支付清理,单位为秒
      */
     const TIME_EXPIRE_LOCAL_ALIPAY_CLEAR = 3600;
+    /**
+     * 时间-超时时间-本地SY支付宝支付更新,单位为秒
+     */
+    const TIME_EXPIRE_LOCAL_SY_ALIPAY_REFRESH = 600;
+    /**
+     * 时间-超时时间-本地SY支付宝支付清理,单位为秒
+     */
+    const TIME_EXPIRE_LOCAL_SY_ALIPAY_CLEAR = 3600;
     /**
      * 时间-超时时间-本地企业钉钉更新,单位为秒
      */
@@ -905,6 +918,10 @@ class ProjectBase
      * 正则表达式-微信-openid
      */
     const REGEX_WX_OPEN_ID = '/^[0-9a-zA-Z\-\_]{28}$/';
+    /**
+     * 支付包-分隔符-证书结尾
+     */
+    const ALIPAY_SEPARATOR_CERT_END = '-----END CERTIFICATE-----';
 
     public static $totalLangType = [
         self::LANG_TYPE_ZH => '中文',

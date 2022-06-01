@@ -1,4 +1,5 @@
 <?php
+
 namespace Wx\CorpProvider\Common;
 
 use SyConstant\ErrorCode;
@@ -10,17 +11,20 @@ use Wx\WxUtilCorpProvider;
 
 /**
  * 获取应用的管理员列表
+ *
  * @package Wx\CorpProvider\Common
  */
 class AdminListGet extends WxBaseCorpProvider
 {
     /**
      * 授权企业ID
+     *
      * @var string
      */
     private $auth_corpid = '';
     /**
      * 应用ID
+     *
      * @var string
      */
     private $agentid = '';
@@ -34,10 +38,10 @@ class AdminListGet extends WxBaseCorpProvider
 
     private function __clone()
     {
+        //do nothing
     }
 
     /**
-     * @param string $agentId
      * @throws \SyException\Wx\WxCorpProviderException
      */
     public function setAgentId(string $agentId)
@@ -63,7 +67,7 @@ class AdminListGet extends WxBaseCorpProvider
         $this->curlConfigs[CURLOPT_POSTFIELDS] = Tool::jsonEncode($this->reqData, JSON_UNESCAPED_UNICODE);
         $sendRes = WxUtilBase::sendPostReq($this->curlConfigs);
         $sendData = Tool::jsonDecode($sendRes);
-        if ($sendData['errcode'] == 0) {
+        if (0 == $sendData['errcode']) {
             $resArr['data'] = $sendData;
         } else {
             $resArr['code'] = ErrorCode::WXPROVIDER_CORP_POST_ERROR;

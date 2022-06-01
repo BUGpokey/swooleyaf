@@ -5,6 +5,7 @@
  * Date: 18-9-13
  * Time: 上午12:45
  */
+
 namespace Wx\OpenMini\Base;
 
 use DesignPatterns\Singletons\WxConfigSingleton;
@@ -14,6 +15,7 @@ class AdminRebindUrl extends WxBaseOpenMini
 {
     /**
      * 应用ID
+     *
      * @var string
      */
     private $appId = '';
@@ -27,11 +29,13 @@ class AdminRebindUrl extends WxBaseOpenMini
 
     public function __clone()
     {
+        //do nothing
     }
 
-    public function getDetail() : array
+    public function getDetail(): array
     {
         $openCommonConfig = WxConfigSingleton::getInstance()->getOpenCommonConfig();
+
         return [
             'url' => $this->serviceUrl . '?' . http_build_query([
                 'appid' => $this->appId,

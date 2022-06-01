@@ -5,6 +5,7 @@
  * Date: 18-9-12
  * Time: 下午10:02
  */
+
 namespace Wx\OpenCommon;
 
 use SyConstant\ErrorCode;
@@ -18,6 +19,7 @@ class AuthorizerInfo extends WxBaseOpenCommon
 {
     /**
      * 授权码
+     *
      * @var string
      */
     private $authCode = '';
@@ -31,22 +33,22 @@ class AuthorizerInfo extends WxBaseOpenCommon
 
     public function __clone()
     {
+        //do nothing
     }
 
     /**
-     * @param string $authCode
      * @throws \SyException\Wx\WxOpenException
      */
     public function setAuthCode(string $authCode)
     {
-        if (strlen($authCode) > 0) {
+        if (\strlen($authCode) > 0) {
             $this->reqData['authorization_code'] = $authCode;
         } else {
             throw new WxOpenException('授权码不合法', ErrorCode::WXOPEN_PARAM_ERROR);
         }
     }
 
-    public function getDetail() : array
+    public function getDetail(): array
     {
         if (!isset($this->reqData['authorization_code'])) {
             throw new WxOpenException('授权码不能为空', ErrorCode::WXOPEN_PARAM_ERROR);

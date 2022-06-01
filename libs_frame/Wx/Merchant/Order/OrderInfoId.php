@@ -5,6 +5,7 @@
  * Date: 2018/12/14 0014
  * Time: 16:01
  */
+
 namespace Wx\Merchant\Order;
 
 use SyConstant\ErrorCode;
@@ -18,11 +19,13 @@ class OrderInfoId extends WxBaseMerchant
 {
     /**
      * 公众号ID
+     *
      * @var string
      */
     private $appid = '';
     /**
      * 订单ID
+     *
      * @var string
      */
     private $order_id = '';
@@ -36,22 +39,22 @@ class OrderInfoId extends WxBaseMerchant
 
     private function __clone()
     {
+        //do nothing
     }
 
     /**
-     * @param string $orderId
      * @throws \SyException\Wx\WxException
      */
     public function setOrderId(string $orderId)
     {
-        if (ctype_digit($orderId) && (strlen($orderId) <= 32)) {
+        if (ctype_digit($orderId) && (\strlen($orderId) <= 32)) {
             $this->reqData['order_id'] = $orderId;
         } else {
             throw new WxException('订单ID不合法', ErrorCode::WX_PARAM_ERROR);
         }
     }
 
-    public function getDetail() : array
+    public function getDetail(): array
     {
         if (!isset($this->reqData['order_id'])) {
             throw new WxException('订单ID不能为空', ErrorCode::WX_PARAM_ERROR);
@@ -65,7 +68,7 @@ class OrderInfoId extends WxBaseMerchant
         $this->curlConfigs[CURLOPT_POSTFIELDS] = Tool::jsonEncode($this->reqData, JSON_UNESCAPED_UNICODE);
         $sendRes = WxUtilBase::sendPostReq($this->curlConfigs);
         $sendData = Tool::jsonDecode($sendRes);
-        if ($sendData['errcode'] == 0) {
+        if (0 == $sendData['errcode']) {
             $resArr['data'] = $sendData;
         } else {
             $resArr['code'] = ErrorCode::WX_POST_ERROR;

@@ -5,6 +5,7 @@
  * Date: 2020/5/4 0004
  * Time: 15:09
  */
+
 namespace Wx\Payment\V3;
 
 use DesignPatterns\Singletons\WxConfigSingleton;
@@ -15,17 +16,20 @@ use Wx\WxUtilPayment;
 
 /**
  * Class CertList
+ *
  * @package Wx\Payment\V3
  */
 class CertList extends WxBasePayment
 {
     /**
      * 公众号ID
+     *
      * @var string
      */
     private $appid = '';
     /**
      * 商户号
+     *
      * @var string
      */
     private $mch_id = '';
@@ -39,9 +43,10 @@ class CertList extends WxBasePayment
 
     private function __clone()
     {
+        //do nothing
     }
 
-    public function getDetail() : array
+    public function getDetail(): array
     {
         $accountConfig = WxConfigSingleton::getInstance()->getAccountConfig($this->appid);
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Wx\Corp\OA;
 
 use SyConstant\ErrorCode;
@@ -10,6 +11,7 @@ use Wx\WxUtilBase;
 
 /**
  * 查询自建应用审批单当前状态
+ *
  * @package Wx\Corp\OA
  */
 class OpenApprovalDataGet extends WxBaseCorp
@@ -18,6 +20,7 @@ class OpenApprovalDataGet extends WxBaseCorp
 
     /**
      * 审批单号
+     *
      * @var string
      */
     private $thirdNo = '';
@@ -32,10 +35,10 @@ class OpenApprovalDataGet extends WxBaseCorp
 
     private function __clone()
     {
+        //do nothing
     }
 
     /**
-     * @param string $thirdNo
      * @throws \SyException\Wx\WxException
      */
     public function setThirdNo(string $thirdNo)
@@ -61,7 +64,7 @@ class OpenApprovalDataGet extends WxBaseCorp
         $this->curlConfigs[CURLOPT_POSTFIELDS] = Tool::jsonEncode($this->reqData, JSON_UNESCAPED_UNICODE);
         $sendRes = WxUtilBase::sendPostReq($this->curlConfigs);
         $sendData = Tool::jsonDecode($sendRes);
-        if ($sendData['errcode'] == 0) {
+        if (0 == $sendData['errcode']) {
             $resArr['data'] = $sendData;
         } else {
             $resArr['code'] = ErrorCode::WX_POST_ERROR;

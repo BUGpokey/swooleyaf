@@ -5,6 +5,7 @@
  * Date: 2018/12/20 0020
  * Time: 10:52
  */
+
 namespace Wx\Account\CustomService;
 
 use SyConstant\ErrorCode;
@@ -17,6 +18,7 @@ class SessionListWait extends WxBaseAccount
 {
     /**
      * 公众号ID
+     *
      * @var string
      */
     private $appid = '';
@@ -30,9 +32,10 @@ class SessionListWait extends WxBaseAccount
 
     private function __clone()
     {
+        //do nothing
     }
 
-    public function getDetail() : array
+    public function getDetail(): array
     {
         $resArr = [
             'code' => 0,

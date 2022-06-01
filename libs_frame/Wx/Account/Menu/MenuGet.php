@@ -5,18 +5,20 @@
  * Date: 2018/9/12 0012
  * Time: 15:49
  */
+
 namespace Wx\Account\Menu;
 
 use SyConstant\ErrorCode;
 use SyTool\Tool;
 use Wx\WxBaseAccount;
-use Wx\WxUtilBase;
 use Wx\WxUtilAlone;
+use Wx\WxUtilBase;
 
 class MenuGet extends WxBaseAccount
 {
     /**
      * 公众号ID
+     *
      * @var string
      */
     private $appid = '';
@@ -30,12 +32,13 @@ class MenuGet extends WxBaseAccount
 
     public function __clone()
     {
+        //do nothing
     }
 
-    public function getDetail() : array
+    public function getDetail(): array
     {
         $resArr = [
-            'code' => 0
+            'code' => 0,
         ];
 
         $this->curlConfigs[CURLOPT_URL] = $this->serviceUrl . WxUtilAlone::getAccessToken($this->appid);

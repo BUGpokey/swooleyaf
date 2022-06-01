@@ -5,6 +5,7 @@
  * Date: 18-9-13
  * Time: 上午12:45
  */
+
 namespace Wx\OpenAccount;
 
 use DesignPatterns\Singletons\WxConfigSingleton;
@@ -25,9 +26,10 @@ class MiniFastRegisterAuth extends WxBaseOpenAccount
 
     public function __clone()
     {
+        //do nothing
     }
 
-    public function getDetail() : array
+    public function getDetail(): array
     {
         return [
             'url' => $this->serviceUrl . '?' . http_build_query($this->reqData),

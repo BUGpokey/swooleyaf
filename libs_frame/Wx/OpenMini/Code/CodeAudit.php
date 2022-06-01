@@ -5,6 +5,7 @@
  * Date: 2018/9/13 0013
  * Time: 7:34
  */
+
 namespace Wx\OpenMini\Code;
 
 use SyConstant\ErrorCode;
@@ -18,11 +19,13 @@ class CodeAudit extends WxBaseOpenMini
 {
     /**
      * 应用ID
+     *
      * @var string
      */
     private $appId = '';
     /**
      * 审核列表
+     *
      * @var array
      */
     private $auditList = [];
@@ -36,25 +39,26 @@ class CodeAudit extends WxBaseOpenMini
 
     public function __clone()
     {
+        //do nothing
     }
 
     /**
-     * @param array $auditList
      * @throws \SyException\Wx\WxOpenException
      */
     public function setAuditList(array $auditList)
     {
-        $auditNum = count($auditList);
-        if ($auditNum == 0) {
+        $auditNum = \count($auditList);
+        if (0 == $auditNum) {
             throw new WxOpenException('审核列表不能为空', ErrorCode::WXOPEN_PARAM_ERROR);
-        } elseif ($auditNum > 5) {
+        }
+        if ($auditNum > 5) {
             throw new WxOpenException('审核列表数量不能超过5个', ErrorCode::WXOPEN_PARAM_ERROR);
         }
 
         $this->reqData['item_list'] = $auditList;
     }
 
-    public function getDetail() : array
+    public function getDetail(): array
     {
         if (!isset($this->reqData['item_list'])) {
             throw new WxOpenException('审核列表不能为空', ErrorCode::WXOPEN_PARAM_ERROR);
@@ -70,7 +74,7 @@ class CodeAudit extends WxBaseOpenMini
         $this->curlConfigs[CURLOPT_SSL_VERIFYHOST] = false;
         $sendRes = WxUtilBase::sendPostReq($this->curlConfigs);
         $sendData = Tool::jsonDecode($sendRes);
-        if ($sendData['errcode'] == 0) {
+        if (0 == $sendData['errcode']) {
             $resArr['data'] = $sendData;
         } else {
             $resArr['code'] = ErrorCode::WXOPEN_POST_ERROR;

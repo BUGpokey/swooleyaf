@@ -5,10 +5,11 @@
  * Date: 18-9-12
  * Time: 下午10:47
  */
+
 namespace Wx\OpenCommon;
 
-use SyConstant\ErrorCode;
 use DesignPatterns\Singletons\WxConfigSingleton;
+use SyConstant\ErrorCode;
 use SyTool\Tool;
 use Wx\WxBaseOpenCommon;
 use Wx\WxUtilBase;
@@ -18,11 +19,13 @@ class AuthorizerInfoGet extends WxBaseOpenCommon
 {
     /**
      * 第三方平台appid
+     *
      * @var string
      */
     private $component_appid = '';
     /**
      * 授权公众号或小程序的appid
+     *
      * @var string
      */
     private $authorizer_appid = '';
@@ -37,9 +40,10 @@ class AuthorizerInfoGet extends WxBaseOpenCommon
 
     public function __clone()
     {
+        //do nothing
     }
 
-    public function getDetail() : array
+    public function getDetail(): array
     {
         $resArr = [
             'code' => 0,

@@ -5,6 +5,7 @@
  * Date: 2018/9/13 0013
  * Time: 8:28
  */
+
 namespace Wx\OpenMini\Code;
 
 use SyConstant\ErrorCode;
@@ -18,11 +19,13 @@ class CodeGrayRelease extends WxBaseOpenMini
 {
     /**
      * 应用ID
+     *
      * @var string
      */
     private $appId = '';
     /**
      * 灰度百分比
+     *
      * @var int
      */
     private $percentage = 0;
@@ -36,10 +39,10 @@ class CodeGrayRelease extends WxBaseOpenMini
 
     public function __clone()
     {
+        //do nothing
     }
 
     /**
-     * @param int $percentage
      * @throws \SyException\Wx\WxOpenException
      */
     public function setPercentage(int $percentage)
@@ -51,7 +54,7 @@ class CodeGrayRelease extends WxBaseOpenMini
         }
     }
 
-    public function getDetail() : array
+    public function getDetail(): array
     {
         if (!isset($this->reqData['gray_percentage'])) {
             throw new WxOpenException('灰度百分比不能为空', ErrorCode::WXOPEN_PARAM_ERROR);
@@ -67,7 +70,7 @@ class CodeGrayRelease extends WxBaseOpenMini
         $this->curlConfigs[CURLOPT_SSL_VERIFYHOST] = false;
         $sendRes = WxUtilBase::sendPostReq($this->curlConfigs);
         $sendData = Tool::jsonDecode($sendRes);
-        if ($sendData['errcode'] == 0) {
+        if (0 == $sendData['errcode']) {
             $resArr['data'] = $sendData;
         } else {
             $resArr['code'] = ErrorCode::WXOPEN_POST_ERROR;

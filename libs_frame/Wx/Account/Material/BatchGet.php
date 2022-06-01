@@ -5,6 +5,7 @@
  * Date: 2018/12/13 0013
  * Time: 9:37
  */
+
 namespace Wx\Account\Material;
 
 use SyConstant\ErrorCode;
@@ -18,21 +19,25 @@ class BatchGet extends WxBaseAccount
 {
     /**
      * 公众号ID
+     *
      * @var string
      */
     private $appid = '';
     /**
      * 素材类型
+     *
      * @var string
      */
     private $type = '';
     /**
      * 偏移位置
+     *
      * @var int
      */
     private $offset = 0;
     /**
      * 条数
+     *
      * @var int
      */
     private $count = 0;
@@ -49,10 +54,10 @@ class BatchGet extends WxBaseAccount
 
     private function __clone()
     {
+        //do nothing
     }
 
     /**
-     * @param string $type
      * @throws \SyException\Wx\WxException
      */
     public function setType(string $type)
@@ -65,7 +70,6 @@ class BatchGet extends WxBaseAccount
     }
 
     /**
-     * @param int $offset
      * @throws \SyException\Wx\WxException
      */
     public function setOffset(int $offset)
@@ -78,7 +82,6 @@ class BatchGet extends WxBaseAccount
     }
 
     /**
-     * @param int $count
      * @throws \SyException\Wx\WxException
      */
     public function setCount(int $count)
@@ -90,7 +93,7 @@ class BatchGet extends WxBaseAccount
         }
     }
 
-    public function getDetail() : array
+    public function getDetail(): array
     {
         if (!isset($this->reqData['type'])) {
             throw new WxException('素材类型不能为空', ErrorCode::WX_PARAM_ERROR);

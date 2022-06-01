@@ -5,6 +5,7 @@
  * Date: 2018/9/13 0013
  * Time: 7:34
  */
+
 namespace Wx\OpenMini\Base;
 
 use SyConstant\ErrorCode;
@@ -18,11 +19,13 @@ class NicknameCheck extends WxBaseOpenMini
 {
     /**
      * 应用ID
+     *
      * @var string
      */
     private $appId = '';
     /**
      * 昵称
+     *
      * @var string
      */
     private $nick_name = '';
@@ -36,22 +39,22 @@ class NicknameCheck extends WxBaseOpenMini
 
     public function __clone()
     {
+        //do nothing
     }
 
     /**
-     * @param string $nickName
      * @throws \SyException\Wx\WxOpenException
      */
     public function setNickName(string $nickName)
     {
-        if (strlen($nickName) > 0) {
+        if (\strlen($nickName) > 0) {
             $this->reqData['nick_name'] = $nickName;
         } else {
             throw new WxOpenException('昵称不合法', ErrorCode::WXOPEN_PARAM_ERROR);
         }
     }
 
-    public function getDetail() : array
+    public function getDetail(): array
     {
         if (!isset($this->reqData['nick_name'])) {
             throw new WxOpenException('昵称不能为空', ErrorCode::WXOPEN_PARAM_ERROR);
@@ -67,7 +70,7 @@ class NicknameCheck extends WxBaseOpenMini
         $this->curlConfigs[CURLOPT_SSL_VERIFYHOST] = false;
         $sendRes = WxUtilBase::sendPostReq($this->curlConfigs);
         $sendData = Tool::jsonDecode($sendRes);
-        if ($sendData['errcode'] == 0) {
+        if (0 == $sendData['errcode']) {
             $resArr['data'] = $sendData;
         } else {
             $resArr['code'] = ErrorCode::WXOPEN_POST_ERROR;

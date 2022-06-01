@@ -5,6 +5,7 @@
  * Date: 2018/12/22 0022
  * Time: 11:05
  */
+
 namespace Wx\Corp\Department;
 
 use SyConstant\ErrorCode;
@@ -16,6 +17,7 @@ use Wx\WxUtilBase;
 
 /**
  * 获取部门列表
+ *
  * @package Wx\Corp\Department
  */
 class DepartmentList extends WxBaseCorp
@@ -24,6 +26,7 @@ class DepartmentList extends WxBaseCorp
 
     /**
      * 部门id
+     *
      * @var int
      */
     private $id = 0;
@@ -38,10 +41,10 @@ class DepartmentList extends WxBaseCorp
 
     private function __clone()
     {
+        //do nothing
     }
 
     /**
-     * @param int $id
      * @throws \SyException\Wx\WxException
      */
     public function setId(int $id)
@@ -53,7 +56,7 @@ class DepartmentList extends WxBaseCorp
         }
     }
 
-    public function getDetail() : array
+    public function getDetail(): array
     {
         $resArr = [
             'code' => 0,
@@ -63,7 +66,7 @@ class DepartmentList extends WxBaseCorp
         $this->curlConfigs[CURLOPT_URL] = $this->serviceUrl . '?' . http_build_query($this->reqData);
         $sendRes = WxUtilBase::sendGetReq($this->curlConfigs);
         $sendData = Tool::jsonDecode($sendRes);
-        if ($sendData['errcode'] == 0) {
+        if (0 == $sendData['errcode']) {
             $resArr['data'] = $sendData;
         } else {
             $resArr['code'] = ErrorCode::WX_GET_ERROR;
